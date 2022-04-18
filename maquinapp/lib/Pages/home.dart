@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/Registro.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu.dart';
@@ -26,7 +27,18 @@ class _HomePageState extends State<HomePage> {
         centerTitle: true,
       ),
       drawer: _drawerMaquinapp(size),
-      body: Center(),
+      body: Center(
+        child: RaisedButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => RegisterPage(),
+              ),
+            );
+          },
+          child: Text('Registro'),
+        ),
+      ),
     );
   }
 
