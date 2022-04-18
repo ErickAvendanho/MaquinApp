@@ -1,40 +1,64 @@
 import 'package:flutter/material.dart';
 
-class SignInUpp extends StatelessWidget {
-  const SignInUpp({Key? key}) : super(key: key);
+class SignInUp extends StatelessWidget {
+  const SignInUp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0XFFFDD734),
-      body: Column(
-        children: [
-          Image.asset(''),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: const Color(0XFF3B3A38),
-              fixedSize: const Size(300, 90),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(70.0),
+                child: Image.asset(
+                  'assets/images/maquinapp.png',
+                  height: size.height * 0.3,
+                ),
               ),
-            ),
-            onPressed: () {},
-            child: const Text('INICIAR SESIÓN'),
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary: const Color(0XFF3B3A38),
-              fixedSize: const Size(300, 90),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0XFF3B3A38),
+                    fixedSize: Size(size.width * 0.75, 60),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: const Text('INICIAR SESIÓN'),
+                ),
               ),
-            ),
-            onPressed: () {},
-            child: const Text('REGISTRARSE'),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: const Color(0XFF3B3A38),
+                    fixedSize: Size(size.width * 0.75, 60),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: const Text('REGISTRARSE'),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(70.0),
+                child: Image.asset(
+                  'assets/images/logomaquina.png',
+                  height: size.height * 0.2,
+                ),
+              ),
+            ],
           ),
-          Image.asset('')
-        ],
+        ),
       ),
     );
   }
