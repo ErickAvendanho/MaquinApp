@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/loginPage.dart';
 
-class SignInUpPage extends StatelessWidget {
-  const SignInUpPage({Key? key}) : super(key: key);
+class SignPage extends StatelessWidget {
+  const SignPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +32,14 @@ class SignInUpPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const LoginPage(),
+                      ),
+                    );
+                  },
                   child: const Text('INICIAR SESIÓN'),
                 ),
               ),
