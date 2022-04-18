@@ -7,6 +7,11 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/launch_image" />
+            android:src="@drawable/maquinaapp" />
+    </item>
+    <item>
+        <bitmap
+            android:gravity="bottom"
+            android:src="@drawable/logomaquina" />
     </item>
 </layer-list>
