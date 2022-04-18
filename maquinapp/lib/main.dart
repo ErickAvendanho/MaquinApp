@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Pages/home.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -30,7 +32,40 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   @override
+  void initState() {
+    _delay();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future _delay() async {
+    await Future.delayed(
+      const Duration(seconds: 3),
+    );
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const HomePage(),
+      ),
+      (Route<dynamic> route) => false,
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Image.asset(''),
+            const CircularProgressIndicator(),
+            Image.asset(''),
+          ],
+        ),
+      ),
+    );
   }
 }
