@@ -57,12 +57,19 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      backgroundColor: Color(0xffFDD734),
+      body: Center(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(''),
+            const SizedBox(height: 210),
+            Image.asset('assets/images/maquinapp.png', width: 300, height: 300),
+            const SizedBox(height: 50),
             const CircularProgressIndicator(),
-            Image.asset(''),
+            const SizedBox(height: 80),
+            Image.asset('assets/images/logomaquina.png',
+                width: 200, height: 97),
           ],
         ),
       ),
