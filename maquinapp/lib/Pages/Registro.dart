@@ -18,6 +18,7 @@ class _RegisterPageState extends State<RegisterPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: new Scaffold(
+        backgroundColor: Color(0xFFFDD734),
         appBar: new AppBar(
           title: Center(
             child: Text('Registro de Arrendador'),
