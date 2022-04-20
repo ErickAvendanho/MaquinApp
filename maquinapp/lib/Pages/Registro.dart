@@ -63,51 +63,59 @@ class _RegisterPageState extends State<RegisterPage> {
         formItemsDesign(
             Icons.person,
             TextFormField(
+              style: TextStyle(color: Colors.white),
               controller: nameCtrl,
-              decoration: new InputDecoration(
+              decoration: new InputDecoration.collapsed(
                 hintText: 'Nombre',
+                hintStyle: TextStyle(color: Colors.white),
               ),
               validator: validateName,
             )),
         formItemsDesign(
             Icons.email,
             TextFormField(
+              style: TextStyle(color: Colors.white),
               controller: emailCtrl,
-              decoration: new InputDecoration(
-                hintText: 'Email',
+              decoration: new InputDecoration.collapsed(
+                hintText: 'Correo',
+                hintStyle: TextStyle(color: Colors.white),
               ),
               keyboardType: TextInputType.emailAddress,
-              maxLength: 32,
               validator: validateEmail,
             )),
         formItemsDesign(
             Icons.phone,
             TextFormField(
+              style: TextStyle(color: Colors.white),
               controller: mobileCtrl,
-              decoration: new InputDecoration(
-                hintText: 'Numero de telefono',
+              decoration: new InputDecoration.collapsed(
+                hintText: 'Telefono',
+                hintStyle: TextStyle(color: Colors.white),
               ),
               keyboardType: TextInputType.phone,
-              maxLength: 10,
               validator: validateMobile,
             )),
         formItemsDesign(
             Icons.password,
             TextFormField(
+              style: TextStyle(color: Colors.white),
               controller: passwordCtrl,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: InputDecoration.collapsed(
                 hintText: 'Contraseña',
+                hintStyle: TextStyle(color: Colors.white),
               ),
               validator: validatePassword,
             )),
         formItemsDesign(
             Icons.password,
             TextFormField(
+              style: TextStyle(color: Colors.white),
               controller: repeatPassCtrl,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: InputDecoration.collapsed(
                 hintText: 'Confirmar contraseña',
+                hintStyle: TextStyle(color: Colors.white),
               ),
               validator: validatePassword,
             )),
@@ -121,12 +129,9 @@ class _RegisterPageState extends State<RegisterPage> {
               decoration: ShapeDecoration(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0)),
-                gradient: LinearGradient(colors: [
-                  Color(0xFF0EDED2),
-                  Color(0xFF03A0FE),
-                ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                color: Color(0xFF343436),
               ),
-              child: Text("Guardar",
+              child: Text("Continuar",
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -138,7 +143,6 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   String? validatePassword(String? value) {
-    print("valor $value passsword ${passwordCtrl.text}");
     if (value != passwordCtrl.text) {
       return "Las contraseñas no coinciden";
     }
@@ -186,8 +190,10 @@ class _RegisterPageState extends State<RegisterPage> {
   save() {
     if (keyForm.currentState!.validate()) {
       print("Nombre ${nameCtrl.text}");
-      print("Telefono ${mobileCtrl.text}");
       print("Correo ${emailCtrl.text}");
+      print("Telefono ${mobileCtrl.text}");
+      print("Password ${passwordCtrl.text}");
+      print("Confirmacion password ${repeatPassCtrl.text}");
       keyForm.currentState!.reset();
     }
   }
