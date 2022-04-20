@@ -20,8 +20,12 @@ class _RegisterPageState extends State<RegisterPage> {
       home: new Scaffold(
         backgroundColor: Color(0xFFFDD734),
         appBar: new AppBar(
+          backgroundColor: Color(0xFFFDD734),
           title: Center(
-            child: Text('Registro de Arrendador'),
+            child: Text(
+              'Registro de Arrendador',
+              style: TextStyle(color: Colors.black),
+            ),
           ),
         ),
         body: new SingleChildScrollView(
@@ -38,9 +42,14 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   formItemsDesign(icon, item) {
-    return Padding(
+    return Container(
       padding: EdgeInsets.symmetric(vertical: 7),
-      child: Card(child: ListTile(leading: Icon(icon), title: item)),
+      child: Card(
+        child: ListTile(
+            leading: Icon(icon, color: Color(0xFFFDD734)), title: item),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        color: Color(0xFF343436),
+      ),
     );
   }
 
@@ -56,7 +65,7 @@ class _RegisterPageState extends State<RegisterPage> {
             TextFormField(
               controller: nameCtrl,
               decoration: new InputDecoration(
-                labelText: 'Nombre',
+                hintText: 'Nombre',
               ),
               validator: validateName,
             )),
@@ -65,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
             TextFormField(
               controller: emailCtrl,
               decoration: new InputDecoration(
-                labelText: 'Email',
+                hintText: 'Email',
               ),
               keyboardType: TextInputType.emailAddress,
               maxLength: 32,
@@ -76,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
             TextFormField(
               controller: mobileCtrl,
               decoration: new InputDecoration(
-                labelText: 'Numero de telefono',
+                hintText: 'Numero de telefono',
               ),
               keyboardType: TextInputType.phone,
               maxLength: 10,
@@ -88,7 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
               controller: passwordCtrl,
               obscureText: true,
               decoration: InputDecoration(
-                labelText: 'Contraseña',
+                hintText: 'Contraseña',
               ),
               validator: validatePassword,
             )),
@@ -98,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
               controller: repeatPassCtrl,
               obscureText: true,
               decoration: InputDecoration(
-                labelText: 'Confirmar contraseña',
+                hintText: 'Confirmar contraseña',
               ),
               validator: validatePassword,
             )),
