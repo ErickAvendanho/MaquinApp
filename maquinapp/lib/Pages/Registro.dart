@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -83,18 +84,38 @@ class _RegisterPageState extends State<RegisterPage> {
               keyboardType: TextInputType.emailAddress,
               validator: validateEmail,
             )),
-        formItemsDesign(
-            Icons.phone,
-            TextFormField(
-              style: TextStyle(color: Colors.white),
-              controller: mobileCtrl,
-              decoration: new InputDecoration.collapsed(
-                hintText: 'Telefono',
-                hintStyle: TextStyle(color: Colors.white),
+        Row(
+          children: <Widget>[
+            Expanded(
+              child: CountryCodePicker(
+                onChanged: print,
+                // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
+                initialSelection: 'MX',
+                favorite: ['+52', 'MX'],
+                // optional. Shows only country name and flag
+                showCountryOnly: false,
+                // optional. Shows only country name and flag when popup is closed.
+                showOnlyCountryWhenClosed: false,
+                // optional. aligns the flag and the Text left
+                alignLeft: false,
               ),
-              keyboardType: TextInputType.phone,
-              validator: validateMobile,
-            )),
+            ),
+            Expanded(
+              child: formItemsDesign(
+                  Icons.phone,
+                  TextFormField(
+                    style: TextStyle(color: Colors.white),
+                    controller: mobileCtrl,
+                    decoration: new InputDecoration.collapsed(
+                      hintText: 'Telefono',
+                      hintStyle: TextStyle(color: Colors.white),
+                    ),
+                    keyboardType: TextInputType.phone,
+                    validator: validateMobile,
+                  )),
+            ),
+          ],
+        ),
         formItemsDesign(
             Icons.password,
             TextFormField(
