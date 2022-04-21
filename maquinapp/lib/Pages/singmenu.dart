@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/loginPage.dart';
+import 'package:maquinapp/Pages/registerPage.dart';
 
 class SignPage extends StatelessWidget {
   const SignPage({Key? key}) : super(key: key);
@@ -32,13 +33,13 @@ class SignPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () => {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => const LoginPage(),
                       ),
-                    );
+                    ),
                   },
                   child: const Text('INICIAR SESIÓN'),
                 ),
@@ -53,7 +54,14 @@ class SignPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(),
+                      ),
+                    ),
+                  },
                   child: const Text('REGISTRARSE'),
                 ),
               ),

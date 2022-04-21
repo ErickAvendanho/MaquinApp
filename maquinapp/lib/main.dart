@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'Pages/home.dart';
+import 'package:maquinapp/Pages/singmenu.dart';
 
 void main() {
   runApp(const MyApp());
@@ -49,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => const HomePage(),
+        builder: (context) => const SignPage(),
       ),
       (Route<dynamic> route) => false,
     );
@@ -58,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffFDD734),
+      backgroundColor: const Color(0xffFDD734),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,7 +66,9 @@ class _MyHomePageState extends State<MyHomePage> {
             const SizedBox(height: 210),
             Image.asset('assets/images/maquinapp.png', width: 300, height: 300),
             const SizedBox(height: 50),
-            const CircularProgressIndicator(),
+            const CircularProgressIndicator(
+              color: Color(0XFF343331),
+            ),
             const SizedBox(height: 80),
             Image.asset('assets/images/logomaquina.png',
                 width: 200, height: 97),

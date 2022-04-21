@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:maquinapp/Pages/home.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -8,49 +10,238 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final GlobalKey<FormState> _keyForm = GlobalKey();
+
+  late TextEditingController emailCtrl = TextEditingController();
+  late TextEditingController passCtrl = TextEditingController();
+
+  @override
+  void initState() {
+    emailCtrl = TextEditingController()
+      ..addListener(() {
+        setState(() {});
+      });
+    passCtrl = TextEditingController()
+      ..addListener(() {
+        setState(() {});
+      });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0XFF3B3A38),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Iniciar Sesion",
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: const Color(0XFF3B3A38),
+        title: const Text('Iniciar sesión'),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+          ),
+          splashColor: Colors.transparent,
+          onPressed: () => {
+            Navigator.pop(context),
+          },
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _keyForm,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(60.0),
+                  child: Image.asset(
+                    'assets/images/maquinapp.png',
+                    height: size.height * 0.3,
+                  ),
+                ),
+                TextBox(
+                  size: size,
+                  icon: Icons.email,
+                  hintText: 'Correo electrónico',
+                  isPassword: false,
+                  controller: emailCtrl,
+                  inputAction: TextInputAction.next,
+                  inputType: TextInputType.emailAddress,
+                ),
+                TextBox(
+                  size: size,
+                  icon: Icons.key_rounded,
+                  hintText: 'Contraseña',
+                  isPassword: true,
+                  controller: passCtrl,
+                  inputAction: TextInputAction.done,
+                  inputType: TextInputType.visiblePassword,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                _buttonSignIn(size),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  width: size.width * 0.7,
+                  child: const Divider(
+                    thickness: 2,
+                    color: Color(0XFFFED246),
+                  ),
+                ),
+                SizedBox(
+                  width: size.width * 0.7,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.facebook,
+                            color: Colors.blue.shade700,
+                          ),
+                          iconSize: 48,
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.email,
+                            color: Colors.white,
+                          ),
+                          iconSize: 48,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Text("Ingresa con correo y contraseña \n o con tus redes sociales",
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center)
-          ],
+          ),
         ),
       ),
     );
   }
+
+  ElevatedButton _buttonSignIn(Size size) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        elevation: 10,
+        padding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+      ),
+      onPressed: () {
+        signUp();
+      },
+      child: Ink(
+        decoration: BoxDecoration(
+          color: const Color(0XFF20536F),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Container(
+          height: 50,
+          width: size.width * 0.6,
+          alignment: Alignment.center,
+          child: const Text(
+            'INICIAR SESIÓN',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void signUp() {
+    if (_keyForm.currentState!.validate()) {
+      print('OK');
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+      );
+    }
+  }
 }
 
-class SingForm extends StatefulWidget {
-  @override
-  _SingFormState createState() => _SingFormState();
-}
+class TextBox extends StatelessWidget {
+  const TextBox({
+    Key? key,
+    required this.size,
+    required this.icon,
+    required this.hintText,
+    required this.isPassword,
+    required this.controller,
+    required this.inputAction,
+    required this.inputType,
+  }) : super(key: key);
 
-class _SingFormState extends State<SingForm> {
+  final Size size;
+  final IconData icon;
+  final String hintText;
+  final bool isPassword;
+  final TextEditingController controller;
+  final TextInputAction inputAction;
+  final TextInputType inputType;
+
   @override
   Widget build(BuildContext context) {
-    return Form(
-      child: Column(
-        children: [
-          TextFormField(
-            decoration: const InputDecoration(
-              labelText: "Correo",
-              hintText: "Introduce tu correo electrónico",
-              enabledBorder: OutlineInputBorder(),
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      width: size.width * 0.8,
+      decoration: BoxDecoration(
+        color: const Color(0XFFFED246),
+        borderRadius: BorderRadius.circular(29),
+      ),
+      child: TextFormField(
+        autofocus: false,
+        keyboardType: inputType,
+        textInputAction: inputAction,
+        controller: controller,
+        cursorColor: const Color(0XFF343331),
+        decoration: InputDecoration(
+          errorStyle: TextStyle(
+            color: Colors.red.shade400,
+            fontWeight: FontWeight.bold,
           ),
-        ],
+          icon: Icon(
+            icon,
+            color: const Color(0XFF343331),
+          ),
+          hintText: hintText,
+          hintStyle: const TextStyle(color: Color.fromARGB(255, 116, 98, 39)),
+          border: InputBorder.none,
+        ),
+        style: const TextStyle(
+          color: Color(0XFF343331),
+        ),
+        obscureText: isPassword,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return 'El campo está vacío.';
+          }
+          if (inputType == TextInputType.emailAddress &&
+              (!value.contains(RegExp(
+                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")))) {
+            return 'El formato no es válido.';
+          }
+          return null;
+        },
       ),
     );
   }
