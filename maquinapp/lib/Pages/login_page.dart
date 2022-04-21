@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(60.0),
+                  padding: const EdgeInsets.only(bottom: 60.0),
                   child: Image.asset(
                     'assets/images/maquinapp.png',
                     height: size.height * 0.3,
@@ -107,20 +107,19 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {},
                           icon: Icon(
                             Icons.facebook,
-                            color: Colors.blue.shade700,
+                            color: Colors.blue.shade600,
                           ),
                           iconSize: 48,
                         ),
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.email,
-                            color: Colors.white,
+                        child: InkWell(
+                          onTap: () => {},
+                          child: Image.asset(
+                            'assets/images/google.png',
+                            width: 40,
                           ),
-                          iconSize: 48,
                         ),
                       ),
                     ],
