@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/loginPage.dart';
-import 'package:maquinapp/Pages/registerPage.dart';
+import 'package:maquinapp/Pages/login_page.dart';
+import 'package:maquinapp/Pages/register_page.dart';
 
 class SignPage extends StatelessWidget {
   const SignPage({Key? key}) : super(key: key);

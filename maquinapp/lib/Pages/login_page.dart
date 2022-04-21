@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:maquinapp/Pages/home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -167,7 +166,6 @@ class _LoginPageState extends State<LoginPage> {
 
   void signUp() {
     if (_keyForm.currentState!.validate()) {
-      print('OK');
       Navigator.push(
         context,
         MaterialPageRoute(

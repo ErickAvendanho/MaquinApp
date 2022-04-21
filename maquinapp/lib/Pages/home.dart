@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/registerPage.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu.dart';
@@ -30,7 +29,7 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: [],
+            children: const [],
           ),
         ),
       ),
