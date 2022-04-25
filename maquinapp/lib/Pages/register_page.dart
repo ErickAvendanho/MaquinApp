@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:maquinapp/Pages/verify_phone.dart';
+import 'package:maquinapp/Pages/src/firebaseServices/auth_services.dart';
+
+import 'home_page.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  final String tipoRegistro;
+  const RegisterPage({
+    Key? key,
+    required this.tipoRegistro,
+  }) : super(key: key);
 
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -83,7 +92,9 @@ class _RegisterPageState extends State<RegisterPage> {
           TextFormField(
             style: const TextStyle(color: Colors.white),
             controller: nameCtrl,
+            cursorColor: const Color(0xFFFDD734),
             decoration: InputDecoration(
+              border: InputBorder.none,
               errorStyle: TextStyle(
                 color: Colors.orange.shade600,
                 fontWeight: FontWeight.bold,
@@ -100,7 +111,9 @@ class _RegisterPageState extends State<RegisterPage> {
           TextFormField(
             style: const TextStyle(color: Colors.white),
             controller: emailCtrl,
+            cursorColor: const Color(0xFFFDD734),
             decoration: InputDecoration(
+              border: InputBorder.none,
               errorStyle: TextStyle(
                 color: Colors.orange.shade600,
                 fontWeight: FontWeight.bold,
@@ -147,7 +160,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 TextFormField(
                   style: const TextStyle(color: Colors.white),
                   controller: mobileCtrl,
+                  cursorColor: const Color(0xFFFDD734),
                   decoration: InputDecoration(
+                    border: InputBorder.none,
                     errorStyle: TextStyle(
                       color: Colors.orange.shade600,
                       fontWeight: FontWeight.bold,
@@ -168,8 +183,10 @@ class _RegisterPageState extends State<RegisterPage> {
           TextFormField(
             style: const TextStyle(color: Colors.white),
             controller: passwordCtrl,
+            cursorColor: const Color(0xFFFDD734),
             obscureText: true,
             decoration: InputDecoration(
+              border: InputBorder.none,
               errorStyle: TextStyle(
                 color: Colors.orange.shade600,
                 fontWeight: FontWeight.bold,
@@ -186,8 +203,10 @@ class _RegisterPageState extends State<RegisterPage> {
           TextFormField(
             style: const TextStyle(color: Colors.white),
             controller: repeatPassCtrl,
+            cursorColor: const Color(0xFFFDD734),
             obscureText: true,
             decoration: InputDecoration(
+              border: InputBorder.none,
               errorStyle: TextStyle(
                 color: Colors.orange.shade600,
                 fontWeight: FontWeight.bold,
@@ -221,6 +240,8 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: const EdgeInsets.only(top: 16, bottom: 16),
           ),
         ),
+        SizedBox(height: 20),
+        Image.asset('assets/images/logomaquina.png', width: 200, height: 100),
       ],
     );
   }
@@ -270,14 +291,21 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  save() {
+  void save() async {
     if (keyForm.currentState!.validate()) {
-      print("Nombre ${nameCtrl.text}");
-      print("Correo ${emailCtrl.text}");
-      print("Telefono ${mobileCtrl.text}");
-      print("Password ${passwordCtrl.text}");
-      print("Confirmacion password ${repeatPassCtrl.text}");
-      keyForm.currentState!.reset();
-    }
+      AuthServices as = AuthServices();
+      bool uc = await as.registration(emailCtrl.text, passwordCtrl.text);
+      if (uc) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const VerifyPhonePage(),
+          ),
+          (route) => false,
+        );
+      }
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const VerifyPhonePage()));
+    } else {}
   }
 }

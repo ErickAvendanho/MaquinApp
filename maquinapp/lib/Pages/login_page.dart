@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/home.dart';
+import 'package:maquinapp/Pages/home_page.dart';
+import 'package:maquinapp/Pages/src/firebaseServices/auth_services.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -25,29 +26,12 @@ class _LoginPageState extends State<LoginPage> {
       ..addListener(() {
         setState(() {});
       });
-    getUsers();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-  }
-
-  void getUsers() async {
-    try {
-      CollectionReference collectionReference =
-          FirebaseFirestore.instance.collection('Users');
-
-      QuerySnapshot users = await collectionReference.get();
-      if (users.docs.isNotEmpty) {
-        for (var doc in users.docs) {
-          print(doc.data());
-        }
-      }
-    } catch (e) {
-      //print(e);
-    }
   }
 
   @override
@@ -161,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
       onPressed: () {
-        signUp();
+        signIn();
       },
       child: Ink(
         decoration: BoxDecoration(
@@ -181,14 +165,19 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void signUp() {
+  void signIn() async {
     if (_keyForm.currentState!.validate()) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomePage(),
-        ),
-      );
+      AuthServices as = AuthServices();
+      UserCredential? uc = await as.singIn(emailCtrl.text, passCtrl.text);
+      if (uc != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      }
     }
   }
 }

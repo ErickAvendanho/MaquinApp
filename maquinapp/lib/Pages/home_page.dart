@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
-import 'package:maquinapp/Pages/singmenu.dart';
+import 'package:maquinapp/Pages/singmenu_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({

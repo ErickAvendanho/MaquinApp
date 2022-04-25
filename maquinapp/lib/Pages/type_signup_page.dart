@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/login_page.dart';
 import 'package:maquinapp/Pages/register_page.dart';
 
-class SignPage extends StatelessWidget {
-  const SignPage({Key? key}) : super(key: key);
+class TypeSignUpPage extends StatelessWidget {
+  const TypeSignUpPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0XFFFDD734),
+      appBar: AppBar(
+        backgroundColor: const Color(0XFFFDD734),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
+          splashColor: Colors.transparent,
+          onPressed: () => {
+            Navigator.pop(context),
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -17,12 +30,22 @@ class SignPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.all(70.0),
+                padding: const EdgeInsets.only(bottom: 70.0),
                 child: Image.asset(
                   'assets/images/maquinapp.png',
                   height: size.height * 0.3,
                 ),
               ),
+              const SizedBox(height: 20),
+              const Text(
+                "Seleccione como quiere registrarse",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Color(0XFF3B3A38),
+                ),
+              ),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
@@ -35,13 +58,13 @@ class SignPage extends StatelessWidget {
                   ),
                   onPressed: () => {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const LoginPage(),
-                      ),
-                    ),
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterPage(
+                                  tipoRegistro: 'arrendador',
+                                )))
                   },
-                  child: const Text('INICIAR SESIÓN'),
+                  child: const Text('ARRENDADOR'),
                 ),
               ),
               Padding(
@@ -56,13 +79,13 @@ class SignPage extends StatelessWidget {
                   ),
                   onPressed: () => {
                     Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const RegisterPage(),
-                      ),
-                    ),
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RegisterPage(
+                                  tipoRegistro: 'arrendatario',
+                                )))
                   },
-                  child: const Text('REGISTRARSE'),
+                  child: const Text('ARRENDATARIO'),
                 ),
               ),
               Padding(
