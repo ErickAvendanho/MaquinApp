@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home.dart';
 
@@ -24,12 +25,29 @@ class _LoginPageState extends State<LoginPage> {
       ..addListener(() {
         setState(() {});
       });
+    getUsers();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
+  }
+
+  void getUsers() async {
+    try {
+      CollectionReference collectionReference =
+          FirebaseFirestore.instance.collection('Users');
+
+      QuerySnapshot users = await collectionReference.get();
+      if (users.docs.isNotEmpty) {
+        for (var doc in users.docs) {
+          print(doc.data());
+        }
+      }
+    } catch (e) {
+      //print(e);
+    }
   }
 
   @override

@@ -1,8 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/singmenu.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Se asegura de que todas las dependencias estén inicializadas
+  Firebase.initializeApp().then((value) => {runApp(const MyApp())});
 }
 
 class MyApp extends StatelessWidget {
