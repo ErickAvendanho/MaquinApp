@@ -16,6 +16,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final user = FirebaseAuth.instance.currentUser!;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -51,26 +52,35 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(top: 40, left: 20, bottom: 30),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    backgroundColor:
-                        Color((math.Random().nextDouble() * 0xFFFFFF).toInt())
-                            .withOpacity(1.0),
-                    radius: 50,
-                    child: const Text(
-                      'P',
-                      style: TextStyle(
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
+                  user.photoURL!.isEmpty
+                      ? CircleAvatar(
+                          backgroundColor: Color(
+                                  (math.Random().nextDouble() * 0xFFFFFF)
+                                      .toInt())
+                              .withOpacity(1.0),
+                          radius: 50,
+                          child: Text(
+                            user.displayName![0],
+                            style: const TextStyle(
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        )
+                      : CircleAvatar(
+                          backgroundColor: const Color(0xFFFDD835),
+                          radius: 50,
+                          backgroundImage: NetworkImage(
+                            user.photoURL!,
+                          ),
+                        ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Column(
                       children: [
-                        const Text(
-                          'Pablo Pérez',
-                          style: TextStyle(
+                        Text(
+                          user.displayName!,
+                          style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                               color: Colors.white),
@@ -106,7 +116,9 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {
+                print(user.photoURL.toString());
+              },
               title: const Text('Mi perfil'),
             ),
             ListTile(

@@ -66,7 +66,7 @@ class SignPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(70.0),
+                padding: const EdgeInsets.only(top: 70.0),
                 child: Image.asset(
                   'assets/images/logomaquina.png',
                   height: size.height * 0.2,
