@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
+import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -115,7 +118,13 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Subir nuevo trabajo'),
             ),
             ListTile(
-              onTap: () {
+              onTap: () async {
+                final provider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                bool result = await provider.googleLogout();
+                if (!result) {
+                  await FirebaseAuth.instance.signOut();
+                }
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
                     builder: (context) => const SignPage(),

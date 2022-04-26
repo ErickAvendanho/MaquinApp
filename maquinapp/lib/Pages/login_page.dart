@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home_page.dart';
 import 'package:maquinapp/Pages/src/firebaseServices/auth_services.dart';
+import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -117,7 +119,22 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         child: InkWell(
-                          onTap: () => {},
+                          onTap: () async {
+                            final provider = Provider.of<GoogleSignInProvider>(
+                                context,
+                                listen: false);
+                            bool result = await provider.googleLogin();
+                            if (result) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      const HomePage(),
+                                ),
+                                (route) => false,
+                              );
+                            }
+                          },
                           child: Image.asset(
                             'assets/images/google.png',
                             width: 40,
