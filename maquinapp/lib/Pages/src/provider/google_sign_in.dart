@@ -24,7 +24,6 @@ class GoogleSignInProvider extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }

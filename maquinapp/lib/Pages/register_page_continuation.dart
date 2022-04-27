@@ -1,10 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/src/adduser.dart';
+import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
+
+import 'home_page.dart';
+import 'src/firebaseServices/auth_services.dart';
 
 class RegisterPage2 extends StatefulWidget {
   final String tipoRegistro;
+  final String correo;
+  final String nombre;
+  final String telefono;
+  final String password;
   const RegisterPage2({
     Key? key,
     required this.tipoRegistro,
+    required this.correo,
+    required this.nombre,
+    required this.telefono,
+    required this.password,
   }) : super(key: key);
 
   @override
@@ -25,9 +39,9 @@ class _RegisterPageState extends State<RegisterPage2> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: const Color(0xFFFDD734),
-          title: const Text(
-            'Registro de Arrendador',
-            style: TextStyle(color: Colors.black),
+          title: Text(
+            'Registro de ${widget.tipoRegistro}',
+            style: const TextStyle(color: Colors.black),
           ),
           leading: IconButton(
             icon: const Icon(
@@ -87,6 +101,7 @@ class _RegisterPageState extends State<RegisterPage2> {
             style: const TextStyle(color: Colors.white),
             controller: communeCtrl,
             decoration: InputDecoration(
+              border: InputBorder.none,
               errorStyle: TextStyle(
                 color: Colors.orange.shade600,
                 fontWeight: FontWeight.bold,
@@ -98,25 +113,28 @@ class _RegisterPageState extends State<RegisterPage2> {
             textInputAction: TextInputAction.next,
           ),
         ),
-        formItemsDesign(
-          Icons.storefront,
-          TextFormField(
-            style: const TextStyle(color: Colors.white),
-            controller: businessNameCtrl,
-            decoration: InputDecoration(
-              errorStyle: TextStyle(
-                color: Colors.orange.shade600,
-                fontWeight: FontWeight.bold,
-              ),
-              hintText: 'Nombre del negocio',
-              hintStyle: const TextStyle(color: Colors.white),
-            ),
-            keyboardType: TextInputType.emailAddress,
-            validator: validateBusinessName,
-            textInputAction: TextInputAction.next,
-          ),
-        ),
-        SizedBox(height: 40),
+        widget.tipoRegistro == 'arrendador'
+            ? formItemsDesign(
+                Icons.storefront,
+                TextFormField(
+                  style: const TextStyle(color: Colors.white),
+                  controller: businessNameCtrl,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    errorStyle: TextStyle(
+                      color: Colors.orange.shade600,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    hintText: 'Nombre del negocio',
+                    hintStyle: const TextStyle(color: Colors.white),
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: validateBusinessName,
+                  textInputAction: TextInputAction.next,
+                ),
+              )
+            : const SizedBox.shrink(),
+        const SizedBox(height: 40),
         GestureDetector(
           onTap: () {
             save();
@@ -153,14 +171,42 @@ class _RegisterPageState extends State<RegisterPage2> {
   }
 
   String? validateBusinessName(String? value) {
-    if (value?.length == 0) {
+    if (value?.length == 0 && widget.tipoRegistro == "arrendador") {
       return "El nombre del negocio es necesario";
     }
     return null;
   }
 
-  save() {
+  save() async {
     if (keyForm.currentState!.validate()) {
+      AuthServices as = AuthServices();
+      bool result = await as.registration(widget.correo, widget.password);
+      if (result) {
+        AddUser register = AddUser(
+          0,
+          communeCtrl.text,
+          widget.correo,
+          '',
+          0,
+          0,
+          businessNameCtrl.text,
+          widget.nombre,
+          'usuario',
+          widget.telefono,
+          widget.tipoRegistro,
+        );
+        await register.agregarUsuario();
+        UserCredential? uc = await as.singIn(widget.correo, widget.password);
+        if (uc != null) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const HomePage(),
+            ),
+            (route) => false,
+          );
+        }
+      }
     } else {}
   }
 }

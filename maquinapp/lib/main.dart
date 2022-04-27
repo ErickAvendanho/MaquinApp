@@ -88,6 +88,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             );
           } else if (snapshot.hasData) {
+            print('\n\n\n\n-----\n${snapshot.data}\n-----\n\n\n');
             return const HomePage();
           } else if (snapshot.hasError) {
             return const SignPage();

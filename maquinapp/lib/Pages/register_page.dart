@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:maquinapp/Pages/verify_phone.dart';
-import 'package:maquinapp/Pages/src/firebaseServices/auth_services.dart';
-
-import 'home_page.dart';
+import 'package:maquinapp/Pages/register_page_continuation.dart';
 
 class RegisterPage extends StatefulWidget {
   final String tipoRegistro;
@@ -18,6 +14,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  String? pickedCountryCode = '+52';
   GlobalKey<FormState> keyForm = GlobalKey();
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController emailCtrl = TextEditingController();
@@ -34,9 +31,9 @@ class _RegisterPageState extends State<RegisterPage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: const Color(0xFFFDD734),
-          title: const Text(
-            'Registro de Arrendador',
-            style: TextStyle(color: Colors.black),
+          title: Text(
+            'Registro de ${widget.tipoRegistro}',
+            style: const TextStyle(color: Colors.black),
           ),
           leading: IconButton(
             icon: const Icon(
@@ -141,7 +138,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   dialogBackgroundColor: Colors.white,
                   dialogSize: Size(size.width * 0.9, size.height * 0.7),
                   dialogTextStyle: const TextStyle(color: Color(0XFF20536F)),
-                  onChanged: print,
+                  onChanged: (CountryCode cou) {
+                    pickedCountryCode = cou.dialCode!;
+                  },
                   // Initial selection and favorite can be one of code ('IT') OR dial_code('+39')
                   initialSelection: 'MX',
                   favorite: const ['+52', 'MX'],
@@ -240,7 +239,7 @@ class _RegisterPageState extends State<RegisterPage> {
             padding: const EdgeInsets.only(top: 16, bottom: 16),
           ),
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Image.asset('assets/images/logomaquina.png', width: 200, height: 100),
       ],
     );
@@ -250,7 +249,7 @@ class _RegisterPageState extends State<RegisterPage> {
     if (value != passwordCtrl.text) {
       return "Las contraseñas no coinciden";
     }
-    if (value?.length == 0) {
+    if (value!.isEmpty) {
       return "La contraseña es requerida";
     }
     return null;
@@ -258,10 +257,10 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String? validateName(String? value) {
     String pattern = r'(^[a-zA-Z ]*$)';
-    RegExp regExp = new RegExp(pattern);
-    if (value?.length == 0) {
+    RegExp regExp = RegExp(pattern);
+    if (value!.isEmpty) {
       return "El nombre es necesario";
-    } else if (!regExp.hasMatch(value!)) {
+    } else if (!regExp.hasMatch(value)) {
       return "El nombre debe de ser a-z y A-Z";
     }
     return null;
@@ -269,11 +268,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String? validateMobile(String? value) {
     String patttern = r'(^[0-9]*$)';
-    RegExp regExp = new RegExp(patttern);
-    if (value?.length == 0) {
-      return "El telefono es necesario";
-    } else if (value?.length != 10) {
-      return "El numero debe tener 10 digitos";
+    RegExp regExp = RegExp(patttern);
+    if (value!.isEmpty) {
+      return "Campo necesario";
+    } else if (value.length != 10) {
+      return "No hay 10 digitos";
+    } else if (!regExp.hasMatch(value)) {
+      return "Sólo números";
     }
     return null;
   }
@@ -282,9 +283,9 @@ class _RegisterPageState extends State<RegisterPage> {
     String pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(pattern);
-    if (value?.length == 0) {
+    if (value!.isEmpty) {
       return "El correo es necesario";
-    } else if (!regExp.hasMatch(value!)) {
+    } else if (!regExp.hasMatch(value)) {
       return "Correo invalido";
     } else {
       return null;
@@ -293,19 +294,18 @@ class _RegisterPageState extends State<RegisterPage> {
 
   void save() async {
     if (keyForm.currentState!.validate()) {
-      AuthServices as = AuthServices();
-      bool uc = await as.registration(emailCtrl.text, passwordCtrl.text);
-      if (uc) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => const VerifyPhonePage(),
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RegisterPage2(
+            tipoRegistro: widget.tipoRegistro,
+            nombre: nameCtrl.text,
+            correo: emailCtrl.text,
+            telefono: '$pickedCountryCode${mobileCtrl.text}',
+            password: passwordCtrl.text,
           ),
-          (route) => false,
-        );
-      }
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const VerifyPhonePage()));
+        ),
+      );
     } else {}
   }
 }

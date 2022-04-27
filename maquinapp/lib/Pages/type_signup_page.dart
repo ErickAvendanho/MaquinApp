@@ -58,11 +58,13 @@ class TypeSignUpPage extends StatelessWidget {
                   ),
                   onPressed: () => {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterPage(
-                                  tipoRegistro: 'arrendador',
-                                )))
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(
+                          tipoRegistro: 'arrendador',
+                        ),
+                      ),
+                    ),
                   },
                   child: const Text('ARRENDADOR'),
                 ),
@@ -79,11 +81,13 @@ class TypeSignUpPage extends StatelessWidget {
                   ),
                   onPressed: () => {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterPage(
-                                  tipoRegistro: 'arrendatario',
-                                )))
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const RegisterPage(
+                          tipoRegistro: 'arrendatario',
+                        ),
+                      ),
+                    ),
                   },
                   child: const Text('ARRENDATARIO'),
                 ),
