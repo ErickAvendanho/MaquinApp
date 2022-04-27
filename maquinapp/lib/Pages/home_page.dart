@@ -16,7 +16,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final user = FirebaseAuth.instance.currentUser!;
+  final User user = FirebaseAuth.instance.currentUser!;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -29,7 +30,7 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
       ),
-      drawer: _drawerMaquinapp(size),
+      //drawer: _drawerMaquinapp(size),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Drawer _drawerMaquinapp(Size size) {
+  /* Drawer _drawerMaquinapp(Size size) {
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -117,7 +118,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ListTile(
               onTap: () {
-                print(user.photoURL.toString());
+                //print(user.photoURL.toString());
               },
               title: const Text('Mi perfil'),
             ),
@@ -151,4 +152,6 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+}
+*/
 }
