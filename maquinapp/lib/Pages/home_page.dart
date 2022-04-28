@@ -7,6 +7,8 @@ import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
+import 'src/search_list_page.dart';
+
 final usersRef = FirebaseFirestore.instance.collection("Users").doc();
 
 class HomePage extends StatefulWidget {
@@ -84,6 +86,19 @@ class _HomePageState extends State<HomePage> {
           height: size.height * 0.15,
         ),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SearchList(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       drawer: _drawerMaquinapp(size),
       body: SingleChildScrollView(
@@ -116,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                               .withOpacity(1.0),
                           radius: 50,
                           child: Text(
-                            displayName[0],
+                            "prueba",
                             style: const TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
