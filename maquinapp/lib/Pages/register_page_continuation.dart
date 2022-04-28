@@ -180,8 +180,9 @@ class _RegisterPageState extends State<RegisterPage2> {
   save() async {
     if (keyForm.currentState!.validate()) {
       AuthServices as = AuthServices();
-      bool result = await as.registration(widget.correo, widget.password);
-      if (result) {
+      UserCredential? result =
+          await as.registration(widget.correo, widget.password);
+      if (result != null) {
         AddUser register = AddUser(
           0,
           communeCtrl.text,
@@ -194,6 +195,7 @@ class _RegisterPageState extends State<RegisterPage2> {
           'usuario',
           widget.telefono,
           widget.tipoRegistro,
+          result.user!.uid,
         );
         await register.agregarUsuario();
         UserCredential? uc = await as.singIn(widget.correo, widget.password);

@@ -21,19 +21,20 @@ class AuthServices {
     }
   }
 
-  Future<bool> registration(String mail, String password) async {
+  Future<UserCredential?> registration(String mail, String password) async {
+    UserCredential usuario;
     try {
-      await FirebaseAuth.instance
+      usuario = await FirebaseAuth.instance
           .createUserWithEmailAndPassword(email: mail, password: password);
+      return usuario;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        return false;
+        return null;
       } else if (e.code == 'email-already-in-use') {
-        return false;
+        return null;
       }
     } catch (e) {
       print(e);
     }
-    return true;
   }
 }

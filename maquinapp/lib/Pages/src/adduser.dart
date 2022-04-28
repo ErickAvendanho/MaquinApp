@@ -14,6 +14,7 @@ class AddUser {
   final String privilegios;
   final String telefono;
   final String tipo;
+  final String uid;
 
   AddUser(
     this.alcance,
@@ -27,6 +28,7 @@ class AddUser {
     this.privilegios,
     this.telefono,
     this.tipo,
+    this.uid,
   );
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
