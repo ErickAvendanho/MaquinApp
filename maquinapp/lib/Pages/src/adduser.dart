@@ -30,7 +30,7 @@ class AddUser {
     this.tipo,
     this.uid,
   );
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
   Future<bool> agregarUsuario() async {
     bool result = false;
@@ -47,6 +47,7 @@ class AddUser {
             'nombre': nombre,
             'telefono': telefono,
             'tipo': tipo,
+            'uid': uid,
           })
           .then((value) => result = true)
           .catchError((error) => result = false);

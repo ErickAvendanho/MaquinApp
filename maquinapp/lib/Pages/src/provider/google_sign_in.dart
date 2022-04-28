@@ -34,7 +34,6 @@ class GoogleSignInProvider extends ChangeNotifier {
       FirebaseAuth.instance.signOut();
       return true;
     } catch (e) {
-      print(e.toString());
       return false;
     }
   }

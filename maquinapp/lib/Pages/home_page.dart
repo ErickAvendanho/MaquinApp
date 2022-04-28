@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
@@ -5,6 +6,8 @@ import 'dart:math' as math;
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
+
+final usersRef = FirebaseFirestore.instance.collection("Users").doc();
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -17,6 +20,58 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final User user = FirebaseAuth.instance.currentUser!;
+  late String photoURL;
+  late String displayName;
+
+  void obtenerDatos() {
+    try {
+      photoURL = user.photoURL!;
+    } catch (e) {
+      photoURL = '';
+    }
+    try {
+      displayName = user.displayName!;
+    } catch (e) {
+      try {
+        displayName = "Algun nombre";
+      } catch (e) {
+        displayName = 'usuario';
+      }
+    }
+  }
+
+  void getUsers() async {
+    /*var document = FirebaseFirestore.instance.doc('Users/Xhn1Ge6mQ43qDllgAZDs');
+    document.get().then((document) {
+      print(document.data());
+    });*/
+    /*
+    FirebaseFirestore.instance
+        .collection('Users')
+        .doc('Xhn1Ge6mQ43qDllgAZDs')
+        .get()
+        .then((DocumentSnapshot document) {
+      print("x value: ${document['nombre']}");
+    });*/
+    CollectionReference _collectionRef =
+        FirebaseFirestore.instance.collection('Users');
+    QuerySnapshot querySnapshot = await _collectionRef.get();
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    print(allData[0]);
+  }
+
+  @override
+  void initState() {
+    getUsers();
+    obtenerDatos();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +85,7 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
       ),
-      //drawer: _drawerMaquinapp(size),
+      drawer: _drawerMaquinapp(size),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -41,7 +96,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  /* Drawer _drawerMaquinapp(Size size) {
+  Drawer _drawerMaquinapp(Size size) {
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -53,7 +108,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(top: 40, left: 20, bottom: 30),
               child: Row(
                 children: [
-                  user.photoURL!.isEmpty
+                  photoURL == ""
                       ? CircleAvatar(
                           backgroundColor: Color(
                                   (math.Random().nextDouble() * 0xFFFFFF)
@@ -61,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                               .withOpacity(1.0),
                           radius: 50,
                           child: Text(
-                            user.displayName![0],
+                            displayName[0],
                             style: const TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
@@ -72,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                           backgroundColor: const Color(0xFFFDD835),
                           radius: 50,
                           backgroundImage: NetworkImage(
-                            user.photoURL!,
+                            photoURL,
                           ),
                         ),
                   Padding(
@@ -80,7 +135,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       children: [
                         Text(
-                          user.displayName!,
+                          displayName,
                           style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -152,6 +207,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-*/
 }
