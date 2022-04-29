@@ -25,13 +25,20 @@ class _HomePageState extends State<HomePage> {
   late String photoURL;
   late String displayName;
 
-  void obtenerDatos() {
+  void obtenerDatos() async {
     try {
+      /*
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .where('email', isEqualTo: query)
+          .get()
+          .then();*/
       photoURL = user.photoURL!;
     } catch (e) {
       photoURL = '';
     }
     try {
+      print(user.displayName!);
       displayName = user.displayName!;
     } catch (e) {
       try {
@@ -47,20 +54,34 @@ class _HomePageState extends State<HomePage> {
     document.get().then((document) {
       print(document.data());
     });*/
-    /*
+
+    /* print(user.email);
     FirebaseFirestore.instance
         .collection('Users')
-        .doc('Xhn1Ge6mQ43qDllgAZDs')
+        .where('email', isEqualTo: user.email)
         .get()
-        .then((DocumentSnapshot document) {
-      print("x value: ${document['nombre']}");
-    });*/
-    CollectionReference _collectionRef =
+        .then((document) {
+      print(document.docs[0].id);
+    }); */
+
+    /* final snapshot = await FirebaseFirestore.instance
+        .collection('Users')
+        .where('email', isEqualTo: user.email)
+        .get();
+    print(snapshot.docs); */
+    /*
+    List<DocumentSnapshot> documentList;
+    documentList = await FirebaseFirestore.instance
+        .collection("Users")
+        .where("email", isEqualTo: user.email)
+        .get();
+    print(documentList);*/
+    /*CollectionReference _collectionRef =
         FirebaseFirestore.instance.collection('Users');
     QuerySnapshot querySnapshot = await _collectionRef.get();
     final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
-    print(allData[0]);
+    print(allData[0]);*/
   }
 
   @override
@@ -79,32 +100,138 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: const Color(0xFFFDD835),
       appBar: AppBar(
-        backgroundColor: const Color(0xFFFDD835),
-        title: Image.asset(
-          'assets/images/logomaquina.png',
-          height: size.height * 0.15,
+        elevation: 0,
+        backgroundColor: const Color(0XFF3B3A38),
+        title: const Text(
+          'MAQUINAPP',
+          style: TextStyle(
+            color: Color(0xFFFDD835),
+            fontWeight: FontWeight.bold,
+            fontSize: 28,
+          ),
         ),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
-            icon: const Icon(Icons.search),
+            icon: const Icon(
+              Icons.search,
+              color: Colors.white,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => SearchList(),
+                  builder: (context) => const SearchList(),
                 ),
               );
             },
           ),
         ],
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _drawerMaquinapp(size),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
-            children: const [],
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 10,
+                  padding: EdgeInsets.zero,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                onPressed: () {},
+                child: Ink(
+                  decoration: BoxDecoration(
+                    color: const Color(0XFF20536F),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Container(
+                    height: 50,
+                    width: size.width * 0.8,
+                    alignment: Alignment.center,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.map,
+                          color: Color(0xFFFDD835),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          'CAMBIAR A MAPA',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              WidgetTrabajo(
+                onTap: () {},
+                size: size,
+                categoria: 'Constructores',
+                cliente: 'Marissa',
+                descripcion:
+                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
+                distancia: '3.29 km',
+                fecha: '30/03/2022',
+                title: 'Construcción en casa',
+                costo: '1809',
+                img:
+                    'https://cdn.pixabay.com/photo/2019/04/15/18/13/bathroom-4130000_960_720.jpg',
+              ),
+              WidgetTrabajo(
+                onTap: () {},
+                size: size,
+                categoria: 'Constructores',
+                cliente: 'Marissa',
+                descripcion:
+                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
+                distancia: '3.29 km',
+                fecha: '30/03/2022',
+                title: 'Construcción en casa',
+                img:
+                    'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_960_720.jpg',
+                costo: '1809',
+              ),
+              WidgetTrabajo(
+                onTap: () {},
+                size: size,
+                categoria: 'Constructores',
+                cliente: 'Marissa',
+                descripcion:
+                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
+                distancia: '3.29 km',
+                fecha: '30/03/2022',
+                title: 'Construcción en casa',
+                img: '',
+                costo: '1809',
+              ),
+              WidgetTrabajo(
+                onTap: () {},
+                size: size,
+                categoria: 'Constructores',
+                cliente: 'Marissa',
+                descripcion:
+                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
+                distancia: '3.29 km',
+                fecha: '30/03/2022',
+                title: 'Construcción en casa',
+                img:
+                    'https://cdn.pixabay.com/photo/2015/12/07/10/49/electrician-1080554_960_720.jpg',
+                costo: '1809',
+              ),
+            ],
           ),
         ),
       ),
@@ -131,7 +258,7 @@ class _HomePageState extends State<HomePage> {
                               .withOpacity(1.0),
                           radius: 50,
                           child: Text(
-                            "prueba",
+                            displayName[0],
                             style: const TextStyle(
                               fontSize: 40,
                               fontWeight: FontWeight.bold,
@@ -216,6 +343,138 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               title: const Text('Cerrar sesión'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class WidgetTrabajo extends StatelessWidget {
+  const WidgetTrabajo({
+    Key? key,
+    required this.size,
+    required this.title,
+    required this.fecha,
+    required this.descripcion,
+    required this.categoria,
+    required this.cliente,
+    required this.distancia,
+    required this.costo,
+    required this.img,
+    this.onTap,
+  }) : super(key: key);
+
+  final Size size;
+  final String title;
+  final String fecha;
+  final String descripcion;
+  final String categoria;
+  final String cliente;
+  final String distancia;
+  final String costo;
+  final String img;
+  final Function()? onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size.width * 0.95,
+      padding: const EdgeInsets.all(20),
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(
+          Radius.circular(10),
+        ),
+      ),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                Text(fecha),
+              ],
+            ),
+            img != ''
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    child: Image.network(
+                      img,
+                      fit: BoxFit.fitWidth,
+                    ),
+                  )
+                : const SizedBox(
+                    height: 20,
+                  ),
+            Text(descripcion),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10.0),
+              child: SizedBox(
+                width: size.width * 0.89,
+                child: Wrap(
+                  spacing: 60,
+                  runSpacing: 10,
+                  direction: Axis.horizontal,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.black),
+                        children: [
+                          const WidgetSpan(
+                            child: Icon(
+                              Icons.cases_outlined,
+                              color: Color(0xFFFDD835),
+                            ),
+                          ),
+                          TextSpan(text: categoria),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.black),
+                        children: [
+                          const WidgetSpan(
+                            child: Icon(
+                              Icons.person,
+                              color: Color(0xFFFDD835),
+                            ),
+                          ),
+                          TextSpan(text: cliente),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.black),
+                        children: [
+                          const WidgetSpan(
+                            child: Icon(
+                              Icons.map,
+                              color: Color(0xFFFDD835),
+                            ),
+                          ),
+                          TextSpan(text: distancia),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Text(
+              costo,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ],
         ),

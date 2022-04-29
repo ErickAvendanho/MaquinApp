@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchList extends StatefulWidget {
-  SearchList({Key? key}) : super(key: key);
+  const SearchList({Key? key}) : super(key: key);
   @override
   _SearchListState createState() => _SearchListState();
 }
@@ -95,34 +95,26 @@ class _SearchListState extends State<SearchList> {
 
   Widget buildBar(BuildContext context) {
     return AppBar(
-      backgroundColor: const Color(0xFFFDD835),
+      backgroundColor: const Color(0XFF3B3A38),
       leading: IconButton(
         icon: const Icon(
           Icons.arrow_back,
-          color: Color(0xFF343436),
+          color: Colors.white,
         ),
         onPressed: () => Navigator.of(context).pop(),
       ),
       centerTitle: true,
       title: Container(
-        decoration: BoxDecoration(
-          color: const Color(0xFF343436),
-          borderRadius: const BorderRadius.all(
+        decoration: const BoxDecoration(
+          color: Color(0xFF343436),
+          borderRadius: BorderRadius.all(
             Radius.circular(35),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.shade400,
-              spreadRadius: 0.1,
-              blurRadius: 5,
-              offset: const Offset(0, 2.0),
-            ),
-          ],
         ),
         alignment: Alignment.centerLeft,
         child: TextField(
           autofocus: true,
-          cursorColor: const Color(0XFF000695),
+          cursorColor: Colors.white,
           controller: _searchQuery,
           style: const TextStyle(
             color: Colors.white,
@@ -148,7 +140,7 @@ class _SearchListState extends State<SearchList> {
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.close),
-          color: const Color(0xFF343436),
+          color: Colors.white,
           onPressed: () {
             _handleSearchEnd();
           },
