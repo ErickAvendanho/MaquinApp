@@ -1,18 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
-import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 
 import '../home_page.dart';
 import '../src/firebaseServices/auth_services.dart';
 
-class RegisterPage2 extends StatefulWidget {
+class RegisterPageSecond extends StatefulWidget {
   final String tipoRegistro;
   final String correo;
   final String nombre;
   final String telefono;
   final String password;
-  const RegisterPage2({
+  const RegisterPageSecond({
     Key? key,
     required this.tipoRegistro,
     required this.correo,
@@ -25,7 +24,7 @@ class RegisterPage2 extends StatefulWidget {
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage2> {
+class _RegisterPageState extends State<RegisterPageSecond> {
   GlobalKey<FormState> keyForm = GlobalKey();
   TextEditingController communeCtrl = TextEditingController();
   TextEditingController businessNameCtrl = TextEditingController();

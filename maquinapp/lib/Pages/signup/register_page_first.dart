@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:maquinapp/Pages/signup/register_page_continuation.dart';
+import 'package:maquinapp/Pages/signup/register_page_second.dart';
 
-class RegisterPage extends StatefulWidget {
+class RegisterPageFirst extends StatefulWidget {
   final String tipoRegistro;
-  const RegisterPage({
+  const RegisterPageFirst({
     Key? key,
     required this.tipoRegistro,
   }) : super(key: key);
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _RegisterPageFirstState createState() => _RegisterPageFirstState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _RegisterPageFirstState extends State<RegisterPageFirst> {
   String? pickedCountryCode = '+52';
   GlobalKey<FormState> keyForm = GlobalKey();
   TextEditingController nameCtrl = TextEditingController();
@@ -21,6 +21,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController mobileCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
   TextEditingController repeatPassCtrl = TextEditingController();
+  bool passwordVisible = false;
+  bool repeatPassVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  formItemsDesign(icon, item) {
+  formItemsDesign(icon, item, trailing) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 7),
       child: Card(
@@ -69,6 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
             color: const Color(0xFFFDD734),
           ),
           title: item,
+          trailing: trailing,
         ),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         color: const Color(0xFF343436),
@@ -102,6 +105,7 @@ class _RegisterPageState extends State<RegisterPage> {
             validator: validateName,
             textInputAction: TextInputAction.next,
           ),
+          const SizedBox.shrink(),
         ),
         formItemsDesign(
           Icons.email,
@@ -122,13 +126,14 @@ class _RegisterPageState extends State<RegisterPage> {
             validator: validateEmail,
             textInputAction: TextInputAction.next,
           ),
+          const SizedBox.shrink(),
         ),
         Row(
           children: <Widget>[
             Expanded(
               child: Container(
                 height: 55,
-                margin: const EdgeInsets.symmetric(horizontal: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                   color: const Color(0XFF343331),
                   borderRadius: BorderRadius.circular(15),
@@ -136,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: CountryCodePicker(
                   textStyle: const TextStyle(color: Colors.white),
                   dialogBackgroundColor: Colors.white,
-                  dialogSize: Size(size.width * 0.9, size.height * 0.7),
+                  dialogSize: Size(size.width * 0.5, size.height * 0.7),
                   dialogTextStyle: const TextStyle(color: Color(0XFF20536F)),
                   onChanged: (CountryCode cou) {
                     pickedCountryCode = cou.dialCode!;
@@ -173,6 +178,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   validator: validateMobile,
                   textInputAction: TextInputAction.next,
                 ),
+                const SizedBox.shrink(),
               ),
             ),
           ],
@@ -183,7 +189,7 @@ class _RegisterPageState extends State<RegisterPage> {
             style: const TextStyle(color: Colors.white),
             controller: passwordCtrl,
             cursorColor: const Color(0xFFFDD734),
-            obscureText: true,
+            obscureText: !passwordVisible,
             decoration: InputDecoration(
               border: InputBorder.none,
               errorStyle: TextStyle(
@@ -196,6 +202,22 @@ class _RegisterPageState extends State<RegisterPage> {
             validator: validatePassword,
             textInputAction: TextInputAction.next,
           ),
+          IconButton(
+            onPressed: () => {
+              setState(() {
+                passwordVisible = !passwordVisible;
+              })
+            },
+            icon: passwordVisible
+                ? const Icon(
+                    Icons.visibility_off,
+                    color: Color(0XFF8B6B34),
+                  )
+                : const Icon(
+                    Icons.visibility,
+                    color: Color(0XFF8B6B34),
+                  ),
+          ),
         ),
         formItemsDesign(
           Icons.password,
@@ -203,7 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
             style: const TextStyle(color: Colors.white),
             controller: repeatPassCtrl,
             cursorColor: const Color(0xFFFDD734),
-            obscureText: true,
+            obscureText: !repeatPassVisible,
             decoration: InputDecoration(
               border: InputBorder.none,
               errorStyle: TextStyle(
@@ -215,6 +237,22 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
             validator: validatePassword,
             textInputAction: TextInputAction.done,
+          ),
+          IconButton(
+            onPressed: () => {
+              setState(() {
+                repeatPassVisible = !repeatPassVisible;
+              })
+            },
+            icon: repeatPassVisible
+                ? const Icon(
+                    Icons.visibility_off,
+                    color: Color(0XFF8B6B34),
+                  )
+                : const Icon(
+                    Icons.visibility,
+                    color: Color(0XFF8B6B34),
+                  ),
           ),
         ),
         GestureDetector(
@@ -230,7 +268,7 @@ class _RegisterPageState extends State<RegisterPage> {
               color: const Color(0xFF343436),
             ),
             child: const Text(
-              "Continuar",
+              "CONTINUAR",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -297,7 +335,7 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RegisterPage2(
+          builder: (context) => RegisterPageSecond(
             tipoRegistro: widget.tipoRegistro,
             nombre: nameCtrl.text,
             correo: emailCtrl.text,

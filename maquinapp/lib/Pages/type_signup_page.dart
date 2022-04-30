@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/signup/register_page.dart';
+import 'package:maquinapp/Pages/signup/register_page_first.dart';
 
 class TypeSignUpPage extends StatelessWidget {
   const TypeSignUpPage({Key? key}) : super(key: key);
@@ -60,7 +60,7 @@ class TypeSignUpPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const RegisterPage(
+                        builder: (context) => const RegisterPageFirst(
                           tipoRegistro: 'arrendador',
                         ),
                       ),
@@ -83,7 +83,7 @@ class TypeSignUpPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const RegisterPage(
+                        builder: (context) => const RegisterPageFirst(
                           tipoRegistro: 'arrendatario',
                         ),
                       ),
