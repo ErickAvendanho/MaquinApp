@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:maquinapp/Pages/register_page_continuation.dart';
+import 'package:maquinapp/Pages/signup/register_page_continuation.dart';
 
 class RegisterPage extends StatefulWidget {
   final String tipoRegistro;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/login_page.dart';
-import 'package:maquinapp/Pages/register_page.dart';
+import 'package:maquinapp/Pages/signup/register_page.dart';
 
 import 'type_signup_page.dart';
 

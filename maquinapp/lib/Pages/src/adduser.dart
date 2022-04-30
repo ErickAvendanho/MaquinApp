@@ -1,5 +1,3 @@
-// Import the firebase_core and cloud_firestore plugin
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AddUser {
@@ -32,11 +30,37 @@ class AddUser {
   );
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
 
-  Future<bool> agregarUsuario() async {
+  Future<bool> agregarUsuarioFirestoreDocRandom() async {
     bool result = false;
     try {
       users
           .add({
+            'alcance': alcance,
+            'comuna': comuna,
+            'correo': correo,
+            'fotoperfil': fotoPerfil,
+            'latitud': latitud,
+            'longitud': longitud,
+            'negocio': negocio,
+            'nombre': nombre,
+            'telefono': telefono,
+            'tipo': tipo,
+            'uid': uid,
+          })
+          .then((value) => result = true)
+          .catchError((error) => result = false);
+      return result;
+    } catch (e) {
+      return result;
+    }
+  }
+
+  Future<bool> agregarUsuarioFirestore() async {
+    bool result = false;
+    try {
+      users
+          .doc(uid.toString())
+          .set({
             'alcance': alcance,
             'comuna': comuna,
             'correo': correo,

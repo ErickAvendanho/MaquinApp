@@ -5,6 +5,7 @@ import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
+import 'package:maquinapp/models/document_user.dart';
 import 'package:maquinapp/models/document_users.dart';
 import 'package:provider/provider.dart';
 
@@ -29,15 +30,15 @@ class _HomePageState extends State<HomePage> {
         user.displayName.toString() != "null") {
       return user.displayName.toString();
     } else {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection("Users").get();
-      List<DocumentUsers> users = snapshot.docs
-          .map((docSnapshot) => DocumentUsers.fromDocumentSnapshot(docSnapshot))
-          .toList();
-      for (DocumentUsers userInfo in users) {
-        if (userInfo.uid == user.uid) {
-          return userInfo.nombre;
-        }
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(user.uid.toString())
+              .get();
+      if (docSnapshot.exists) {
+        DocumentUser userDoc = DocumentUser();
+        userDoc.fromMap(docSnapshot.data());
+        return userDoc.nombre.toString();
       }
     }
     return 'User';
@@ -47,15 +48,15 @@ class _HomePageState extends State<HomePage> {
     if (user.photoURL.toString().isNotEmpty) {
       return user.photoURL.toString();
     } else {
-      QuerySnapshot<Map<String, dynamic>> snapshot =
-          await FirebaseFirestore.instance.collection("Users").get();
-      List<DocumentUsers> users = snapshot.docs
-          .map((docSnapshot) => DocumentUsers.fromDocumentSnapshot(docSnapshot))
-          .toList();
-      for (DocumentUsers userInfo in users) {
-        if (userInfo.uid == user.uid) {
-          return userInfo.fotoperfil.toString();
-        }
+      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(user.uid.toString())
+              .get();
+      if (docSnapshot.exists) {
+        DocumentUser userDoc = DocumentUser();
+        userDoc.fromMap(docSnapshot.data());
+        return userDoc.fotoperfil.toString();
       }
     }
     return 'null';

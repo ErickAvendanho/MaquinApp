@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 
-import 'home_page.dart';
-import 'src/firebaseServices/auth_services.dart';
+import '../home_page.dart';
+import '../src/firebaseServices/auth_services.dart';
 
 class RegisterPage2 extends StatefulWidget {
   final String tipoRegistro;
@@ -157,7 +157,7 @@ class _RegisterPageState extends State<RegisterPage2> {
             padding: const EdgeInsets.only(top: 16, bottom: 16),
           ),
         ),
-        SizedBox(height: 50),
+        const SizedBox(height: 50),
         Image.asset('assets/images/logomaquina.png', width: 200, height: 100),
       ],
     );
@@ -181,7 +181,7 @@ class _RegisterPageState extends State<RegisterPage2> {
     if (keyForm.currentState!.validate()) {
       AuthServices as = AuthServices();
       UserCredential? user =
-          await as.registration(widget.correo, widget.password);
+          await as.authSignUp(widget.correo, widget.password);
       if (user != null) {
         AddUser register = AddUser(
           0,
@@ -197,7 +197,7 @@ class _RegisterPageState extends State<RegisterPage2> {
           widget.tipoRegistro,
           user.user!.uid,
         );
-        await register.agregarUsuario();
+        await register.agregarUsuarioFirestore();
         UserCredential? uc = await as.singIn(widget.correo, widget.password);
         if (uc != null) {
           Navigator.pushAndRemoveUntil(

@@ -16,9 +16,10 @@ class AuthServices {
         return null;
       }
     }
+    return null;
   }
 
-  Future<UserCredential?> registration(String mail, String password) async {
+  Future<UserCredential?> authSignUp(String mail, String password) async {
     UserCredential usuario;
     try {
       usuario = await FirebaseAuth.instance
