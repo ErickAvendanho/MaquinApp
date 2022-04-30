@@ -106,7 +106,7 @@ class _SearchListState extends State<SearchList> {
       centerTitle: true,
       title: Container(
         decoration: const BoxDecoration(
-          color: Color(0xFF343436),
+          color: Color(0XFF3B3A38),
           borderRadius: BorderRadius.all(
             Radius.circular(35),
           ),

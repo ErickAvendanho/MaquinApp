@@ -5,11 +5,12 @@ import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
+import 'package:maquinapp/models/document_users.dart';
 import 'package:provider/provider.dart';
 
 import 'src/search_list_page.dart';
 
-final usersRef = FirebaseFirestore.instance.collection("Users").doc();
+final usersRef = FirebaseFirestore.instance.collection("Users");
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -22,72 +23,46 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final User user = FirebaseAuth.instance.currentUser!;
-  late String photoURL;
-  late String displayName;
 
-  void obtenerDatos() async {
-    try {
-      /*
-      final snapshot = await FirebaseFirestore.instance
-          .collection('Users')
-          .where('email', isEqualTo: query)
-          .get()
-          .then();*/
-      photoURL = user.photoURL!;
-    } catch (e) {
-      photoURL = '';
-    }
-    try {
-      print(user.displayName!);
-      displayName = user.displayName!;
-    } catch (e) {
-      try {
-        displayName = "Algun nombre";
-      } catch (e) {
-        displayName = 'usuario';
+  Future<String> obtenerNombre() async {
+    if (user.displayName.toString().isNotEmpty &&
+        user.displayName.toString() != "null") {
+      return user.displayName.toString();
+    } else {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection("Users").get();
+      List<DocumentUsers> users = snapshot.docs
+          .map((docSnapshot) => DocumentUsers.fromDocumentSnapshot(docSnapshot))
+          .toList();
+      for (DocumentUsers userInfo in users) {
+        if (userInfo.uid == user.uid) {
+          return userInfo.nombre;
+        }
       }
     }
+    return 'User';
   }
 
-  void getUsers() async {
-    /*var document = FirebaseFirestore.instance.doc('Users/Xhn1Ge6mQ43qDllgAZDs');
-    document.get().then((document) {
-      print(document.data());
-    });*/
-
-    /* print(user.email);
-    FirebaseFirestore.instance
-        .collection('Users')
-        .where('email', isEqualTo: user.email)
-        .get()
-        .then((document) {
-      print(document.docs[0].id);
-    }); */
-
-    /* final snapshot = await FirebaseFirestore.instance
-        .collection('Users')
-        .where('email', isEqualTo: user.email)
-        .get();
-    print(snapshot.docs); */
-    /*
-    List<DocumentSnapshot> documentList;
-    documentList = await FirebaseFirestore.instance
-        .collection("Users")
-        .where("email", isEqualTo: user.email)
-        .get();
-    print(documentList);*/
-    /*CollectionReference _collectionRef =
-        FirebaseFirestore.instance.collection('Users');
-    QuerySnapshot querySnapshot = await _collectionRef.get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-
-    print(allData[0]);*/
+  Future<String> obtenerFoto() async {
+    if (user.photoURL.toString().isNotEmpty) {
+      return user.photoURL.toString();
+    } else {
+      QuerySnapshot<Map<String, dynamic>> snapshot =
+          await FirebaseFirestore.instance.collection("Users").get();
+      List<DocumentUsers> users = snapshot.docs
+          .map((docSnapshot) => DocumentUsers.fromDocumentSnapshot(docSnapshot))
+          .toList();
+      for (DocumentUsers userInfo in users) {
+        if (userInfo.uid == user.uid) {
+          return userInfo.fotoperfil.toString();
+        }
+      }
+    }
+    return 'null';
   }
 
   @override
   void initState() {
-    getUsers();
-    obtenerDatos();
     super.initState();
   }
 
@@ -248,69 +223,92 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0XFF3B3A38),
               ),
               padding: const EdgeInsets.only(top: 40, left: 20, bottom: 30),
-              child: Row(
-                children: [
-                  photoURL == ""
-                      ? CircleAvatar(
-                          backgroundColor: Color(
-                                  (math.Random().nextDouble() * 0xFFFFFF)
-                                      .toInt())
-                              .withOpacity(1.0),
-                          radius: 50,
-                          child: Text(
-                            displayName[0],
-                            style: const TextStyle(
-                              fontSize: 40,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        )
-                      : CircleAvatar(
-                          backgroundColor: const Color(0xFFFDD835),
-                          radius: 50,
-                          backgroundImage: NetworkImage(
-                            photoURL,
-                          ),
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Column(
+              child: FutureBuilder(
+                future: obtenerNombre(),
+                builder: (context, dataName) {
+                  if (dataName.hasError) {
+                    return const Text('Error');
+                  } else if (dataName.hasData) {
+                    return Row(
                       children: [
-                        Text(
-                          displayName,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                              color: Colors.white),
+                        FutureBuilder(
+                          future: obtenerFoto(),
+                          builder: (context, dataPhoto) {
+                            if (dataPhoto.hasError) {
+                              return const Text('Error');
+                            } else if (dataPhoto.hasData) {
+                              return dataPhoto.data == "null"
+                                  ? CircleAvatar(
+                                      backgroundColor: Color(
+                                              (math.Random().nextDouble() *
+                                                      0xFFFFFF)
+                                                  .toInt())
+                                          .withOpacity(1.0),
+                                      radius: 50,
+                                      child: Text(
+                                        dataName.data.toString()[0],
+                                        style: const TextStyle(
+                                          fontSize: 40,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  : CircleAvatar(
+                                      backgroundColor: const Color(0xFFFDD835),
+                                      radius: 50,
+                                      backgroundImage: NetworkImage(
+                                        dataPhoto.data.toString(),
+                                      ),
+                                    );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
                         ),
-                        Wrap(
-                          children: const [
-                            Icon(
-                              Icons.star_rounded,
-                              color: Colors.white,
-                            ),
-                            Icon(
-                              Icons.star_rounded,
-                              color: Colors.white,
-                            ),
-                            Icon(
-                              Icons.star_rounded,
-                              color: Colors.white,
-                            ),
-                            Icon(
-                              Icons.star_outline_rounded,
-                              color: Colors.white,
-                            ),
-                            Icon(
-                              Icons.star_outline_rounded,
-                              color: Colors.white,
-                            ),
-                          ],
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Column(
+                            children: [
+                              Text(
+                                dataName.data.toString(),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    color: Colors.white),
+                              ),
+                              Wrap(
+                                children: const [
+                                  Icon(
+                                    Icons.star_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Icon(
+                                    Icons.star_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Icon(
+                                    Icons.star_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Icon(
+                                    Icons.star_outline_rounded,
+                                    color: Colors.white,
+                                  ),
+                                  Icon(
+                                    Icons.star_outline_rounded,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
+                    );
+                  } else {
+                    return const LinearProgressIndicator();
+                  }
+                },
               ),
             ),
             ListTile(
