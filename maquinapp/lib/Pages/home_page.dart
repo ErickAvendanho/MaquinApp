@@ -6,7 +6,6 @@ import 'dart:math' as math;
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 import 'package:maquinapp/models/document_user.dart';
-import 'package:maquinapp/models/document_users.dart';
 import 'package:provider/provider.dart';
 
 import 'src/search_list_page.dart';

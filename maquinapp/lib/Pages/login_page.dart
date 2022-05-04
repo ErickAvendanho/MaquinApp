@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home_page.dart';
+import 'package:maquinapp/Pages/signup/Register_doc_page_first.dart';
 import 'package:maquinapp/Pages/src/firebaseServices/auth_services.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  final User? user = FirebaseAuth.instance.currentUser;
+
   final GlobalKey<FormState> _keyForm = GlobalKey();
 
   late TextEditingController emailCtrl = TextEditingController();
@@ -125,14 +129,30 @@ class _LoginPageState extends State<LoginPage> {
                                 listen: false);
                             bool result = await provider.googleLogin();
                             if (result) {
-                              Navigator.pushAndRemoveUntil(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      const HomePage(),
-                                ),
-                                (route) => false,
-                              );
+                              DocumentSnapshot<Map<String, dynamic>>
+                                  docSnapshot = await FirebaseFirestore.instance
+                                      .collection("Users")
+                                      .doc(user?.uid.toString())
+                                      .get();
+                              if (docSnapshot.exists) {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const HomePage(),
+                                  ),
+                                  (route) => false,
+                                );
+                              } else {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const RegisterDocPageFirst(),
+                                  ),
+                                  (route) => false,
+                                );
+                              }
                             }
                           },
                           child: Image.asset(
