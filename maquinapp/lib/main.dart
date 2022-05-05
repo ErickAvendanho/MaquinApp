@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/home_page.dart';
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
+import 'Pages/home/home_page.dart';
 import 'Pages/signup/register_doc_page_first.dart';
 
 void main() {

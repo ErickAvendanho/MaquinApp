@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 
-import '../home_page.dart';
+import '../home/home_page.dart';
 import '../src/firebaseServices/auth_services.dart';
 
 class RegisterPageSecond extends StatefulWidget {

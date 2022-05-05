@@ -6,11 +6,11 @@ import 'dart:math' as math;
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 import 'package:maquinapp/models/document_user.dart';
+import 'package:maquinapp/models/trabajos_arrendatario.dart';
 import 'package:provider/provider.dart';
 
-import 'src/search_list_page.dart';
-
-final usersRef = FirebaseFirestore.instance.collection("Users");
+import '../src/search_list_page.dart';
+import 'widgets/widget_trabajo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -61,6 +61,29 @@ class _HomePageState extends State<HomePage> {
     return 'null';
   }
 
+  Future<List<TrabajosArrendatario>> getJobs() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance
+        .collection("TrabajosArrendatario")
+        .get();
+    List<DocumentSnapshot> documents = qs.docs;
+    return documents
+        .map(
+          (e) => TrabajosArrendatario(
+            descripcion: e["descripcion"],
+            uid: e["uid"],
+            fecha: e["fecha"],
+            tipo: e["tipo"],
+            longitud: e["longitud"],
+            latitud: e["latitud"],
+            precio: e["precio"],
+            foto: e["foto"],
+            titulo: e["titulo"],
+            usuario: e["usuario"],
+          ),
+        )
+        .toList();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -106,8 +129,9 @@ class _HomePageState extends State<HomePage> {
         ],
         iconTheme: const IconThemeData(color: Colors.white),
       ),
-      drawer: _drawerMaquinapp(size),
+      drawer: _drawerMaquinApp(context),
       body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
         child: Center(
           child: Column(
             children: [
@@ -151,60 +175,40 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              WidgetTrabajo(
-                onTap: () {},
-                size: size,
-                categoria: 'Constructores',
-                cliente: 'Marissa',
-                descripcion:
-                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
-                distancia: '3.29 km',
-                fecha: '30/03/2022',
-                title: 'Construcción en casa',
-                costo: '1809',
-                img:
-                    'https://cdn.pixabay.com/photo/2019/04/15/18/13/bathroom-4130000_960_720.jpg',
+              const SizedBox(
+                height: 10,
               ),
-              WidgetTrabajo(
-                onTap: () {},
-                size: size,
-                categoria: 'Constructores',
-                cliente: 'Marissa',
-                descripcion:
-                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
-                distancia: '3.29 km',
-                fecha: '30/03/2022',
-                title: 'Construcción en casa',
-                img:
-                    'https://cdn.pixabay.com/photo/2016/11/18/17/46/house-1836070_960_720.jpg',
-                costo: '1809',
-              ),
-              WidgetTrabajo(
-                onTap: () {},
-                size: size,
-                categoria: 'Constructores',
-                cliente: 'Marissa',
-                descripcion:
-                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
-                distancia: '3.29 km',
-                fecha: '30/03/2022',
-                title: 'Construcción en casa',
-                img: '',
-                costo: '1809',
-              ),
-              WidgetTrabajo(
-                onTap: () {},
-                size: size,
-                categoria: 'Constructores',
-                cliente: 'Marissa',
-                descripcion:
-                    'Buenas noches, neceisot una construcción de casa en donde yo pueda...',
-                distancia: '3.29 km',
-                fecha: '30/03/2022',
-                title: 'Construcción en casa',
-                img:
-                    'https://cdn.pixabay.com/photo/2015/12/07/10/49/electrician-1080554_960_720.jpg',
-                costo: '1809',
+              FutureBuilder(
+                future: getJobs(),
+                builder: (context, data) {
+                  if (data.hasData) {
+                    List<TrabajosArrendatario> trabajos =
+                        data.data as List<TrabajosArrendatario>;
+                    return ListView.builder(
+                      primary: false,
+                      shrinkWrap: true,
+                      itemCount: trabajos.isEmpty ? 0 : trabajos.length,
+                      itemBuilder: (context, int index) {
+                        return WidgetTrabajo(
+                            onTap: () {},
+                            size: size,
+                            title: trabajos[index].titulo.toString(),
+                            fecha: trabajos[index].fecha.toString(),
+                            descripcion: trabajos[index].descripcion.toString(),
+                            categoria: trabajos[index].tipo.toString(),
+                            cliente: trabajos[index].usuario.toString(),
+                            distancia: '3.29 KM',
+                            costo: trabajos[index].precio.toString(),
+                            img: trabajos[index].foto.toString());
+                      },
+                    );
+                  } else {
+                    return const Padding(
+                      padding: EdgeInsets.all(30),
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -213,7 +217,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Drawer _drawerMaquinapp(Size size) {
+  Drawer _drawerMaquinApp(BuildContext context) {
     return Drawer(
       child: SingleChildScrollView(
         child: Column(
@@ -341,138 +345,6 @@ class _HomePageState extends State<HomePage> {
                 );
               },
               title: const Text('Cerrar sesión'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class WidgetTrabajo extends StatelessWidget {
-  const WidgetTrabajo({
-    Key? key,
-    required this.size,
-    required this.title,
-    required this.fecha,
-    required this.descripcion,
-    required this.categoria,
-    required this.cliente,
-    required this.distancia,
-    required this.costo,
-    required this.img,
-    this.onTap,
-  }) : super(key: key);
-
-  final Size size;
-  final String title;
-  final String fecha;
-  final String descripcion;
-  final String categoria;
-  final String cliente;
-  final String distancia;
-  final String costo;
-  final String img;
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size.width * 0.95,
-      padding: const EdgeInsets.all(20),
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(10),
-        ),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Spacer(),
-                Text(fecha),
-              ],
-            ),
-            img != ''
-                ? Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Image.network(
-                      img,
-                      fit: BoxFit.fitWidth,
-                    ),
-                  )
-                : const SizedBox(
-                    height: 20,
-                  ),
-            Text(descripcion),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10.0),
-              child: SizedBox(
-                width: size.width * 0.89,
-                child: Wrap(
-                  spacing: 60,
-                  runSpacing: 10,
-                  direction: Axis.horizontal,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(color: Colors.black),
-                        children: [
-                          const WidgetSpan(
-                            child: Icon(
-                              Icons.cases_outlined,
-                              color: Color(0xFFFDD835),
-                            ),
-                          ),
-                          TextSpan(text: categoria),
-                        ],
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(color: Colors.black),
-                        children: [
-                          const WidgetSpan(
-                            child: Icon(
-                              Icons.person,
-                              color: Color(0xFFFDD835),
-                            ),
-                          ),
-                          TextSpan(text: cliente),
-                        ],
-                      ),
-                    ),
-                    RichText(
-                      text: TextSpan(
-                        style: const TextStyle(color: Colors.black),
-                        children: [
-                          const WidgetSpan(
-                            child: Icon(
-                              Icons.map,
-                              color: Color(0xFFFDD835),
-                            ),
-                          ),
-                          TextSpan(text: distancia),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Text(
-              costo,
-              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
           ],
         ),
