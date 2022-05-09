@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/signup/register_page_third.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 
 import '../home/home_page.dart';
@@ -202,10 +203,18 @@ class _RegisterPageState extends State<RegisterPageSecond> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage(),
+              builder: (BuildContext context) => const RegisterPageThird(),
             ),
             (route) => false,
           );
+          /*
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (BuildContext context) => const HomePage(),
+            ),
+            (route) => false,
+          );*/
         }
       }
     } else {}

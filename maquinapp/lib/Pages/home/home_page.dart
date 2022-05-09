@@ -205,7 +205,9 @@ class _HomePageState extends State<HomePage> {
                   } else {
                     return const Padding(
                       padding: EdgeInsets.all(30),
-                      child: CircularProgressIndicator(),
+                      child: CircularProgressIndicator(
+                        color: Color(0XFF20536F),
+                      ),
                     );
                   }
                 },

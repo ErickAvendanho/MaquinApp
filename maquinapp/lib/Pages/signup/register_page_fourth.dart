@@ -9,7 +9,7 @@ class RegisterPageFourth extends StatefulWidget {
 }
 
 class _RegisterPageFourthState extends State<RegisterPageFourth> {
-  final _initialCameraPosition = CameraPosition(
+  final _initialCameraPosition = const CameraPosition(
     target: LatLng(19.4122119, -98.9913005),
     zoom: 15,
   );

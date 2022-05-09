@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -104,66 +106,59 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color(0XFFFED246),
                   ),
                 ),
-                SizedBox(
-                  width: size.width * 0.7,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.facebook,
-                            color: Colors.blue.shade600,
-                          ),
-                          iconSize: 48,
+                Platform.isAndroid
+                    ? SizedBox(
+                        width: size.width * 0.7,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin:
+                                  const EdgeInsets.symmetric(horizontal: 20),
+                              child: InkWell(
+                                onTap: () async {
+                                  final provider =
+                                      Provider.of<GoogleSignInProvider>(context,
+                                          listen: false);
+                                  bool result = await provider.googleLogin();
+                                  if (result) {
+                                    DocumentSnapshot<Map<String, dynamic>>
+                                        docSnapshot = await FirebaseFirestore
+                                            .instance
+                                            .collection("Users")
+                                            .doc(user?.uid.toString())
+                                            .get();
+                                    if (docSnapshot.exists) {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const HomePage(),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    } else {
+                                      Navigator.pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (BuildContext context) =>
+                                              const RegisterDocPageFirst(),
+                                        ),
+                                        (route) => false,
+                                      );
+                                    }
+                                  }
+                                },
+                                child: Image.asset(
+                                  'assets/images/google.png',
+                                  width: 40,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: InkWell(
-                          onTap: () async {
-                            final provider = Provider.of<GoogleSignInProvider>(
-                                context,
-                                listen: false);
-                            bool result = await provider.googleLogin();
-                            if (result) {
-                              DocumentSnapshot<Map<String, dynamic>>
-                                  docSnapshot = await FirebaseFirestore.instance
-                                      .collection("Users")
-                                      .doc(user?.uid.toString())
-                                      .get();
-                              if (docSnapshot.exists) {
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const HomePage(),
-                                  ),
-                                  (route) => false,
-                                );
-                              } else {
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const RegisterDocPageFirst(),
-                                  ),
-                                  (route) => false,
-                                );
-                              }
-                            }
-                          },
-                          child: Image.asset(
-                            'assets/images/google.png',
-                            width: 40,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                      )
+                    : const SizedBox.shrink(),
               ],
             ),
           ),

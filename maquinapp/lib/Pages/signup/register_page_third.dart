@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../home/home_page.dart';
 
 class RegisterPageThird extends StatefulWidget {
   const RegisterPageThird({Key? key}) : super(key: key);
@@ -9,6 +12,11 @@ class RegisterPageThird extends StatefulWidget {
 
 class _RegisterPageThridState extends State<RegisterPageThird> {
   int alcance = 1;
+  final _initialCameraPosition = const CameraPosition(
+    target: LatLng(19.4122119, -98.9913005),
+    zoom: 15,
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,81 +24,67 @@ class _RegisterPageThridState extends State<RegisterPageThird> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0xFFFDD734),
+        leading: Image.asset('assets/images/maquinapp.png'),
         title: const Text(
-          'Selecciona la ubicación del negocio',
+          'Negocio',
           style: TextStyle(color: Colors.black),
         ),
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            color: Colors.black,
+        actions: [
+          IconButton(
+            tooltip: 'Reducir alcance',
+            onPressed: () => {
+              setState(() {
+                if (alcance > 1) {
+                  alcance--;
+                }
+              })
+            },
+            icon: const Icon(
+              Icons.remove,
+              color: Color(0XFF20536F),
+            ),
           ),
-          splashColor: Colors.transparent,
-          onPressed: () => {
-            Navigator.pop(context),
-          },
-        ),
+          TextButton(
+            onPressed: null,
+            child: Text('$alcance KM.'),
+          ),
+          IconButton(
+            tooltip: 'Aumentar alcance',
+            onPressed: () => {
+              setState(() {
+                if (alcance < 10) {
+                  alcance++;
+                }
+              })
+            },
+            icon: const Icon(
+              Icons.add,
+              color: Color(0XFF20536F),
+            ),
+          ),
+          IconButton(
+            tooltip: 'Continuar',
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const HomePage(),
+                ),
+                (route) => false,
+              );
+            },
+            icon: const Icon(
+              Icons.arrow_forward_ios,
+              color: Colors.black,
+            ),
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => {
-                      setState(() {
-                        if (alcance > 1) {
-                          alcance--;
-                        }
-                      })
-                    },
-                    icon: const Icon(Icons.remove),
-                  ),
-                  Text('Kilómetros: $alcance'),
-                  IconButton(
-                    onPressed: () => {
-                      setState(() {
-                        if (alcance < 10) {
-                          alcance++;
-                        }
-                      })
-                    },
-                    icon: const Icon(Icons.add),
-                  ),
-                ],
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {},
-                child: Container(
-                  margin: const EdgeInsets.all(30.0),
-                  alignment: Alignment.center,
-                  decoration: ShapeDecoration(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0)),
-                    color: const Color(0xFF343436),
-                  ),
-                  child: const Text(
-                    'SIGUIENTE',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+      body: GoogleMap(
+        initialCameraPosition: _initialCameraPosition,
+        zoomControlsEnabled: false,
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
       ),
     );
   }
