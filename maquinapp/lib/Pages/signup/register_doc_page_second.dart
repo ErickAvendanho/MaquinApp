@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/signup/register_doc_page_third.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 
-import '../home/home_page.dart';
 import '../src/firebaseServices/auth_services.dart';
 
 class RegisterDocPageSecond extends StatefulWidget {
@@ -191,7 +191,7 @@ class _RegisterPageState extends State<RegisterDocPageSecond> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-          builder: (BuildContext context) => const HomePage(),
+          builder: (BuildContext context) => const RegisterDocPageThird(),
         ),
         (route) => false,
       );
