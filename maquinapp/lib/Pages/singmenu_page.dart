@@ -1,11 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/login_page.dart';
 import 'package:maquinapp/Pages/signup/register_page_first.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'type_signup_page.dart';
 
-class SignPage extends StatelessWidget {
+class SignPage extends StatefulWidget {
   const SignPage({Key? key}) : super(key: key);
+
+  @override
+  State<SignPage> createState() => _SignPageState();
+}
+
+class _SignPageState extends State<SignPage> {
+  Future requestGPSPermission() async {
+    final locationStatus = await Permission.location.status;
+    final locationWhenInUseStatus = await Permission.locationWhenInUse.status;
+    while (locationStatus.isDenied || locationWhenInUseStatus.isDenied) {
+      if (locationStatus.isDenied) {
+        await Permission.location.request();
+      }
+      if (locationWhenInUseStatus.isDenied) {
+        await Permission.locationWhenInUse.request();
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    requestGPSPermission();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

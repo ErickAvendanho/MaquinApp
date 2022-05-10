@@ -201,7 +201,6 @@ class _LoginPageState extends State<LoginPage> {
     if (_keyForm.currentState!.validate()) {
       AuthServices as = AuthServices();
       UserCredential? uc = await as.singIn(emailCtrl.text, passCtrl.text);
-
       if (uc != null) {
         Navigator.pushAndRemoveUntil(
           context,

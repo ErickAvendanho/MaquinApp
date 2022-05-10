@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/home/home_map_page.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
@@ -11,19 +11,23 @@ import 'package:maquinapp/models/trabajos_arrendatario.dart';
 import 'package:provider/provider.dart';
 
 import '../src/search_list_page.dart';
-import 'widgets/widget_trabajo.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({
+class HomeMapPage extends StatefulWidget {
+  const HomeMapPage({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeMapPage> createState() => _HomeMapPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeMapPageState extends State<HomeMapPage> {
   final User user = FirebaseAuth.instance.currentUser!;
+  int alcance = 1;
+  final _initialCameraPosition = const CameraPosition(
+    target: LatLng(19.4122119, -98.9913005),
+    zoom: 15,
+  );
 
   Future<String> obtenerNombre() async {
     if (user.displayName.toString().isNotEmpty &&
@@ -131,96 +135,10 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _drawerMaquinApp(context),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 10,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeMapPage()));
-                },
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: const Color(0XFF20536F),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Container(
-                    height: 50,
-                    width: size.width * 0.8,
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.map,
-                          color: Color(0xFFFDD835),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'CAMBIAR A MAPA',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              FutureBuilder(
-                future: getJobs(),
-                builder: (context, data) {
-                  if (data.hasData) {
-                    List<TrabajosArrendatario> trabajos =
-                        data.data as List<TrabajosArrendatario>;
-                    return ListView.builder(
-                      primary: false,
-                      shrinkWrap: true,
-                      itemCount: trabajos.isEmpty ? 0 : trabajos.length,
-                      itemBuilder: (context, int index) {
-                        return WidgetTrabajo(
-                            onTap: () {},
-                            size: size,
-                            title: trabajos[index].titulo.toString(),
-                            fecha: trabajos[index].fecha.toString(),
-                            descripcion: trabajos[index].descripcion.toString(),
-                            categoria: trabajos[index].tipo.toString(),
-                            cliente: trabajos[index].usuario.toString(),
-                            distancia: '3.29 KM',
-                            costo: trabajos[index].precio.toString(),
-                            img: trabajos[index].foto.toString());
-                      },
-                    );
-                  } else {
-                    return const Padding(
-                      padding: EdgeInsets.all(30),
-                      child: CircularProgressIndicator(
-                        color: Color(0XFF20536F),
-                      ),
-                    );
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
+      body: GoogleMap(
+        initialCameraPosition: _initialCameraPosition,
+        myLocationButtonEnabled: true,
+        myLocationEnabled: true,
       ),
     );
   }
