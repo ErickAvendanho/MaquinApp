@@ -18,19 +18,19 @@ class _SearchListState extends State<SearchList> {
   final key = GlobalKey<ScaffoldState>();
   final TextEditingController _searchQuery = TextEditingController();
   List<String> _list = [];
-  bool _IsSearching = true;
+  bool _isSearching = true;
   String _searchText = "";
 
   _SearchListState() {
     _searchQuery.addListener(() {
       if (_searchQuery.text.isEmpty) {
         setState(() {
-          _IsSearching = false;
+          _isSearching = false;
           _searchText = "";
         });
       } else {
         setState(() {
-          _IsSearching = true;
+          _isSearching = true;
           _searchText = _searchQuery.text;
         });
       }
@@ -40,7 +40,7 @@ class _SearchListState extends State<SearchList> {
   @override
   void initState() {
     super.initState();
-    _IsSearching = false;
+    _isSearching = false;
     init();
   }
 
@@ -69,7 +69,7 @@ class _SearchListState extends State<SearchList> {
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 5.0),
-        children: _IsSearching ? _buildSearchList() : _buildList(),
+        children: _isSearching ? _buildSearchList() : _buildList(),
       ),
     );
   }
@@ -151,21 +151,21 @@ class _SearchListState extends State<SearchList> {
 
   void _handleSearchStart() {
     setState(() {
-      _IsSearching = true;
+      _isSearching = true;
     });
   }
 
   void _handleSearchEnd() {
     setState(() {
-      this.actionIcon = new Icon(
+      actionIcon = const Icon(
         Icons.search,
         color: Colors.white,
       );
-      this.appBarTitle = new Text(
+      appBarTitle = const Text(
         "Search Sample",
-        style: new TextStyle(color: Colors.white),
+        style: TextStyle(color: Colors.white),
       );
-      _IsSearching = false;
+      _isSearching = false;
       _searchQuery.clear();
     });
   }
@@ -173,9 +173,9 @@ class _SearchListState extends State<SearchList> {
 
 class ChildItem extends StatelessWidget {
   final String name;
-  ChildItem(this.name);
+  const ChildItem(this.name, {Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListTile(title: Text(this.name));
+    return ListTile(title: Text(name));
   }
 }

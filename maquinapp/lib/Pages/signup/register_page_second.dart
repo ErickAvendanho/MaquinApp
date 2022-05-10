@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/signup/register_page_third.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 
-import '../home/home_page.dart';
 import '../src/firebaseServices/auth_services.dart';
 
 class RegisterPageSecond extends StatefulWidget {
@@ -30,6 +29,8 @@ class _RegisterPageState extends State<RegisterPageSecond> {
   TextEditingController communeCtrl = TextEditingController();
   TextEditingController businessNameCtrl = TextEditingController();
 
+  bool loginIng = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,9 +50,11 @@ class _RegisterPageState extends State<RegisterPageSecond> {
               color: Colors.black,
             ),
             splashColor: Colors.transparent,
-            onPressed: () => {
-              Navigator.pop(context),
-            },
+            onPressed: loginIng
+                ? null
+                : () => {
+                      Navigator.pop(context),
+                    },
           ),
         ),
         body: SingleChildScrollView(
@@ -85,7 +88,6 @@ class _RegisterPageState extends State<RegisterPageSecond> {
   }
 
   Widget formUI() {
-    Size size = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
         Image.asset('assets/images/maquinapp.png', width: 100, height: 100),
@@ -136,9 +138,11 @@ class _RegisterPageState extends State<RegisterPageSecond> {
             : const SizedBox.shrink(),
         const SizedBox(height: 40),
         GestureDetector(
-          onTap: () {
-            save();
-          },
+          onTap: loginIng
+              ? null
+              : () {
+                  save();
+                },
           child: Container(
             margin: const EdgeInsets.all(30.0),
             alignment: Alignment.center,
@@ -147,13 +151,17 @@ class _RegisterPageState extends State<RegisterPageSecond> {
                   borderRadius: BorderRadius.circular(30.0)),
               color: const Color(0xFF343436),
             ),
-            child: const Text(
-              "SIGUIENTE",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500),
-            ),
+            child: loginIng
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : const Text(
+                    "SIGUIENTE",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
+                  ),
             padding: const EdgeInsets.only(top: 16, bottom: 16),
           ),
         ),
@@ -164,20 +172,23 @@ class _RegisterPageState extends State<RegisterPageSecond> {
   }
 
   String? validateCommune(String? value) {
-    if (value?.length == 0) {
+    if (value!.isEmpty) {
       return "La comuna es necesaria";
     }
     return null;
   }
 
   String? validateBusinessName(String? value) {
-    if (value?.length == 0 && widget.tipoRegistro == "arrendador") {
+    if (value!.isEmpty && widget.tipoRegistro == "arrendador") {
       return "El nombre del negocio es necesario";
     }
     return null;
   }
 
   save() async {
+    setState(() {
+      loginIng = true;
+    });
     if (keyForm.currentState!.validate()) {
       AuthServices as = AuthServices();
       UserCredential? user =
@@ -207,16 +218,11 @@ class _RegisterPageState extends State<RegisterPageSecond> {
             ),
             (route) => false,
           );
-          /*
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => const HomePage(),
-            ),
-            (route) => false,
-          );*/
         }
       }
     } else {}
+    setState(() {
+      loginIng = false;
+    });
   }
 }

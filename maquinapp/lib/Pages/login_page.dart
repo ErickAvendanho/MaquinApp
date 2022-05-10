@@ -21,8 +21,10 @@ class _LoginPageState extends State<LoginPage> {
 
   final GlobalKey<FormState> _keyForm = GlobalKey();
 
-  late TextEditingController emailCtrl = TextEditingController();
-  late TextEditingController passCtrl = TextEditingController();
+  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController passCtrl = TextEditingController();
+
+  bool loginIng = false;
 
   @override
   void initState() {
@@ -114,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             Container(
                               margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
+                                  const EdgeInsets.symmetric(horizontal: 10),
                               child: InkWell(
                                 onTap: () async {
                                   final provider =
@@ -151,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                                 child: Image.asset(
                                   'assets/images/google.png',
-                                  width: 40,
+                                  width: 50,
                                 ),
                               ),
                             ),
@@ -176,9 +178,11 @@ class _LoginPageState extends State<LoginPage> {
           borderRadius: BorderRadius.circular(30),
         ),
       ),
-      onPressed: () {
-        signIn();
-      },
+      onPressed: loginIng
+          ? null
+          : () {
+              signIn();
+            },
       child: Ink(
         decoration: BoxDecoration(
           color: const Color(0XFF20536F),
@@ -188,16 +192,23 @@ class _LoginPageState extends State<LoginPage> {
           height: 50,
           width: size.width * 0.6,
           alignment: Alignment.center,
-          child: const Text(
-            'INICIAR SESIÓN',
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
+          child: loginIng
+              ? const CircularProgressIndicator(
+                  color: Colors.white,
+                )
+              : const Text(
+                  'INICIAR SESIÓN',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
         ),
       ),
     );
   }
 
   void signIn() async {
+    setState(() {
+      loginIng = true;
+    });
     if (_keyForm.currentState!.validate()) {
       AuthServices as = AuthServices();
       UserCredential? uc = await as.singIn(emailCtrl.text, passCtrl.text);
@@ -211,6 +222,9 @@ class _LoginPageState extends State<LoginPage> {
         );
       }
     }
+    setState(() {
+      loginIng = false;
+    });
   }
 }
 

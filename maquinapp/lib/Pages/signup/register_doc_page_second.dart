@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/signup/register_doc_page_third.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 
-import '../src/firebaseServices/auth_services.dart';
-
 class RegisterDocPageSecond extends StatefulWidget {
   final String tipoRegistro;
   const RegisterDocPageSecond({
@@ -78,7 +76,6 @@ class _RegisterPageState extends State<RegisterDocPageSecond> {
   }
 
   Widget formUI() {
-    Size size = MediaQuery.of(context).size;
     return Column(
       children: <Widget>[
         Image.asset('assets/images/maquinapp.png', width: 100, height: 100),
@@ -157,14 +154,14 @@ class _RegisterPageState extends State<RegisterDocPageSecond> {
   }
 
   String? validateCommune(String? value) {
-    if (value?.length == 0) {
+    if (value!.isEmpty) {
       return "La comuna es necesaria";
     }
     return null;
   }
 
   String? validateBusinessName(String? value) {
-    if (value?.length == 0 && widget.tipoRegistro == "arrendador") {
+    if (value!.isEmpty && widget.tipoRegistro == "arrendador") {
       return "El nombre del negocio es necesario";
     }
     return null;
@@ -172,7 +169,6 @@ class _RegisterPageState extends State<RegisterDocPageSecond> {
 
   save() async {
     if (keyForm.currentState!.validate()) {
-      AuthServices as = AuthServices();
       AddUser register = AddUser(
         0,
         communeCtrl.text,

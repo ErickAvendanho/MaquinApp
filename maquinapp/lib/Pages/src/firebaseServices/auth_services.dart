@@ -32,7 +32,7 @@ class AuthServices {
         return null;
       }
     } catch (e) {
-      print(e);
+      rethrow;
     }
     return null;
   }

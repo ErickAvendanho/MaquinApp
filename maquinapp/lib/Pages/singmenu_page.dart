@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/login_page.dart';
-import 'package:maquinapp/Pages/signup/register_page_first.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'type_signup_page.dart';
