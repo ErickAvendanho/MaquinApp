@@ -220,11 +220,51 @@ class _LoginPageState extends State<LoginPage> {
           ),
           (route) => false,
         );
+      } else {
+        showAlertDialog(context, 'Verifica tus datos',
+            'Los datos que ingresaste son erróneos');
       }
     }
     setState(() {
       loginIng = false;
     });
+  }
+
+  showAlertDialog(BuildContext context, String title, String content) {
+    // set up the button
+    Widget okButton = TextButton(
+      style: TextButton.styleFrom(
+        primary: const Color(0XFFFED246),
+      ),
+      child: const Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      backgroundColor: const Color(0XFF20536F),
+      title: Text(
+        title,
+        style: const TextStyle(color: Colors.white),
+      ),
+      content: Text(
+        content,
+        style: const TextStyle(color: Colors.white),
+      ),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }
 
