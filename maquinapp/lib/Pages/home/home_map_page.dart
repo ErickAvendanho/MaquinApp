@@ -23,15 +23,15 @@ class HomeMapPage extends StatefulWidget {
 
 class _HomeMapPageState extends State<HomeMapPage> {
   final User user = FirebaseAuth.instance.currentUser!;
-  List<Marker>? markers = [];
-  Future<void> AddMarkers() async {
-    QuerySnapshot qs = await FirebaseFirestore.instance
-        .collection("TrabajosArrendatario")
-        .get();
-    List<DocumentSnapshot> documents = qs.docs;
-    documents.map(
-      (document) {
-        markers?.add(
+  late List<Marker>? markers;
+  Future<bool> addMarkers() async {
+    try {
+      QuerySnapshot qs = await FirebaseFirestore.instance
+          .collection("TrabajosArrendatario")
+          .get();
+      List<DocumentSnapshot> documents = qs.docs;
+      for (var document in documents) {
+        markers!.add(
           Marker(
             markerId: MarkerId(document.id),
             position: LatLng(
@@ -44,8 +44,11 @@ class _HomeMapPageState extends State<HomeMapPage> {
             ),
           ),
         );
-      },
-    );
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   int alcance = 1;
@@ -116,6 +119,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   @override
   void initState() {
+    markers = [];
+    addMarkers();
     super.initState();
   }
 
@@ -159,11 +164,26 @@ class _HomeMapPageState extends State<HomeMapPage> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _drawerMaquinApp(context),
-      body: GoogleMap(
-        initialCameraPosition: _initialCameraPosition,
-        markers: Set.from(markers!),
-        myLocationButtonEnabled: true,
-        myLocationEnabled: true,
+      body: FutureBuilder(
+        future: addMarkers(),
+        builder: (context, data) {
+          if (data.hasData) {
+            return GoogleMap(
+              initialCameraPosition: _initialCameraPosition,
+              markers: Set.from(markers!),
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+            );
+          } else if (data.hasError) {
+            return Center(
+              child: Text('${data.error}'),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
