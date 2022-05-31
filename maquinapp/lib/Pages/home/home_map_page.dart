@@ -23,6 +23,31 @@ class HomeMapPage extends StatefulWidget {
 
 class _HomeMapPageState extends State<HomeMapPage> {
   final User user = FirebaseAuth.instance.currentUser!;
+  List<Marker>? markers = [];
+  Future<void> AddMarkers() async {
+    QuerySnapshot qs = await FirebaseFirestore.instance
+        .collection("TrabajosArrendatario")
+        .get();
+    List<DocumentSnapshot> documents = qs.docs;
+    documents.map(
+      (document) {
+        markers?.add(
+          Marker(
+            markerId: MarkerId(document.id),
+            position: LatLng(
+              document["latitud"],
+              document["longitud"],
+            ),
+            infoWindow: InfoWindow(
+              title: document["titulo"],
+              snippet: document["descripcion"],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   int alcance = 1;
   final _initialCameraPosition = const CameraPosition(
     target: LatLng(19.4122119, -98.9913005),
@@ -136,6 +161,7 @@ class _HomeMapPageState extends State<HomeMapPage> {
       drawer: _drawerMaquinApp(context),
       body: GoogleMap(
         initialCameraPosition: _initialCameraPosition,
+        markers: Set.from(markers!),
         myLocationButtonEnabled: true,
         myLocationEnabled: true,
       ),
