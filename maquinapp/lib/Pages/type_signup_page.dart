@@ -66,7 +66,7 @@ class TypeSignUpPage extends StatelessWidget {
                       ),
                     ),
                   },
-                  child: const Text('ARRENDADOR'),
+                  child: const Text('Ofrezco'),
                 ),
               ),
               Padding(
@@ -89,7 +89,7 @@ class TypeSignUpPage extends StatelessWidget {
                       ),
                     ),
                   },
-                  child: const Text('ARRENDATARIO'),
+                  child: const Text('Busco'),
                 ),
               ),
               Padding(
