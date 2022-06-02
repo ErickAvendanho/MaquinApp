@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/home/services/product_controller.dart';
 
 
 class ProductPage extends StatefulWidget {
@@ -9,11 +10,181 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  ProductCotroller _con = new ProductController();
+  ProductController _con = new ProductController();
+
+  //Init state
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      
+    return Scaffold(
+      body: Container(
+        width: double .infinity,
+        child: Stack(
+          children: [
+            _textPrecio(),
+            _textDescription(),
+            _textFecha(),
+            _textUsuario(),
+            _buttonUpdate(),
+          ],
+        ),
+      ),
     );
   }
+
+  //
+
+  Widget _textPrecio(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      decoration: BoxDecoration(
+        //color:  
+        //borderRadius 
+      ),
+      child: TextField(
+        controller: _con.precioController,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          hintText: 'Precio',
+          border: InputBorder.none,
+          //hintStyle: TextStyle(color: ), este es para el color de la letra
+          prefixIcon: Icon(
+            Icons.money,
+            //color:  Aqui es para ponerle color al icono
+          ),
+        ),
+        //cursorColor: MyColors.primaryColor,
+        textInputAction: TextInputAction.next,
+      ),
+    );
+  }
+  
+  Widget _textDescription(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      decoration: BoxDecoration(
+        //color:  
+        //borderRadius 
+      ),
+      child: TextField(
+        controller: _con.descripcionController,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          hintText: 'AGREGA UNA DESCRIPCION',
+          border: InputBorder.none,
+          //hintStyle: TextStyle(color: ), este es para el color de la letra
+          prefixIcon: Icon(
+            Icons.money,
+            //color:  Aqui es para ponerle color al icono
+          ),
+        ),
+        //cursorColor: MyColors.primaryColor,
+        textInputAction: TextInputAction.next,
+      ),
+    );
+  }
+
+  Widget _textFecha(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      decoration: BoxDecoration(
+        //color:  
+        //borderRadius 
+      ),
+      child: TextField(
+        controller: _con.fechaController,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          hintText: 'Fecha de publicacion',
+          border: InputBorder.none,
+          //hintStyle: TextStyle(color: ), este es para el color de la letra
+          prefixIcon: Icon(
+            Icons.money,
+            //color:  Aqui es para ponerle color al icono
+          ),
+        ),
+        //cursorColor: MyColors.primaryColor,
+        textInputAction: TextInputAction.next,
+      ),
+    );
+  }
+
+    Widget _textUsuario(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      decoration: BoxDecoration(
+        //color:  
+        //borderRadius 
+      ),
+      child: TextField(
+        controller: _con.usuarioController,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          hintText: 'Identificador del usuario',
+          border: InputBorder.none,
+          //hintStyle: TextStyle(color: ), este es para el color de la letra
+          prefixIcon: Icon(
+            Icons.money,
+            //color:  Aqui es para ponerle color al icono
+          ),
+        ),
+        //cursorColor: MyColors.primaryColor,
+        textInputAction: TextInputAction.next,
+      ),
+    );
+  }
+
+    Widget _textType(){
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      decoration: BoxDecoration(
+        //color:  
+        //borderRadius 
+      ),
+      child: TextField(
+        controller: _con.typeController,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+          hintText: 'AGREGA UNA DESCRIPCION',
+          border: InputBorder.none,
+          //hintStyle: TextStyle(color: ), este es para el color de la letra
+          prefixIcon: Icon(
+            Icons.money,
+            //color:  Aqui es para ponerle color al icono
+          ),
+        ),
+        //cursorColor: MyColors.primaryColor,
+        textInputAction: TextInputAction.next,
+      ),
+    );
+  }
+
+  Widget _buttonUpdate() {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+      child: ElevatedButton(
+        onPressed: (){} ,
+        child: const Text('REGISTRARSE'),
+        style: ElevatedButton.styleFrom(
+            //primary: MyColors.primaryColor,
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+            padding: const EdgeInsets.symmetric(vertical: 15)),
+      ),
+    );
+  }
+
+   Widget _imageUser() {
+    return GestureDetector(
+      onTap: _con.showAlertDialog,
+      child: CircleAvatar(
+        //backgroundImage: _con.imageFile != null 
+        //? FileImage(_con.imageFile)
+        //: const AssetImage('assets/img/user_profile_2.png'),
+        backgroundColor: Colors.grey[200],
+      ),
+    );
+  }
+ 
 }
