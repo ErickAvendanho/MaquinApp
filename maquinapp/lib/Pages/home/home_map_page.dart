@@ -23,6 +23,34 @@ class HomeMapPage extends StatefulWidget {
 
 class _HomeMapPageState extends State<HomeMapPage> {
   final User user = FirebaseAuth.instance.currentUser!;
+  late List<Marker>? markers;
+  Future<bool> addMarkers() async {
+    try {
+      QuerySnapshot qs = await FirebaseFirestore.instance
+          .collection("TrabajosArrendatario")
+          .get();
+      List<DocumentSnapshot> documents = qs.docs;
+      for (var document in documents) {
+        markers!.add(
+          Marker(
+            markerId: MarkerId(document.id),
+            position: LatLng(
+              document["latitud"],
+              document["longitud"],
+            ),
+            infoWindow: InfoWindow(
+              title: document["titulo"],
+              snippet: document["descripcion"],
+            ),
+          ),
+        );
+      }
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   int alcance = 1;
   final _initialCameraPosition = const CameraPosition(
     target: LatLng(19.4122119, -98.9913005),
@@ -91,6 +119,8 @@ class _HomeMapPageState extends State<HomeMapPage> {
 
   @override
   void initState() {
+    markers = [];
+    addMarkers();
     super.initState();
   }
 
@@ -134,10 +164,26 @@ class _HomeMapPageState extends State<HomeMapPage> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _drawerMaquinApp(context),
-      body: GoogleMap(
-        initialCameraPosition: _initialCameraPosition,
-        myLocationButtonEnabled: true,
-        myLocationEnabled: true,
+      body: FutureBuilder(
+        future: addMarkers(),
+        builder: (context, data) {
+          if (data.hasData) {
+            return GoogleMap(
+              initialCameraPosition: _initialCameraPosition,
+              markers: Set.from(markers!),
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+            );
+          } else if (data.hasError) {
+            return Center(
+              child: Text('${data.error}'),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
