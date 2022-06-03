@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/home_map_page.dart';
+import 'package:maquinapp/Pages/home/services/product_page.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
@@ -334,7 +335,7 @@ class _HomePageState extends State<HomePage> {
               title: const Text('Mis solicitudes'),
             ),
             ListTile(
-              onTap: () {},
+              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductPage()));},
               title: const Text('Subir nuevo trabajo'),
             ),
             ListTile(
