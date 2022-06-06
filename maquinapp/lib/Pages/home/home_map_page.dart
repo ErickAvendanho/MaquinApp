@@ -10,6 +10,8 @@ import 'package:maquinapp/models/document_user.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
 import 'package:provider/provider.dart';
 
+import 'package:maquinapp/Pages/home/services/product_page.dart';
+
 import '../src/search_list_page.dart';
 
 class HomeMapPage extends StatefulWidget {
