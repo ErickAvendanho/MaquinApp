@@ -40,6 +40,10 @@ class _ProductPageState extends State<ProductPage> {
                 const SizedBox(height: 10),
                 _textUsuario(),
                 const SizedBox(height: 10),
+                _textType(),
+                const SizedBox(height: 10),
+                _imageUser(),
+                const SizedBox(height: 10),
                 _buttonUpdate(),
                 ],
               ),
@@ -209,6 +213,7 @@ class _ProductPageState extends State<ProductPage> {
         //? FileImage(_con.imageFile)
         //: const AssetImage('assets/img/user_profile_2.png'),
         backgroundColor: Colors.grey[200],
+        radius: 60,
       ),
     );
   }
