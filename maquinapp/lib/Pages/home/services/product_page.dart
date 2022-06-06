@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/home/home_map_page.dart';
 import 'package:maquinapp/Pages/home/services/product_controller.dart';
 
 
@@ -21,11 +22,28 @@ class _ProductPageState extends State<ProductPage> {
         width: double .infinity,
         child: Stack(
           children: [
-            _textPrecio(),
-            _textDescription(),
-            _textFecha(),
-            _textUsuario(),
-            _buttonUpdate(),
+            Positioned(
+              child: _iconBack(),
+              top: 51,
+              left: -5,
+            ),
+            Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(top: 50),
+              child: Column(
+                children: [
+                _textPrecio(),
+                const SizedBox(height: 10),
+                _textDescription(),
+                const SizedBox(height: 10),
+                _textFecha(),
+                const SizedBox(height: 10),
+                _textUsuario(),
+                const SizedBox(height: 10),
+                _buttonUpdate(),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -33,6 +51,14 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   //
+
+  Widget _iconBack(){
+    return IconButton(
+      onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const HomeMapPage()));}, 
+      icon: const Icon(Icons.arrow_back_ios, color: Colors.yellow)
+      );
+  }
+
 
   Widget _textPrecio(){
     return Container(
