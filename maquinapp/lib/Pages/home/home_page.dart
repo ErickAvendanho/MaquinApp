@@ -1,18 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:maquinapp/Pages/home/home_map_page.dart';
-import 'package:maquinapp/Pages/home/services/product_page.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maquinapp/Pages/home/home_controller.dart';
+import 'package:maquinapp/Pages/home/components/addjob/addjob_page.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
-import 'package:maquinapp/models/document_user.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
 import 'package:provider/provider.dart';
 
 import '../src/search_list_page.dart';
-import 'widgets/widget_trabajo.dart';
+import 'components/widget_trabajo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -25,69 +24,19 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final User user = FirebaseAuth.instance.currentUser!;
+  bool _isMapMode = false;
+  HomeController _controller = HomeController();
 
-  Future<String> obtenerNombre() async {
-    if (user.displayName.toString().isNotEmpty &&
-        user.displayName.toString() != "null") {
-      return user.displayName.toString();
-    } else {
-      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-          await FirebaseFirestore.instance
-              .collection("Users")
-              .doc(user.uid.toString())
-              .get();
-      if (docSnapshot.exists) {
-        DocumentUser userDoc = DocumentUser();
-        userDoc.fromMap(docSnapshot.data());
-        return userDoc.nombre.toString();
-      }
-    }
-    return 'User';
-  }
-
-  Future<String> obtenerFoto() async {
-    if (user.photoURL.toString().isNotEmpty) {
-      return user.photoURL.toString();
-    } else {
-      DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-          await FirebaseFirestore.instance
-              .collection("Users")
-              .doc(user.uid.toString())
-              .get();
-      if (docSnapshot.exists) {
-        DocumentUser userDoc = DocumentUser();
-        userDoc.fromMap(docSnapshot.data());
-        return userDoc.fotoperfil.toString();
-      }
-    }
-    return 'null';
-  }
-
-  Future<List<TrabajosArrendatario>> getJobs() async {
-    QuerySnapshot qs = await FirebaseFirestore.instance
-        .collection("TrabajosArrendatario")
-        .get();
-    List<DocumentSnapshot> documents = qs.docs;
-    return documents
-        .map(
-          (e) => TrabajosArrendatario(
-            descripcion: e["descripcion"],
-            uid: e["uid"],
-            fecha: e["fecha"],
-            tipo: e["tipo"],
-            longitud: e["longitud"],
-            latitud: e["latitud"],
-            precio: e["precio"],
-            foto: e["foto"],
-            titulo: e["titulo"],
-            usuario: e["usuario"],
-          ),
-        )
-        .toList();
-  }
+  int alcance = 1;
+  final _initialCameraPosition = const CameraPosition(
+    target: LatLng(19.4122119, -98.9913005),
+    zoom: 15,
+  );
 
   @override
   void initState() {
+    _controller.markers = [];
+    _controller.addMarkers();
     super.initState();
   }
 
@@ -132,92 +81,143 @@ class _HomePageState extends State<HomePage> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _drawerMaquinApp(context),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Center(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  elevation: 10,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+      body: _isMapMode ? _mapMode(size) : _dashboardMode(size),
+    );
+  }
+
+  SingleChildScrollView _dashboardMode(Size size) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Center(
+        child: FutureBuilder(
+          future: _controller.getJobs(),
+          builder: (context, data) {
+            if (data.hasData) {
+              List<TrabajosArrendatario> trabajos =
+                  data.data as List<TrabajosArrendatario>;
+              return Column(
+                children: [
+                  const SizedBox(
+                    height: 10,
                   ),
-                ),
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const HomeMapPage()));
-                },
-                child: Ink(
-                  decoration: BoxDecoration(
-                    color: const Color(0XFF20536F),
-                    borderRadius: BorderRadius.circular(30),
+                  _changeMapButton(size),
+                  const SizedBox(
+                    height: 10,
                   ),
-                  child: Container(
-                    height: 50,
-                    width: size.width * 0.8,
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(
-                          Icons.map,
-                          color: Color(0xFFFDD835),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          'CAMBIAR A MAPA',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ],
+                  ListView.builder(
+                    primary: false,
+                    shrinkWrap: true,
+                    itemCount: trabajos.isEmpty ? 0 : trabajos.length,
+                    itemBuilder: (context, int index) {
+                      return WidgetTrabajo(
+                        size: size,
+                        title: trabajos[index].titulo.toString(),
+                        fecha: trabajos[index].fecha.toString(),
+                        descripcion: trabajos[index].descripcion.toString(),
+                        categoria: trabajos[index].tipo.toString(),
+                        cliente: trabajos[index].usuario.toString(),
+                        distancia: '3.29 KM',
+                        costo: trabajos[index].precio.toString(),
+                        img: trabajos[index].foto.toString(),
+                        uid: trabajos[index].uid.toString(),
+                      );
+                    },
+                  ),
+                ],
+              );
+            } else {
+              return Column(
+                children: const [
+                  Padding(
+                    padding: EdgeInsets.all(30),
+                    child: CircularProgressIndicator(
+                      color: Color(0XFF3B3A38),
                     ),
                   ),
-                ),
+                ],
+              );
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  FutureBuilder<bool> _mapMode(Size size) {
+    return FutureBuilder(
+      future: _controller.addMarkers(),
+      builder: (context, data) {
+        if (data.hasData) {
+          return Stack(
+            children: [
+              GoogleMap(
+                initialCameraPosition: _initialCameraPosition,
+                markers: Set.from(_controller.markers!),
+                myLocationButtonEnabled: true,
+                myLocationEnabled: true,
+              ),
+              Positioned(
+                top: 5,
+                right: 60,
+                child: _changeMapButton(size),
+              ),
+            ],
+          );
+        } else if (data.hasError) {
+          return Center(
+            child: Text('${data.error}'),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(
+              color: Color(0XFF3B3A38),
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  ElevatedButton _changeMapButton(Size size) {
+    String text = _isMapMode ? 'CAMBIAR A TABLERO' : 'CAMBIAR A MAPA';
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        elevation: 10,
+        padding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+      ),
+      onPressed: () {
+        setState(() {
+          _isMapMode = !_isMapMode;
+        });
+      },
+      child: Ink(
+        decoration: BoxDecoration(
+          color: const Color(0XFF20536F),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Container(
+          height: 45,
+          width: size.width * 0.7,
+          alignment: Alignment.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.map,
+                color: Color(0xFFFDD835),
               ),
               const SizedBox(
-                height: 10,
+                width: 10,
               ),
-              FutureBuilder(
-                future: getJobs(),
-                builder: (context, data) {
-                  if (data.hasData) {
-                    List<TrabajosArrendatario> trabajos =
-                        data.data as List<TrabajosArrendatario>;
-                    return ListView.builder(
-                      primary: false,
-                      shrinkWrap: true,
-                      itemCount: trabajos.isEmpty ? 0 : trabajos.length,
-                      itemBuilder: (context, int index) {
-                        return WidgetTrabajo(
-                            onTap: () {},
-                            size: size,
-                            title: trabajos[index].titulo.toString(),
-                            fecha: trabajos[index].fecha.toString(),
-                            descripcion: trabajos[index].descripcion.toString(),
-                            categoria: trabajos[index].tipo.toString(),
-                            cliente: trabajos[index].usuario.toString(),
-                            distancia: '3.29 KM',
-                            costo: trabajos[index].precio.toString(),
-                            img: trabajos[index].foto.toString());
-                      },
-                    );
-                  } else {
-                    return const Padding(
-                      padding: EdgeInsets.all(30),
-                      child: CircularProgressIndicator(
-                        color: Color(0XFF20536F),
-                      ),
-                    );
-                  }
-                },
+              Text(
+                text,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),
@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
               ),
               padding: const EdgeInsets.only(top: 40, left: 20, bottom: 30),
               child: FutureBuilder(
-                future: obtenerNombre(),
+                future: _controller.obtenerNombre(user),
                 builder: (context, dataName) {
                   if (dataName.hasError) {
                     return const Text('Error');
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
                     return Row(
                       children: [
                         FutureBuilder(
-                          future: obtenerFoto(),
+                          future: _controller.obtenerFoto(user),
                           builder: (context, dataPhoto) {
                             if (dataPhoto.hasError) {
                               return const Text('Error');
@@ -325,20 +325,41 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             ListTile(
-              onTap: () {
-                //print(user.photoURL.toString());
-              },
+              leading: const Icon(
+                Icons.person,
+                color: Color(0XFF3B3A38),
+              ),
+              onTap: () {},
               title: const Text('Mi perfil'),
             ),
             ListTile(
+              leading: const Icon(
+                Icons.notifications,
+                color: Color(0XFF3B3A38),
+              ),
               onTap: () {},
               title: const Text('Mis solicitudes'),
             ),
             ListTile(
-              onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context) => const ProductPage()));},
+              leading: const Icon(
+                Icons.add_chart,
+                color: Color(0XFF3B3A38),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProductPage(),
+                  ),
+                );
+              },
               title: const Text('Subir nuevo trabajo'),
             ),
             ListTile(
+              leading: const Icon(
+                Icons.logout,
+                color: Color(0XFF3B3A38),
+              ),
               onTap: () async {
                 final provider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
