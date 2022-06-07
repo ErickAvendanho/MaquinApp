@@ -206,16 +206,11 @@ class _ProductPageState extends State<ProductPage> {
   }
 
    Widget _imageUser() {
-    return GestureDetector(
-      onTap: _con.showAlertDialog,
-      child: CircleAvatar(
-        //backgroundImage: _con.imageFile != null 
-        //? FileImage(_con.imageFile)
-        //: const AssetImage('assets/img/user_profile_2.png'),
+    return  CircleAvatar(
+        backgroundImage: const AssetImage('assets/imgages/descarga.png'),
         backgroundColor: Colors.grey[200],
         radius: 60,
-      ),
-    );
+      );
   }
  
 }
