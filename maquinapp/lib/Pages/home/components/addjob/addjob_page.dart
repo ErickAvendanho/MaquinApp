@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/addjob/addjob_controller.dart';
+import '../../../../utils/my_colors.dart';
 
 class ProductPage extends StatefulWidget {
   const ProductPage({Key? key}) : super(key: key);
@@ -77,12 +78,16 @@ class _ProductPageState extends State<ProductPage> {
               const SizedBox(height: 10),
               _textBox(
                 'Tipo',
-                Icons.type_specimen,
+                Icons.more,
                 _con.typeController,
                 TextInputType.text,
                 TextInputAction.next,
                 false,
               ),
+              const SizedBox(height: 10),
+              _imageUser(),
+              const SizedBox(height: 10),
+              _imageUser(),
               const SizedBox(height: 10),
               _imageUser(),
               const SizedBox(height: 10),
@@ -124,9 +129,9 @@ class _ProductPageState extends State<ProductPage> {
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: ElevatedButton(
         onPressed: () {},
-        child: const Text('REGISTRARSE'),
+        child: const Text('AGREGAR TRABAJO'),
         style: ElevatedButton.styleFrom(
-            //primary: MyColors.primaryColor,
+            primary: MyColors.primaryColor,
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             padding: const EdgeInsets.symmetric(vertical: 15)),
