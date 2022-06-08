@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
+import 'package:maquinapp/Pages/payment/create/payments_page.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
 
 class JobDetailPage extends StatefulWidget {
@@ -92,7 +93,14 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               color: Colors.amber,
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(30),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const ClientPaymentsPage(),
+                                    ),
+                                  );
+                                },
                                 splashColor: Colors.amber.shade200,
                                 child: Container(
                                   margin: const EdgeInsets.all(10),
