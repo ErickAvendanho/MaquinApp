@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
-import 'package:maquinapp/Pages/payment/create/payments_page.dart';
+import 'package:maquinapp/Pages/payment/create/payment_screen.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
 
 class JobDetailPage extends StatefulWidget {
@@ -97,7 +97,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const ClientPaymentsPage(),
+                                      builder: (context) => const PaymentsPage(),
                                     ),
                                   );
                                 },
