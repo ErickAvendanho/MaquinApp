@@ -128,7 +128,9 @@ class _ProductPageState extends State<ProductPage> {
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: () {
+          
+        },
         child: const Text('AGREGAR TRABAJO'),
         style: ElevatedButton.styleFrom(
             primary: MyColors.primaryColor,

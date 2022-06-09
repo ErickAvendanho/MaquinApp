@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class TrabajosArrendatario {
   String? descripcion;
   String? fecha;
@@ -22,6 +24,33 @@ class TrabajosArrendatario {
     this.titulo,
     this.usuario,
   });
+
+  CollectionReference users =
+  FirebaseFirestore.instance.collection('TrabajosArrendatario');
+  Future<bool> agregarJob(String uidDoc) async {
+    bool result = false;
+    try {
+      users
+          .doc(uidDoc)
+          .set({
+            'descripcion': descripcion,
+            'fecha': fecha,
+            'foto': foto,
+            'latitud': latitud,
+            'longitud': longitud,
+            'precio': precio,
+            'tipo': tipo,
+            'titulo': titulo,
+            'uid': uid,
+            'usuario': usuario,
+          })
+          .then((value) => result = true)
+          .catchError((error) => result = false);
+      return result;
+    } catch (e) {
+      return result;
+    }
+  }
 
   Map<String, dynamic> json() {
     return {
