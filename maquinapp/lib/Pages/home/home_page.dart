@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maquinapp/Pages/home/home_controller.dart';
 import 'package:maquinapp/Pages/home/components/addjob/addjob_page.dart';
+import 'package:maquinapp/Pages/home/home_page_signin.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
@@ -369,7 +370,7 @@ class _HomePageState extends State<HomePage> {
                 }
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(
-                    builder: (context) => const SignPage(),
+                    builder: (context) => const HomePageSignIn(),
                   ),
                   (Route<dynamic> route) => false,
                 );
