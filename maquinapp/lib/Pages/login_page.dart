@@ -124,11 +124,13 @@ class _LoginPageState extends State<LoginPage> {
                                           listen: false);
                                   bool result = await provider.googleLogin();
                                   if (result) {
+                                    final User? userSigned =
+                                        FirebaseAuth.instance.currentUser;
                                     DocumentSnapshot<Map<String, dynamic>>
                                         docSnapshot = await FirebaseFirestore
                                             .instance
                                             .collection("Users")
-                                            .doc(user?.uid.toString())
+                                            .doc(userSigned?.uid.toString())
                                             .get();
                                     if (docSnapshot.exists) {
                                       Navigator.pushAndRemoveUntil(

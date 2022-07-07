@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/addjob/addjob_controller.dart';
+import '../../../../models/trabajos_arrendatario.dart';
 import '../../../../utils/my_colors.dart';
 
 class ProductPage extends StatefulWidget {
@@ -10,11 +12,15 @@ class ProductPage extends StatefulWidget {
 }
 
 class _ProductPageState extends State<ProductPage> {
-  ProductController _con = ProductController();
+  final User user = FirebaseAuth.instance.currentUser!;
+
+  ProductController _controller = ProductController();
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: const Color(0xFFFDD835),
       appBar: AppBar(
         elevation: 0,
         backgroundColor: const Color(0XFF3B3A38),
@@ -33,17 +39,33 @@ class _ProductPageState extends State<ProductPage> {
             fontSize: 24,
           ),
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
-          padding: const EdgeInsets.only(top: 50),
           child: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.all(10),
+                child: SizedBox(
+                  width: size.width * 0.30,
+                  child: Image.asset('assets/images/maquinapp.png'),
+                ),
+              ),
+              _textBox(
+                'Titulo',
+                Icons.title,
+                _controller.tituloController,
+                TextInputType.text,
+                TextInputAction.next,
+                false,
+              ),
+              const SizedBox(height: 10),
               _textBox(
                 'Precio',
                 Icons.money,
-                _con.precioController,
+                _controller.precioController,
                 TextInputType.number,
                 TextInputAction.next,
                 false,
@@ -52,7 +74,7 @@ class _ProductPageState extends State<ProductPage> {
               _textBox(
                 'Descripción',
                 Icons.description,
-                _con.descripcionController,
+                _controller.descripcionController,
                 TextInputType.text,
                 TextInputAction.next,
                 true,
@@ -61,16 +83,7 @@ class _ProductPageState extends State<ProductPage> {
               _textBox(
                 'Fecha de publicación',
                 Icons.date_range,
-                _con.fechaController,
-                TextInputType.text,
-                TextInputAction.next,
-                false,
-              ),
-              const SizedBox(height: 10),
-              _textBox(
-                'Identificador del usuario',
-                Icons.person,
-                _con.usuarioController,
+                _controller.fechaController,
                 TextInputType.text,
                 TextInputAction.next,
                 false,
@@ -79,17 +92,50 @@ class _ProductPageState extends State<ProductPage> {
               _textBox(
                 'Tipo',
                 Icons.more,
-                _con.typeController,
+                _controller.typeController,
                 TextInputType.text,
                 TextInputAction.next,
                 false,
               ),
               const SizedBox(height: 10),
-              _imageUser(),
-              const SizedBox(height: 10),
-              _imageUser(),
-              const SizedBox(height: 10),
-              _imageUser(),
+              Container(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 40,
+                  vertical: 5,
+                ),
+                child: Wrap(
+                  spacing: 3,
+                  runSpacing: 3,
+                  children: [
+                    InkWell(
+                      onTap: () {},
+                      child: SizedBox(
+                        width: size.width * 0.20,
+                        child: Stack(
+                          children: [
+                            Image.asset('assets/images/add_image.png'),
+                            Positioned(
+                              bottom: 0,
+                              right: 0,
+                              child: Container(
+                                padding: const EdgeInsets.all(3),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.green,
+                                ),
+                                child: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 10),
               _buttonUpdate(),
             ],
@@ -106,15 +152,23 @@ class _ProductPageState extends State<ProductPage> {
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(10),
+        color: const Color(0XFF3B3A38),
       ),
       child: TextField(
         controller: controller,
         keyboardType: tit,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
         decoration: InputDecoration(
           hintText: hint,
+          hintStyle: const TextStyle(
+            color: Colors.white,
+          ),
           border: InputBorder.none,
           prefixIcon: Icon(
             icon,
+            color: Colors.amber,
           ),
         ),
         textInputAction: tia,
@@ -129,11 +183,24 @@ class _ProductPageState extends State<ProductPage> {
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: ElevatedButton(
         onPressed: () {
-          
+          /*
+          TrabajosArrendatario job = TrabajosArrendatario(
+            descripcion: _controller.descripcionController.text,
+            fecha: _controller.fechaController.text,
+            foto: '',
+            latitud: _controller,
+            longitud: _controller,
+            precio: _controller.precioController.text,
+            tipo: _controller.typeController.text,
+            titulo: _controller.tituloController.text,
+            uid: user.uid,
+            usuario: _controller.usuarioController.text,
+          );
+          _controller.uploadNewJob(job);*/
         },
         child: const Text('AGREGAR TRABAJO'),
         style: ElevatedButton.styleFrom(
-            primary: MyColors.primaryColor,
+            primary: const Color(0XFF3B3A38),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             padding: const EdgeInsets.symmetric(vertical: 15)),

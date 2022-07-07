@@ -4,6 +4,7 @@ import '../../../../models/trabajos_arrendatario.dart';
 
 class ProductController {
   late BuildContext context;
+  TextEditingController tituloController = TextEditingController();
   TextEditingController precioController = TextEditingController();
   TextEditingController descripcionController = TextEditingController();
   TextEditingController fechaController = TextEditingController();
@@ -29,29 +30,7 @@ class ProductController {
         });
   }
 
-  void addJob(
-      String descripcion,
-      String fecha,
-      String foto,
-      double latitud,
-      double longitud,
-      String precio,
-      String tipo,
-      String titulo,
-      String uid,
-      String usuario) async {
-    TrabajosArrendatario job = TrabajosArrendatario(
-      descripcion: descripcion,
-      fecha: fecha,
-      foto: foto,
-      latitud: latitud,
-      longitud: longitud,
-      precio: precio,
-      tipo: tipo,
-      titulo: titulo,
-      uid: uid,
-      usuario: usuario,
-    );
+  void uploadNewJob(TrabajosArrendatario job) async {
     const _chars =
         'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
     m.Random _rnd = m.Random();

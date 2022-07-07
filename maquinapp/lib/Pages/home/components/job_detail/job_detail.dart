@@ -1,6 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
-import 'package:maquinapp/Pages/payment/create/payment_screen.dart';
+import 'package:maquinapp/Pages/payment/create/payment_page.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
 
 class JobDetailPage extends StatefulWidget {
@@ -61,7 +62,13 @@ class _JobDetailPageState extends State<JobDetailPage> {
                       height: 30,
                     ),
                     Container(
-                      color: Colors.white,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(16),
+                          topRight: Radius.circular(15),
+                        ),
+                      ),
                       child: ConstrainedBox(
                         constraints: BoxConstraints(
                           minHeight: size.height * 0.75,
@@ -70,21 +77,119 @@ class _JobDetailPageState extends State<JobDetailPage> {
                         child: Column(
                           children: [
                             Container(
-                              color: const Color(0XFF3B3A38),
-                              width: size.width,
-                              padding: const EdgeInsets.all(10.0),
-                              child: Text(
-                                '${job.titulo}',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
+                              decoration: const BoxDecoration(
+                                color: Color(0XFF3B3A38),
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(16),
+                                  topRight: Radius.circular(15),
                                 ),
-                                textAlign: TextAlign.center,
+                              ),
+                              width: size.width,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10.0, vertical: 20.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    '${job.titulo}',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.star_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      Icon(
+                                        Icons.star_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      Icon(
+                                        Icons.star_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      Icon(
+                                        Icons.star_rounded,
+                                        color: Colors.white,
+                                      ),
+                                      Icon(
+                                        Icons.star_border_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              height: size.height * 0.10,
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0XFFB4C5CF),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                      '\$ ${job.precio}',
+                                      style: const TextStyle(
+                                        color: Color(0XFF20536F),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 22,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: const Color(0XFFFFEAAC),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Text(
+                                      'Fecha: ${job.fecha}',
+                                      style: const TextStyle(
+                                        color: Color(0XFFD4A006),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.amber.shade800,
+                                ),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              margin: const EdgeInsets.all(10.0),
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    'Descripción',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 22,
+                                    ),
+                                  ),
+                                  Text('${job.descripcion}'),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
                             ),
                             Card(
                               shape: RoundedRectangleBorder(
@@ -96,20 +201,24 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const PaymentsPage(),
+                                    CupertinoPageRoute(
+                                      builder: (context) =>
+                                          const PaymentsPage(),
                                     ),
                                   );
                                 },
                                 splashColor: Colors.amber.shade200,
                                 child: Container(
                                   margin: const EdgeInsets.all(10),
-                                  padding: const EdgeInsets.all(40),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 40,
+                                    vertical: 10,
+                                  ),
                                   child: Column(
                                     children: const [
                                       Icon(
                                         Icons.lock_open,
-                                        size: 50,
+                                        size: 40,
                                       ),
                                       Text(
                                         'Desbloquear',
