@@ -1,14 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/home_page_signin.dart';
-import 'Pages/home/home_page.dart';
-
 
 void main() {
-  runApp(const MyApp()); 
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Se asegura de que todas las dependencias estén inicializadas
+  Firebase.initializeApp().then((value) => {runApp(const MyApp())});
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp ({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
@@ -21,9 +22,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Maquinapp',
       debugShowCheckedModeBanner: false,
       initialRoute: 'Home',
-      routes: {
-        'Home': (BuildContext context) => const HomePageSignIn()
-      },
+      routes: {'Home': (BuildContext context) => const HomePageSignIn()},
     );
   }
 }
