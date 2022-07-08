@@ -1,10 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maquinapp/Pages/payment/create/payment_page.dart';
 
 import '../home/home_page.dart';
 
 class RegisterPageThird extends StatefulWidget {
-  const RegisterPageThird({Key? key}) : super(key: key);
+  final String tipoRegistro;
+  final String correo;
+  final String nombre;
+  final String telefono;
+  final String password;
+  final String comuna;
+  final String nombreNegocio;
+  const RegisterPageThird({
+    Key? key,
+    required this.tipoRegistro,
+    required this.correo,
+    required this.nombre,
+    required this.telefono,
+    required this.password,
+    required this.comuna,
+    required this.nombreNegocio,
+  }) : super(key: key);
 
   @override
   _RegisterPageThridState createState() => _RegisterPageThridState();
@@ -68,7 +85,15 @@ class _RegisterPageThridState extends State<RegisterPageThird> {
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
-                  builder: (BuildContext context) => const HomePage(),
+                  builder: (BuildContext context) => PaymentsPage(
+                    tipoRegistro: widget.tipoRegistro,
+                    nombre: widget.nombre,
+                    correo: widget.correo,
+                    telefono: widget.telefono,
+                    password: widget.password,
+                    comuna: widget.comuna,
+                    nombreNegocio: widget.nombreNegocio,
+                  ),
                 ),
                 (route) => false,
               );

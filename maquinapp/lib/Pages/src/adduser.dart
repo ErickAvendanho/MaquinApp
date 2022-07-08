@@ -13,22 +13,24 @@ class AddUser {
   final String telefono;
   final String tipo;
   final String uid;
+  final String status;
 
   AddUser(
-    this.alcance,
-    this.comuna,
-    this.correo,
-    this.fotoPerfil,
-    this.latitud,
-    this.longitud,
-    this.negocio,
-    this.nombre,
-    this.privilegios,
-    this.telefono,
-    this.tipo,
-    this.uid,
-  );
+      this.alcance,
+      this.comuna,
+      this.correo,
+      this.fotoPerfil,
+      this.latitud,
+      this.longitud,
+      this.negocio,
+      this.nombre,
+      this.privilegios,
+      this.telefono,
+      this.tipo,
+      this.uid,
+      this.status);
   CollectionReference users = FirebaseFirestore.instance.collection('Users');
+  CollectionReference inactiveUsers = FirebaseFirestore.instance.collection('UsuariosInactivos');
 
   Future<bool> agregarUsuarioFirestoreDocRandom() async {
     bool result = false;
@@ -46,6 +48,7 @@ class AddUser {
             'telefono': telefono,
             'tipo': tipo,
             'uid': uid,
+            'status': status
           })
           .then((value) => result = true)
           .catchError((error) => result = false);
@@ -58,6 +61,7 @@ class AddUser {
   Future<bool> agregarUsuarioFirestore() async {
     bool result = false;
     try {
+      print(status);
       users
           .doc(uid.toString())
           .set({
@@ -72,9 +76,20 @@ class AddUser {
             'telefono': telefono,
             'tipo': tipo,
             'uid': uid,
+            'status': status
           })
           .then((value) => result = true)
           .catchError((error) => result = false);
+      if (status == 'inactivo') {
+        inactiveUsers
+          .doc(uid.toString())
+          .set({
+            'UserID': uid,
+            'visualizacionesGratuitas': 3
+          })
+          .then((value) => result = true)
+          .catchError((error) => result = false);
+      }
       return result;
     } catch (e) {
       return result;

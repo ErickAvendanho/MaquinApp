@@ -169,6 +169,7 @@ class _RegisterPageState extends State<RegisterDocPageSecond> {
 
   save() async {
     if (keyForm.currentState!.validate()) {
+      /*
       AddUser register = AddUser(
         0,
         communeCtrl.text,
@@ -191,6 +192,7 @@ class _RegisterPageState extends State<RegisterDocPageSecond> {
         ),
         (route) => false,
       );
+      */
     } else {}
   }
 }

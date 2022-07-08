@@ -1,18 +1,41 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/home/home_page.dart';
 import 'package:maquinapp/Pages/payment/create/add_creditcard.dart';
 import 'package:maquinapp/Pages/payment/create/payment_service.dart';
+import 'package:maquinapp/Pages/src/adduser.dart';
+import 'package:maquinapp/Pages/src/firebaseServices/auth_services.dart';
 import 'package:stripe_payment/stripe_payment.dart';
 
 class PaymentsPage extends StatefulWidget {
-  const PaymentsPage({Key? key}) : super(key: key);
+  final String tipoRegistro;
+  final String correo;
+  final String nombre;
+  final String telefono;
+  final String password;
+  final String comuna;
+  final String nombreNegocio;
+  const PaymentsPage({
+    Key? key,
+    required this.tipoRegistro,
+    required this.correo,
+    required this.nombre,
+    required this.telefono,
+    required this.password,
+    required this.comuna,
+    required this.nombreNegocio,
+  }) : super(key: key);
 
   @override
   State<PaymentsPage> createState() => _PaymentsPageState();
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
+  GlobalKey<FormState> keyForm = GlobalKey();
   late int creditCardSelected = -1;
   //PaymentMethod? paymentMethod;
+  bool loginIng = false;
+  bool isPremium = false;
 
   @override
   void initState() {
@@ -34,7 +57,11 @@ class _PaymentsPageState extends State<PaymentsPage> {
         ),
         centerTitle: true,
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: loginIng
+              ? null
+              : () => {
+                    Navigator.pop(context),
+                  },
           icon: const Icon(
             Icons.arrow_back_ios,
             color: Color(0XFF3B3A38),
@@ -154,22 +181,32 @@ class _PaymentsPageState extends State<PaymentsPage> {
                     semanticContainer: true,
                     color: Colors.green,
                     child: InkWell(
-                      onTap: () async {
-                        //print(paymentMethod!.id);
-                        //PaymentService()processPayment(paymentMethod);
-                      },
+                      onTap: loginIng
+                          ? null
+                          : () {
+                              isPremium = true;
+
+                              save();
+
+                              //print(paymentMethod!.id);
+                              //PaymentService()processPayment(paymentMethod);
+                            },
                       child: Container(
                         padding: const EdgeInsets.all(15),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: const [
-                            Text(
-                              'Completar la orden',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
+                          children: [
+                            loginIng
+                                ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const Text(
+                                    'Completar la orden',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
                             Icon(
                               Icons.arrow_forward,
                               color: Colors.white,
@@ -182,6 +219,19 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 ],
               ),
             ),
+            RaisedButton(
+                child: loginIng
+                    ? const CircularProgressIndicator(
+                        color: Colors.white,
+                      )
+                    : const Text('Saltar'),
+                onPressed: loginIng
+                    ? null
+                    : () {
+                        isPremium = false;
+
+                        save();
+                      })
           ],
         ),
       ),
@@ -214,5 +264,41 @@ class _PaymentsPageState extends State<PaymentsPage> {
             color: creditCardSelected == noCC ? Colors.amber : Colors.white),
       ),
     );
+  }
+
+  save() async {
+   setState(() {
+      loginIng = true;
+    });
+
+    AuthServices as = AuthServices();
+    UserCredential? user = await as.authSignUp(widget.correo, widget.password);
+    if (user != null) {
+      AddUser register = AddUser(
+          0,
+          widget.comuna,
+          widget.correo,
+          '',
+          0,
+          0,
+          widget.nombreNegocio,
+          widget.nombre,
+          'usuario',
+          widget.telefono,
+          widget.tipoRegistro,
+          user.user!.uid,
+          isPremium ? 'activo' : 'inactivo');
+      await register.agregarUsuarioFirestore();
+      UserCredential? uc = await as.singIn(widget.correo, widget.password);
+      if (uc != null) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (BuildContext context) => const HomePage(),
+          ),
+          (route) => false,
+        );
+      }
+    }
   }
 }

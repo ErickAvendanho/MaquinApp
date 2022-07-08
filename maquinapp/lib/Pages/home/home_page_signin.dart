@@ -23,7 +23,7 @@ class HomePageSignIn extends StatefulWidget {
 }
 
 class _HomePageSignInState extends State<HomePageSignIn> {
-  final User user = FirebaseAuth.instance.currentUser!;
+  final User? user = FirebaseAuth.instance.currentUser;
   HomeController _controller = HomeController();
 
   @override

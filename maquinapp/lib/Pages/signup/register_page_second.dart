@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/payment/create/payment_page.dart';
 import 'package:maquinapp/Pages/signup/register_page_third.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 
@@ -29,7 +30,7 @@ class _RegisterPageState extends State<RegisterPageSecond> {
   TextEditingController communeCtrl = TextEditingController();
   TextEditingController businessNameCtrl = TextEditingController();
 
-  bool loginIng = false;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -45,16 +46,12 @@ class _RegisterPageState extends State<RegisterPageSecond> {
             style: const TextStyle(color: Colors.black),
           ),
           leading: IconButton(
+            onPressed: () => Navigator.pop(context),
             icon: const Icon(
               Icons.arrow_back_ios,
               color: Colors.black,
             ),
             splashColor: Colors.transparent,
-            onPressed: loginIng
-                ? null
-                : () => {
-                      Navigator.pop(context),
-                    },
           ),
         ),
         body: SingleChildScrollView(
@@ -138,9 +135,7 @@ class _RegisterPageState extends State<RegisterPageSecond> {
             : const SizedBox.shrink(),
         const SizedBox(height: 40),
         GestureDetector(
-          onTap: loginIng
-              ? null
-              : () {
+          onTap: () {
                   save();
                 },
           child: Container(
@@ -151,11 +146,7 @@ class _RegisterPageState extends State<RegisterPageSecond> {
                   borderRadius: BorderRadius.circular(30.0)),
               color: const Color(0xFF343436),
             ),
-            child: loginIng
-                ? const CircularProgressIndicator(
-                    color: Colors.white,
-                  )
-                : const Text(
+            child: const Text(
                     "SIGUIENTE",
                     style: TextStyle(
                         color: Colors.white,
@@ -186,43 +177,21 @@ class _RegisterPageState extends State<RegisterPageSecond> {
   }
 
   save() async {
-    setState(() {
-      loginIng = true;
-    });
     if (keyForm.currentState!.validate()) {
-      AuthServices as = AuthServices();
-      UserCredential? user =
-          await as.authSignUp(widget.correo, widget.password);
-      if (user != null) {
-        AddUser register = AddUser(
-          0,
-          communeCtrl.text,
-          widget.correo,
-          '',
-          0,
-          0,
-          businessNameCtrl.text,
-          widget.nombre,
-          'usuario',
-          widget.telefono,
-          widget.tipoRegistro,
-          user.user!.uid,
-        );
-        await register.agregarUsuarioFirestore();
-        UserCredential? uc = await as.singIn(widget.correo, widget.password);
-        if (uc != null) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => const RegisterPageThird(),
-            ),
-            (route) => false,
-          );
-        }
-      }
-    } else {}
-    setState(() {
-      loginIng = false;
-    });
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => RegisterPageThird(
+            tipoRegistro: widget.tipoRegistro,
+            nombre: widget.nombre,
+            correo: widget.correo,
+            telefono: widget.telefono,
+            password: widget.password,
+            comuna: communeCtrl.text,
+            nombreNegocio: businessNameCtrl.text,
+          ),
+        ),
+      );
+    }
   }
 }

@@ -199,6 +199,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(30),
                                 onTap: () {
+                                  /*
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
@@ -206,6 +207,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                           const PaymentsPage(),
                                     ),
                                   );
+                                  */
                                 },
                                 splashColor: Colors.amber.shade200,
                                 child: Container(
