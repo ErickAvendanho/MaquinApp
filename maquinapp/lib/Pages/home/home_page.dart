@@ -121,6 +121,7 @@ class _HomePageState extends State<HomePage> {
                         costo: trabajos[index].precio.toString(),
                         img: trabajos[index].foto.toString(),
                         uid: trabajos[index].uid.toString(),
+                        isLogued: true,
                       );
                     },
                   ),

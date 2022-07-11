@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../models/trabajos_arrendatario.dart';
 
 class JobDetailController {
+  User? user = FirebaseAuth.instance.currentUser;
+
   Future<TrabajosArrendatario?> getJob(String doc) async {
     try {
       DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -17,4 +20,6 @@ class JobDetailController {
       return null;
     }
   }
+
+  
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
+import 'package:maquinapp/Pages/home/components/job_detail/job_detail_full.dart';
 import 'package:maquinapp/Pages/payment/create/payment_page.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
 
@@ -199,15 +200,15 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(30),
                                 onTap: () {
-                                  /*
+                                  
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
                                       builder: (context) =>
-                                          const PaymentsPage(),
+                                          const JobDetailFull(),
                                     ),
                                   );
-                                  */
+                                  
                                 },
                                 splashColor: Colors.amber.shade200,
                                 child: Container(

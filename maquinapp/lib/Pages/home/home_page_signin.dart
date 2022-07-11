@@ -97,6 +97,7 @@ class _HomePageSignInState extends State<HomePageSignIn> {
                         costo: trabajos[index].precio.toString(),
                         img: trabajos[index].foto.toString(),
                         uid: trabajos[index].uid.toString(),
+                        isLogued: false
                       );
                     },
                   ),
