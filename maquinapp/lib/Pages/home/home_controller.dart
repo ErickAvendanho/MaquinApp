@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maquinapp/Pages/src/inactiveUser.dart';
 
 import '../../models/document_user.dart';
 import '../../models/trabajos_arrendatario.dart';
 
 class HomeController {
   late List<Marker>? markers;
+  late bool isUserInactive;
+  User? user = FirebaseAuth.instance.currentUser;
   Future<bool> addMarkers() async {
     try {
       QuerySnapshot qs = await FirebaseFirestore.instance
@@ -81,26 +84,67 @@ class HomeController {
     return 'null';
   }
 
-  Future<List<TrabajosArrendatario>> getJobs() async {
+  Future<List<TrabajosArrendatario>?> getJobs() async {
+    print('GET JOBS');
+
+    try {
+      QuerySnapshot qs = await FirebaseFirestore.instance
+          .collection("TrabajosArrendatario")
+          .get();
+      List<TrabajosArrendatario> documents = qs.docs
+          .map((e) => TrabajosArrendatario(
+                descripcion: e["descripcion"],
+                uid: e["uid"],
+                fecha: e["fecha"],
+                tipo: e["tipo"],
+                longitud: e["longitud"],
+                latitud: e["latitud"],
+                precio: e["precio"],
+                foto: e["foto"],
+                titulo: e["titulo"],
+                usuario: e["usuario"],
+              ))
+          .toList();
+
+      qs = await FirebaseFirestore.instance
+          .collection("UsuariosInactivos")
+          .where('UserID', isEqualTo: user!.uid)
+          .get();
+      List<InactiveUser> inactiveUsers = qs.docs
+          .map((e) => InactiveUser(
+                iUid: e["UserID"],
+                visualizacionesGratuitas: e["visualizacionesGratuitas"],
+              ))
+          .toList();
+      if (inactiveUsers.isEmpty) {
+        isUserInactive = false;
+      } else {
+        isUserInactive = true;
+      }
+      return documents;
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<bool> isCurrentUserInactive() async {
+    bool result = false;
+
     QuerySnapshot qs = await FirebaseFirestore.instance
-        .collection("TrabajosArrendatario")
+        .collection("UsuariosInactivos")
+        .where('UserID', isEqualTo: user!.uid)
         .get();
-    List<DocumentSnapshot> documents = qs.docs;
-    return documents
-        .map(
-          (e) => TrabajosArrendatario(
-            descripcion: e["descripcion"],
-            uid: e["uid"],
-            fecha: e["fecha"],
-            tipo: e["tipo"],
-            longitud: e["longitud"],
-            latitud: e["latitud"],
-            precio: e["precio"],
-            foto: e["foto"],
-            titulo: e["titulo"],
-            usuario: e["usuario"],
-          ),
-        )
+    List<InactiveUser> inactiveUsers = qs.docs
+        .map((e) => InactiveUser(
+              iUid: e["UserID"],
+              visualizacionesGratuitas: e["VisualizacionesGratuitas"],
+            ))
         .toList();
+    if (inactiveUsers.isEmpty) {
+      result = false;
+    } else {
+      result = true;
+    }
+    return result;
   }
 }

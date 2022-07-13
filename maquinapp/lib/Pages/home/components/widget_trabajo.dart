@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail.dart';
+import 'package:maquinapp/Pages/home/components/job_detail/job_detail_full.dart';
 import 'package:maquinapp/Pages/singmenu_page.dart';
 
 class WidgetTrabajo extends StatelessWidget {
@@ -17,6 +18,7 @@ class WidgetTrabajo extends StatelessWidget {
     required this.img,
     required this.uid,
     required this.isLogued,
+    required this.isCurrentUserInactive
   }) : super(key: key);
 
   final Size size;
@@ -30,6 +32,7 @@ class WidgetTrabajo extends StatelessWidget {
   final String img;
   final String uid;
   final bool isLogued;
+  final bool isCurrentUserInactive;
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +50,7 @@ class WidgetTrabajo extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => isLogued ? JobDetailPage(
-                jobID: uid,
-              ) : const SignPage(),
+              builder: (context) => isLogued ? isCurrentUserInactive ? JobDetailPage(jobID: uid,) : const JobDetailFull() : const SignPage()
             ),
           ),
           child: Padding(
