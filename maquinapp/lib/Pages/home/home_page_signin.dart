@@ -134,8 +134,8 @@ class _HomePageSignInState extends State<HomePageSignIn> {
               padding: const EdgeInsets.only(top: 40, left: 20, bottom: 30),
               child: Column(
                 children: [
-                  Image.asset('image.assets/logomaquina.png'),
-                  const Text('Bienvenido'),
+                  Image.asset('assets/images/logomaquina.png'),
+                  const Text('Bienvenido', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),),
                   ],
                 ),
               ),
