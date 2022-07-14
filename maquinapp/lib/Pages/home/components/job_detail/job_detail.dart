@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
-import 'package:maquinapp/Pages/home/components/job_detail/job_detail_full.dart';
-import 'package:maquinapp/Pages/payment/create/payment_page.dart';
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/widgets/alerts.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
@@ -10,7 +8,8 @@ import 'package:maquinapp/models/trabajos_arrendatario.dart';
 class JobDetailPage extends StatefulWidget {
   final String jobID;
   final bool isLogued;
-  const JobDetailPage({Key? key, required this.jobID, required this.isLogued})
+  final bool isUserInactive;
+  const JobDetailPage({Key? key, required this.jobID, required this.isLogued, required this.isUserInactive})
       : super(key: key);
 
   @override
@@ -39,7 +38,8 @@ class _JobDetailPageState extends State<JobDetailPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: FutureBuilder(
-            future: _controller.getJobAndInfoInactiveUser(widget.jobID, widget.isLogued),
+            future: _controller.getJobAndInfoInactiveUser(
+                widget.jobID, widget.isLogued, widget.isUserInactive),
             builder: (context, data) {
               if (data.hasData) {
                 TrabajosArrendatario job = data.data as TrabajosArrendatario;
@@ -196,6 +196,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                             const SizedBox(
                               height: 10,
                             ),
+                            widget.isUserInactive ?
                             Card(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30),
@@ -241,7 +242,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                                       context,
                                                       CupertinoPageRoute(
                                                         builder: (context) =>
-                                                            const JobDetailFull(),
+                                                            JobDetailPage(jobID: widget.jobID, isLogued: true, isUserInactive: false,),
                                                       ),
                                                     );
                                                   },
@@ -321,14 +322,15 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                   ),
                                 ),
                               ),
-                            ),
+                            ) : const SizedBox(height: 10,),
                             SizedBox(
                               height: size.height * 0.02,
                             ),
+                            widget.isUserInactive ?
                             const Text(
                               'Necesita desbloquear el contenido para continuar y ver la información completa sobre este proyecto.',
                               textAlign: TextAlign.center,
-                            ),
+                            ) : const SizedBox(height: 10,)
                           ],
                         ),
                       ),

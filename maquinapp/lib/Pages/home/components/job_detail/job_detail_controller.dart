@@ -11,44 +11,59 @@ class JobDetailController {
   late int freeViews;
 
   Future<TrabajosArrendatario?> getJobAndInfoInactiveUser(
-      String doc, bool isLogued) async {
+      String doc, bool isLogued, bool isUserInactive) async {
     if (isLogued) {
-      try {
-        DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-            await FirebaseFirestore.instance
-                .collection("TrabajosArrendatario")
-                .doc(doc)
-                .get();
-        TrabajosArrendatario jobDoc = TrabajosArrendatario();
-        jobDoc.fromMap(docSnapshot.data());
+      if (isUserInactive) {
+        try {
+          DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+              await FirebaseFirestore.instance
+                  .collection("TrabajosArrendatario")
+                  .doc(doc)
+                  .get();
+          TrabajosArrendatario jobDoc = TrabajosArrendatario();
+          jobDoc.fromMap(docSnapshot.data());
 
-        //Obtiene información del usuario inactivo
-        QuerySnapshot qs = await FirebaseFirestore.instance
-            .collection("UsuariosInactivos")
-            .where('UserID', isEqualTo: user!.uid)
-            .get();
-        List<InactiveUser> inactiveUsers = qs.docs
-            .map((e) => InactiveUser(
-                  iUid: e["UserID"],
-                  visualizacionesGratuitas: e["visualizacionesGratuitas"],
-                ))
-            .toList();
+          //Obtiene información del usuario inactivo
+          QuerySnapshot qs = await FirebaseFirestore.instance
+              .collection("UsuariosInactivos")
+              .where('UserID', isEqualTo: user!.uid)
+              .get();
+          List<InactiveUser> inactiveUsers = qs.docs
+              .map((e) => InactiveUser(
+                    iUid: e["UserID"],
+                    visualizacionesGratuitas: e["visualizacionesGratuitas"],
+                  ))
+              .toList();
 
-        inactiveUser = inactiveUsers.first;
-        freeViews = inactiveUser.visualizacionesGratuitas;
+          inactiveUser = inactiveUsers.first;
+          freeViews = inactiveUser.visualizacionesGratuitas;
 
-        //Revisa si el usuario inactivo aún tiene entre 1 y 3 visualizaciones gratuitas
-        if (freeViews >= 1 && freeViews <= 3) {
-          hasFreeViewsYet = true;
-        } else {
-          hasFreeViewsYet = false;
+          //Revisa si el usuario inactivo aún tiene entre 1 y 3 visualizaciones gratuitas
+          if (freeViews >= 1 && freeViews <= 3) {
+            hasFreeViewsYet = true;
+          } else {
+            hasFreeViewsYet = false;
+          }
+
+          return jobDoc;
+        } catch (e) {
+          return null;
         }
-
-        return jobDoc;
-      } catch (e) {
-        return null;
+      }else{
+        try {
+          DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+              await FirebaseFirestore.instance
+                  .collection("TrabajosArrendatario")
+                  .doc(doc)
+                  .get();
+          TrabajosArrendatario jobDoc = TrabajosArrendatario();
+          jobDoc.fromMap(docSnapshot.data());
+          return jobDoc;
+        } catch (e) {
+          return null;
+        }
       }
-    }else{
+    } else {
       try {
         DocumentSnapshot<Map<String, dynamic>> docSnapshot =
             await FirebaseFirestore.instance
