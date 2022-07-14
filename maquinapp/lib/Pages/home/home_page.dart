@@ -101,7 +101,10 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  _changeMapButton(size),
+                  _controller.isUserInactive ?
+                  const SizedBox(
+                    height: 10,
+                  ) : _changeMapButton(size),
                   const SizedBox(
                     height: 10,
                   ),
