@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_full.dart';
 import 'package:maquinapp/Pages/payment/create/payment_page.dart';
+import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/widgets/alerts.dart';
 import 'package:maquinapp/models/trabajos_arrendatario.dart';
 
 class JobDetailPage extends StatefulWidget {
   final String jobID;
-  const JobDetailPage({Key? key, required this.jobID}) : super(key: key);
+  final bool isLogued;
+  const JobDetailPage({Key? key, required this.jobID, required this.isLogued})
+      : super(key: key);
 
   @override
   State<JobDetailPage> createState() => _JobDetailPageState();
@@ -36,7 +39,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: FutureBuilder(
-            future: _controller.getJobAndInfoInactiveUser(widget.jobID),
+            future: _controller.getJobAndInfoInactiveUser(widget.jobID, widget.isLogued),
             builder: (context, data) {
               if (data.hasData) {
                 TrabajosArrendatario job = data.data as TrabajosArrendatario;
@@ -201,67 +204,98 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(30),
                                 onTap: () {
-                                  print(_controller.freeViews);
-                                  _controller.hasFreeViewsYet
-                                      ? Alerts.messageBoxCustom(
-                                          context,
-                                          const Text('Función premium'),
-                                          Text(
-                                              'Actualmente su cuenta no es premium, por lo que solo cuenta con ${_controller.inactiveUser.visualizacionesGratuitas} visualizaciones gratuitas. ¿Desea continuar con la visualización de este producto y gastar una visualización gratuita?'),
-                                          <Widget>[
-                                              TextButton(
-                                                child: const Text("Cancelar"),
-                                                onPressed: () {
-                                                  Navigator.of(context,
-                                                          rootNavigator: true)
-                                                      .pop();
-                                                },
-                                              ),
-                                              TextButton(
-                                                child: const Text("Confirmar"),
-                                                onPressed: () {
-                                                  _controller.freeViews =
-                                                      _controller.freeViews - 1;
-                                                  print(_controller.freeViews);
-                                                  _controller
-                                                      .actulizarUsuarioInactivo(
-                                                          _controller
-                                                              .inactiveUser
-                                                              .iUid,
-                                                          _controller
-                                                              .freeViews);
-                                                  Navigator.push(
-                                                    context,
-                                                    CupertinoPageRoute(
-                                                      builder: (context) =>
-                                                          const JobDetailFull(),
-                                                    ),
-                                                  );
-                                                },
-                                              )
-                                            ])
-                                      : Alerts.messageBoxCustom(
-                                          context,
-                                          const Text('¡Ups! :('),
-                                          const Text(
-                                              'Parece que ya no tienes visualizaciones gratuitas disponibles'),
-                                          <Widget>[
-                                              TextButton(
-                                                child: const Text(
-                                                    "Adquirir premium"),
-                                                onPressed: () {
-                                                  
-                                                },
-                                              ),
-                                              TextButton(
-                                                child: const Text("OK"),
-                                                onPressed: () {
-                                                  Navigator.of(context,
-                                                          rootNavigator: true)
-                                                      .pop();
-                                                },
-                                              )
-                                            ]);
+                                  if (widget.isLogued) {
+                                    print(_controller.freeViews);
+                                    _controller.hasFreeViewsYet
+                                        ? Alerts.messageBoxCustom(
+                                            context,
+                                            const Text('Función premium'),
+                                            Text(
+                                                'Actualmente su cuenta no es premium, por lo que solo cuenta con ${_controller.inactiveUser.visualizacionesGratuitas} visualizaciones gratuitas. ¿Desea continuar con la visualización de este producto y gastar una visualización gratuita?'),
+                                            <Widget>[
+                                                TextButton(
+                                                  child: const Text("Cancelar"),
+                                                  onPressed: () {
+                                                    Navigator.of(context,
+                                                            rootNavigator: true)
+                                                        .pop();
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child:
+                                                      const Text("Confirmar"),
+                                                  onPressed: () {
+                                                    _controller.freeViews =
+                                                        _controller.freeViews -
+                                                            1;
+                                                    print(
+                                                        _controller.freeViews);
+                                                    _controller
+                                                        .actulizarUsuarioInactivo(
+                                                            _controller
+                                                                .inactiveUser
+                                                                .iUid,
+                                                            _controller
+                                                                .freeViews);
+                                                    Navigator.push(
+                                                      context,
+                                                      CupertinoPageRoute(
+                                                        builder: (context) =>
+                                                            const JobDetailFull(),
+                                                      ),
+                                                    );
+                                                  },
+                                                )
+                                              ])
+                                        : Alerts.messageBoxCustom(
+                                            context,
+                                            const Text('¡Ups! :('),
+                                            const Text(
+                                                'Parece que ya no tienes visualizaciones gratuitas disponibles'),
+                                            <Widget>[
+                                                TextButton(
+                                                  child: const Text(
+                                                      "Adquirir premium"),
+                                                  onPressed: () {},
+                                                ),
+                                                TextButton(
+                                                  child: const Text("OK"),
+                                                  onPressed: () {
+                                                    Navigator.of(context,
+                                                            rootNavigator: true)
+                                                        .pop();
+                                                  },
+                                                )
+                                              ]);
+                                  } else {
+                                    Alerts.messageBoxCustom(
+                                        context,
+                                        const Text('Sesión necesaria'),
+                                        const Text(
+                                            'Para realizar está acción es necesario iniciar sesión'),
+                                        <Widget>[
+                                          TextButton(
+                                            child: const Text("Cancelar"),
+                                            onPressed: () {
+                                              Navigator.of(context,
+                                                      rootNavigator: true)
+                                                  .pop();
+                                            },
+                                          ),
+                                          TextButton(
+                                            child: const Text("Iniciar sesión"),
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                CupertinoPageRoute(
+                                                  builder: (context) =>
+                                                      const SignPage(),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        ]);
+                                  }
                                 },
                                 splashColor: Colors.amber.shade200,
                                 child: Container(

@@ -50,7 +50,7 @@ class WidgetTrabajo extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => isLogued ? isCurrentUserInactive ? JobDetailPage(jobID: uid,) : const JobDetailFull() : const SignPage()
+              builder: (context) => isLogued ? isCurrentUserInactive ? JobDetailPage(jobID: uid, isLogued: true,) : const JobDetailFull() : JobDetailPage(jobID: uid, isLogued: false)
             ),
           ),
           child: Padding(
