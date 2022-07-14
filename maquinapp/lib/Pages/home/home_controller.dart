@@ -84,9 +84,7 @@ class HomeController {
     return 'null';
   }
 
-  Future<List<TrabajosArrendatario>?> getJobs() async {
-    print('GET JOBS');
-
+  Future<List<TrabajosArrendatario>?> getJobsAndCheckStatusUser() async {
     try {
       QuerySnapshot qs = await FirebaseFirestore.instance
           .collection("TrabajosArrendatario")
@@ -106,6 +104,7 @@ class HomeController {
               ))
           .toList();
 
+      //Valida si el usuario es inactivo
       qs = await FirebaseFirestore.instance
           .collection("UsuariosInactivos")
           .where('UserID', isEqualTo: user!.uid)

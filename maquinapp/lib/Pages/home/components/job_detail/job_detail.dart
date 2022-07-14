@@ -35,7 +35,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: FutureBuilder(
-            future: _controller.getJob(widget.jobID),
+            future: _controller.getJobAndInfoInactiveUser(widget.jobID),
             builder: (context, data) {
               if (data.hasData) {
                 TrabajosArrendatario job = data.data as TrabajosArrendatario;
@@ -200,7 +200,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               child: InkWell(
                                 borderRadius: BorderRadius.circular(30),
                                 onTap: () {
-                                  
+                                  print(_controller.inactiveUser.visualizacionesGratuitas);
                                   Navigator.push(
                                     context,
                                     CupertinoPageRoute(
@@ -208,7 +208,6 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                           const JobDetailFull(),
                                     ),
                                   );
-                                  
                                 },
                                 splashColor: Colors.amber.shade200,
                                 child: Container(

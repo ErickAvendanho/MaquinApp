@@ -71,7 +71,7 @@ class _HomePageSignInState extends State<HomePageSignIn> {
       scrollDirection: Axis.vertical,
       child: Center(
         child: FutureBuilder(
-          future: _controller.getJobs(),
+          future: _controller.getJobsAndCheckStatusUser(),
           builder: (context, data) {
             if (data.hasData) {
               List<TrabajosArrendatario> trabajos =
