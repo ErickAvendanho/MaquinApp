@@ -9,6 +9,8 @@ import 'package:stripe_payment/stripe_payment.dart';
 
 class PaymentsPage extends StatefulWidget {
   final String tipoRegistro;
+  final String actividad;
+  final String categoria;
   final String correo;
   final String nombre;
   final String telefono;
@@ -18,6 +20,8 @@ class PaymentsPage extends StatefulWidget {
   const PaymentsPage({
     Key? key,
     required this.tipoRegistro,
+    required this.actividad,
+    required this.categoria,
     required this.correo,
     required this.nombre,
     required this.telefono,
@@ -287,7 +291,9 @@ class _PaymentsPageState extends State<PaymentsPage> {
           widget.telefono,
           widget.tipoRegistro,
           user.user!.uid,
-          isPremium ? 'activo' : 'inactivo');
+          isPremium ? 'activo' : 'inactivo',
+          widget.actividad,
+          widget.categoria);
       await register.agregarUsuarioFirestore();
       UserCredential? uc = await as.singIn(widget.correo, widget.password);
       if (uc != null) {

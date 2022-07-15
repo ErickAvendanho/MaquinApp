@@ -12,11 +12,14 @@ class RegisterPageFirst extends StatefulWidget {
 
 class _RegisterPageFirstState extends State<RegisterPageFirst> {
   // Initial Selected Value
-  String dropdown1value = 'Actividad';
-  String dropdown2value = 'Categoría';
+  String actividad = 'Arrendar';
+  String categoriaArrendar = 'Maquinas';
+  String categoriaContratar = 'Constructores';
+  bool esArrendar = true;
 
   // List of items in our dropdown menu
-  var actividad = [
+
+  var itemsActividad = [
     'Arrendar',
     'Contratar',
   ];
@@ -25,7 +28,7 @@ class _RegisterPageFirstState extends State<RegisterPageFirst> {
     'Maquinas',
     'Herramientas',
     'Vehiculos y camiones',
-    'Accesroios',
+    'Accesorios',
     'Otros'
   ];
 
@@ -93,24 +96,58 @@ class _RegisterPageFirstState extends State<RegisterPageFirst> {
                   height: 10,
                 ),
                 DropdownButton(
-                  // Initial Value
-                  value: dropdown1value,
-
-                  // Down Arrow Icon
+                  value: actividad,
                   icon: const Icon(Icons.keyboard_arrow_down),
-
-                  // Array list of items
-                  items: actividad.map((String items) {
+                  items: itemsActividad.map((String items) {
                     return DropdownMenuItem(
                       value: items,
                       child: Text(items),
                     );
                   }).toList(),
-                  // After selecting the desired option,it will
-                  // change button value to selected value
                   onChanged: (String? newValue) {
                     setState(() {
-                      dropdown1value = newValue!;
+                      actividad = newValue!;
+                      if (actividad == 'Arrendar') {
+                        esArrendar = true;
+                      } else {
+                        esArrendar = false;
+                      }
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Text(
+                  "Seleccione una categoría:",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Color(0XFF3B3A38),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                DropdownButton(
+                  value: esArrendar ? categoriaArrendar : categoriaContratar,
+                  icon: const Icon(Icons.keyboard_arrow_down),
+                  items: esArrendar
+                      ? itemsArrendar.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList()
+                      : itemsContratar.map((String items) {
+                          return DropdownMenuItem(
+                            value: items,
+                            child: Text(items),
+                          );
+                        }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      esArrendar ? categoriaArrendar =newValue! : categoriaContratar = newValue!;
                     });
                   },
                 ),
@@ -125,17 +162,20 @@ class _RegisterPageFirstState extends State<RegisterPageFirst> {
                       ),
                     ),
                     onPressed: () => {
-                      print(dropdown1value),
+                      print(actividad),
+                      esArrendar ? print(categoriaArrendar) : print(categoriaContratar),
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => RegisterPageSecond(
                             tipoRegistro: widget.tipoRegistro,
+                            actividad: actividad,
+                            categoria: esArrendar ? categoriaArrendar : categoriaContratar,
                           ),
                         ),
                       ),
                     },
-                    child: const Text('Ofrezco'),
+                    child: const Text('Siguiente'),
                   ),
                 ),
               ],

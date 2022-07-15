@@ -8,6 +8,8 @@ import '../src/firebaseServices/auth_services.dart';
 
 class RegisterPageThird extends StatefulWidget {
   final String tipoRegistro;
+  final String actividad;
+  final String categoria;
   final String correo;
   final String nombre;
   final String telefono;
@@ -15,6 +17,8 @@ class RegisterPageThird extends StatefulWidget {
   const RegisterPageThird({
     Key? key,
     required this.tipoRegistro,
+    required this.actividad,
+    required this.categoria,
     required this.correo,
     required this.nombre,
     required this.telefono,
@@ -183,6 +187,8 @@ class _RegisterPageState extends State<RegisterPageThird> {
         MaterialPageRoute(
           builder: (context) => RegisterPageFourth(
             tipoRegistro: widget.tipoRegistro,
+            actividad: widget.actividad,
+            categoria: widget.categoria,
             nombre: widget.nombre,
             correo: widget.correo,
             telefono: widget.telefono,

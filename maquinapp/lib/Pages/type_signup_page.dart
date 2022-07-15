@@ -31,7 +31,7 @@ class TypeSignUpPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(bottom: 70.0),
+                padding: const EdgeInsets.only(bottom: 20.0),
                 child: Image.asset(
                   'assets/images/maquinapp.png',
                   height: size.height * 0.3,
@@ -46,7 +46,7 @@ class TypeSignUpPage extends StatelessWidget {
                   color: Color(0XFF3B3A38),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(10.0),
                 child: ElevatedButton(
@@ -94,7 +94,7 @@ class TypeSignUpPage extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(70.0),
+                padding: const EdgeInsets.all(50.0),
                 child: Image.asset(
                   'assets/images/logomaquina.png',
                   height: size.height * 0.2,
