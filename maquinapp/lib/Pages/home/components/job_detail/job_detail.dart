@@ -51,24 +51,37 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 return Column(
                   children: [
                     if (job.fotos!.isNotEmpty)
-                      AspectRatio(
-                        aspectRatio: 16 / 9,
-                        child: Swiper(
-                          itemCount: job.fotos!.length,
-                          itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.network(
-                                  '${job.fotos![index]}',
-                                  fit: BoxFit.fill,
-                                ),
+                      job.fotos!.length > 1
+                          ? AspectRatio(
+                              aspectRatio: 16 / 9,
+                              child: Swiper(
+                                itemCount: job.fotos!.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        '${job.fotos![index]}',
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      )
+                            )
+                          : Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    '${job.fotos!.first}',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              ))
                     else
                       Container(
                         decoration: BoxDecoration(

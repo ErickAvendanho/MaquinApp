@@ -69,24 +69,38 @@ class WidgetTrabajo extends StatelessWidget {
                   ],
                 ),
                 if (trabajo.fotos!.isNotEmpty)
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Swiper(
-                      itemCount: trabajo.fotos!.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: Image.network(
-                              '${trabajo.fotos![index]}',
-                              fit: BoxFit.fill,
-                            ),
+                  trabajo.fotos!.length > 1
+                      ? AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Swiper(
+                            itemCount: trabajo.fotos!.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    '${trabajo.fotos![index]}',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  )
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.network(
+                                    '${trabajo.fotos!.first}',
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                        )
+                      )
                 else
                   const SizedBox(
                     height: 20,
