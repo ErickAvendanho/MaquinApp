@@ -1,3 +1,4 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
@@ -49,24 +50,37 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 TrabajosArrendatario job = data.data as TrabajosArrendatario;
                 return Column(
                   children: [
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: job.fotos!.isEmpty
-                          ? Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
+                    if (job.fotos!.isNotEmpty)
+                      AspectRatio(
+                        aspectRatio: 16 / 9,
+                        child: Swiper(
+                          itemCount: job.fotos!.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: ClipRRect(
                                 borderRadius: BorderRadius.circular(10),
+                                child: Image.network(
+                                  '${job.fotos![index]}',
+                                  fit: BoxFit.fill,
+                                ),
                               ),
-                              height: size.height * 0.20,
-                              margin: const EdgeInsets.all(10),
-                              child: const Center(
-                                child: Text('No hay fotografías'),
-                              ),
-                            )
-                          : Image.network(
-                              job.fotos.toString(),
-                            ),
-                    ),
+                            );
+                          },
+                        ),
+                      )
+                    else
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        height: size.height * 0.20,
+                        margin: const EdgeInsets.all(10),
+                        child: const Center(
+                          child: Text('No hay fotografías'),
+                        ),
+                      ),
                     const SizedBox(
                       height: 30,
                     ),

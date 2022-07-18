@@ -91,18 +91,6 @@ class WidgetTrabajo extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                /*
-                img != ''
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 20),
-                        child: AspectRatio(
-                          aspectRatio: 16 / 9,
-                          child: Image.network(img),
-                        ),
-                      )
-                    : const SizedBox(
-                        height: 20,
-                      ),*/
                 Text('${trabajo.descripcion}'),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
