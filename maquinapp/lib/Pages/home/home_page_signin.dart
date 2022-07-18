@@ -62,7 +62,7 @@ class _HomePageSignInState extends State<HomePageSignIn> {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: _drawerMaquinApp(context),
-      body:  _dashboardMode(size),
+      body: _dashboardMode(size),
     );
   }
 
@@ -84,19 +84,15 @@ class _HomePageSignInState extends State<HomePageSignIn> {
                   ListView.builder(
                     primary: false,
                     shrinkWrap: true,
-                    itemCount: trabajos.isEmpty ? 0 :  trabajos.length>3 ? 3: trabajos.length,
+                    itemCount: trabajos.isEmpty
+                        ? 0
+                        : trabajos.length > 3
+                            ? 3
+                            : trabajos.length,
                     itemBuilder: (context, int index) {
                       return WidgetTrabajo(
                         size: size,
-                        title: trabajos[index].titulo.toString(),
-                        fecha: trabajos[index].fecha.toString(),
-                        descripcion: trabajos[index].descripcion.toString(),
-                        categoria: trabajos[index].tipo.toString(),
-                        cliente: trabajos[index].usuario.toString(),
-                        distancia: '3.29 KM',
-                        costo: trabajos[index].precio.toString(),
-                        img: trabajos[index].foto.toString(),
-                        uid: trabajos[index].uid.toString(),
+                        trabajo: trabajos[index],
                         isLogued: false,
                         isCurrentUserInactive: _controller.isUserInactive,
                       );
@@ -135,17 +131,24 @@ class _HomePageSignInState extends State<HomePageSignIn> {
               child: Column(
                 children: [
                   Image.asset('assets/images/logomaquina.png'),
-                  const Text('Bienvenido', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),),
-                  ],
-                ),
+                  const Text(
+                    'Bienvenido',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18),
+                  ),
+                ],
               ),
+            ),
             ListTile(
               leading: const Icon(
                 Icons.supervisor_account_rounded,
                 color: Color(0XFF3B3A38),
               ),
-             onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>const SignPage())),              
-             title: const Text('Iniciar sesión'),
+              onTap: () => Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const SignPage())),
+              title: const Text('Iniciar sesión'),
             ),
           ],
         ),

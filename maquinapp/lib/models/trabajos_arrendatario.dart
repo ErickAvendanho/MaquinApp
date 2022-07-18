@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TrabajosArrendatario {
   String? descripcion;
   String? fecha;
-  String? foto;
+  List<dynamic>? fotos;
   double? latitud;
   double? longitud;
   String? precio;
@@ -18,7 +18,7 @@ class TrabajosArrendatario {
     this.tipo,
     this.latitud,
     this.longitud,
-    this.foto,
+    this.fotos,
     this.fecha,
     this.precio,
     this.titulo,
@@ -26,7 +26,7 @@ class TrabajosArrendatario {
   });
 
   CollectionReference users =
-  FirebaseFirestore.instance.collection('TrabajosArrendatario');
+      FirebaseFirestore.instance.collection('TrabajosArrendatario');
   Future<bool> agregarJob(String uidDoc) async {
     bool result = false;
     try {
@@ -35,7 +35,7 @@ class TrabajosArrendatario {
           .set({
             'descripcion': descripcion,
             'fecha': fecha,
-            'foto': foto,
+            'fotos': fotos,
             'latitud': latitud,
             'longitud': longitud,
             'precio': precio,
@@ -59,7 +59,7 @@ class TrabajosArrendatario {
       'latitud': latitud,
       'longitud': longitud,
       'descripcion': descripcion,
-      'foto': foto,
+      'fotos': fotos,
       'fecha': fecha,
       'precio': precio,
       'titulo': titulo,
@@ -69,7 +69,7 @@ class TrabajosArrendatario {
 
   void fromMap(Map? map) {
     descripcion = map?["descripcion"];
-    foto = map?["foto"];
+    fotos = map?["fotos"];
     fecha = map?["fecha"];
     precio = map?["precio"];
     titulo = map?["titulo"];

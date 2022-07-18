@@ -9,7 +9,11 @@ class JobDetailPage extends StatefulWidget {
   final String jobID;
   final bool isLogued;
   final bool isUserInactive;
-  const JobDetailPage({Key? key, required this.jobID, required this.isLogued, required this.isUserInactive})
+  const JobDetailPage(
+      {Key? key,
+      required this.jobID,
+      required this.isLogued,
+      required this.isUserInactive})
       : super(key: key);
 
   @override
@@ -47,7 +51,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                   children: [
                     AspectRatio(
                       aspectRatio: 16 / 9,
-                      child: job.foto!.isEmpty
+                      child: job.fotos!.isEmpty
                           ? Container(
                               decoration: BoxDecoration(
                                 color: Colors.white,
@@ -60,7 +64,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               ),
                             )
                           : Image.network(
-                              job.foto.toString(),
+                              job.fotos.toString(),
                             ),
                     ),
                     const SizedBox(
@@ -196,24 +200,96 @@ class _JobDetailPageState extends State<JobDetailPage> {
                             const SizedBox(
                               height: 10,
                             ),
-                            widget.isUserInactive ?
-                            Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              color: Colors.amber,
-                              child: InkWell(
-                                borderRadius: BorderRadius.circular(30),
-                                onTap: () {
-                                  if (widget.isLogued) {
-                                    print(_controller.freeViews);
-                                    _controller.hasFreeViewsYet
-                                        ? Alerts.messageBoxCustom(
-                                            context,
-                                            const Text('Función premium'),
-                                            Text(
-                                                'Actualmente su cuenta no es premium, por lo que solo cuenta con ${_controller.inactiveUser.visualizacionesGratuitas} visualizaciones gratuitas. ¿Desea continuar con la visualización de este producto y gastar una visualización gratuita?'),
-                                            <Widget>[
+                            widget.isUserInactive
+                                ? Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                    ),
+                                    color: Colors.amber,
+                                    child: InkWell(
+                                      borderRadius: BorderRadius.circular(30),
+                                      onTap: () {
+                                        if (widget.isLogued) {
+                                          print(_controller.freeViews);
+                                          _controller.hasFreeViewsYet
+                                              ? Alerts.messageBoxCustom(
+                                                  context,
+                                                  const Text('Función premium'),
+                                                  Text(
+                                                      'Actualmente su cuenta no es premium, por lo que solo cuenta con ${_controller.inactiveUser.visualizacionesGratuitas} visualizaciones gratuitas. ¿Desea continuar con la visualización de este producto y gastar una visualización gratuita?'),
+                                                  <Widget>[
+                                                      TextButton(
+                                                        child: const Text(
+                                                            "Cancelar"),
+                                                        onPressed: () {
+                                                          Navigator.of(context,
+                                                                  rootNavigator:
+                                                                      true)
+                                                              .pop();
+                                                        },
+                                                      ),
+                                                      TextButton(
+                                                        child: const Text(
+                                                            "Confirmar"),
+                                                        onPressed: () {
+                                                          _controller
+                                                                  .freeViews =
+                                                              _controller
+                                                                      .freeViews -
+                                                                  1;
+                                                          print(_controller
+                                                              .freeViews);
+                                                          _controller
+                                                              .actulizarUsuarioInactivo(
+                                                                  _controller
+                                                                      .inactiveUser
+                                                                      .iUid,
+                                                                  _controller
+                                                                      .freeViews);
+                                                          Navigator.push(
+                                                            context,
+                                                            CupertinoPageRoute(
+                                                              builder: (context) =>
+                                                                  JobDetailPage(
+                                                                jobID: widget
+                                                                    .jobID,
+                                                                isLogued: true,
+                                                                isUserInactive:
+                                                                    false,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        },
+                                                      )
+                                                    ])
+                                              : Alerts.messageBoxCustom(
+                                                  context,
+                                                  const Text('¡Ups! :('),
+                                                  const Text(
+                                                      'Parece que ya no tienes visualizaciones gratuitas disponibles'),
+                                                  <Widget>[
+                                                      TextButton(
+                                                        child: const Text(
+                                                            "Adquirir premium"),
+                                                        onPressed: () {},
+                                                      ),
+                                                      TextButton(
+                                                        child: const Text("OK"),
+                                                        onPressed: () {
+                                                          Navigator.of(context,
+                                                                  rootNavigator:
+                                                                      true)
+                                                              .pop();
+                                                        },
+                                                      )
+                                                    ]);
+                                        } else {
+                                          Alerts.messageBoxCustom(
+                                              context,
+                                              const Text('Sesión necesaria'),
+                                              const Text(
+                                                  'Para realizar está acción es necesario iniciar sesión'),
+                                              <Widget>[
                                                 TextButton(
                                                   child: const Text("Cancelar"),
                                                   onPressed: () {
@@ -223,114 +299,60 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                                   },
                                                 ),
                                                 TextButton(
-                                                  child:
-                                                      const Text("Confirmar"),
+                                                  child: const Text(
+                                                      "Iniciar sesión"),
                                                   onPressed: () {
-                                                    _controller.freeViews =
-                                                        _controller.freeViews -
-                                                            1;
-                                                    print(
-                                                        _controller.freeViews);
-                                                    _controller
-                                                        .actulizarUsuarioInactivo(
-                                                            _controller
-                                                                .inactiveUser
-                                                                .iUid,
-                                                            _controller
-                                                                .freeViews);
                                                     Navigator.push(
                                                       context,
                                                       CupertinoPageRoute(
                                                         builder: (context) =>
-                                                            JobDetailPage(jobID: widget.jobID, isLogued: true, isUserInactive: false,),
+                                                            const SignPage(),
                                                       ),
                                                     );
                                                   },
                                                 )
-                                              ])
-                                        : Alerts.messageBoxCustom(
-                                            context,
-                                            const Text('¡Ups! :('),
-                                            const Text(
-                                                'Parece que ya no tienes visualizaciones gratuitas disponibles'),
-                                            <Widget>[
-                                                TextButton(
-                                                  child: const Text(
-                                                      "Adquirir premium"),
-                                                  onPressed: () {},
-                                                ),
-                                                TextButton(
-                                                  child: const Text("OK"),
-                                                  onPressed: () {
-                                                    Navigator.of(context,
-                                                            rootNavigator: true)
-                                                        .pop();
-                                                  },
-                                                )
                                               ]);
-                                  } else {
-                                    Alerts.messageBoxCustom(
-                                        context,
-                                        const Text('Sesión necesaria'),
-                                        const Text(
-                                            'Para realizar está acción es necesario iniciar sesión'),
-                                        <Widget>[
-                                          TextButton(
-                                            child: const Text("Cancelar"),
-                                            onPressed: () {
-                                              Navigator.of(context,
-                                                      rootNavigator: true)
-                                                  .pop();
-                                            },
-                                          ),
-                                          TextButton(
-                                            child: const Text("Iniciar sesión"),
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                CupertinoPageRoute(
-                                                  builder: (context) =>
-                                                      const SignPage(),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        ]);
-                                  }
-                                },
-                                splashColor: Colors.amber.shade200,
-                                child: Container(
-                                  margin: const EdgeInsets.all(10),
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 40,
-                                    vertical: 10,
-                                  ),
-                                  child: Column(
-                                    children: const [
-                                      Icon(
-                                        Icons.lock_open,
-                                        size: 40,
-                                      ),
-                                      Text(
-                                        'Desbloquear',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 20,
+                                        }
+                                      },
+                                      splashColor: Colors.amber.shade200,
+                                      child: Container(
+                                        margin: const EdgeInsets.all(10),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 40,
+                                          vertical: 10,
+                                        ),
+                                        child: Column(
+                                          children: const [
+                                            Icon(
+                                              Icons.lock_open,
+                                              size: 40,
+                                            ),
+                                            Text(
+                                              'Desbloquear',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 20,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    ],
+                                    ),
+                                  )
+                                : const SizedBox(
+                                    height: 10,
                                   ),
-                                ),
-                              ),
-                            ) : const SizedBox(height: 10,),
                             SizedBox(
                               height: size.height * 0.02,
                             ),
-                            widget.isUserInactive ?
-                            const Text(
-                              'Necesita desbloquear el contenido para continuar y ver la información completa sobre este proyecto.',
-                              textAlign: TextAlign.center,
-                            ) : const SizedBox(height: 10,)
+                            widget.isUserInactive
+                                ? const Text(
+                                    'Necesita desbloquear el contenido para continuar y ver la información completa sobre este proyecto.',
+                                    textAlign: TextAlign.center,
+                                  )
+                                : const SizedBox(
+                                    height: 10,
+                                  )
                           ],
                         ),
                       ),

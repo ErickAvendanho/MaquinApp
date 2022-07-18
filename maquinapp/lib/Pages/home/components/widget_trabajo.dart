@@ -1,38 +1,23 @@
+import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail.dart';
 import 'package:maquinapp/Pages/singmenu_page.dart';
+import 'package:maquinapp/models/trabajos_arrendatario.dart';
 
 class WidgetTrabajo extends StatelessWidget {
-  const WidgetTrabajo({
-    Key? key,
-    required this.size,
-    required this.title,
-    required this.fecha,
-    required this.descripcion,
-    required this.categoria,
-    required this.cliente,
-    required this.distancia,
-    required this.costo,
-    required this.img,
-    required this.uid,
-    required this.isLogued,
-    required this.isCurrentUserInactive
-  }) : super(key: key);
+  const WidgetTrabajo(
+      {Key? key,
+      required this.size,
+      required this.trabajo,
+      required this.isLogued,
+      required this.isCurrentUserInactive})
+      : super(key: key);
 
   final Size size;
-  final String title;
-  final String fecha;
-  final String descripcion;
-  final String categoria;
-  final String cliente;
-  final String distancia;
-  final String costo;
-  final String img;
-  final String uid;
+  final TrabajosArrendatario trabajo;
   final bool isLogued;
   final bool isCurrentUserInactive;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,7 +34,22 @@ class WidgetTrabajo extends StatelessWidget {
           onTap: () => Navigator.push(
             context,
             CupertinoPageRoute(
-              builder: (context) => isLogued ? isCurrentUserInactive ? JobDetailPage(jobID: uid, isLogued: true, isUserInactive: true,) : JobDetailPage(jobID: uid, isLogued: true, isUserInactive: false,) : JobDetailPage(jobID: uid, isLogued: false, isUserInactive: true)
+              builder: (context) => isLogued
+                  ? isCurrentUserInactive
+                      ? JobDetailPage(
+                          jobID: '${trabajo.uid}',
+                          isLogued: true,
+                          isUserInactive: true,
+                        )
+                      : JobDetailPage(
+                          jobID: '${trabajo.uid}',
+                          isLogued: true,
+                          isUserInactive: false,
+                        )
+                  : JobDetailPage(
+                      jobID: '${trabajo.uid}',
+                      isLogued: false,
+                      isUserInactive: true),
             ),
           ),
           child: Padding(
@@ -59,15 +59,39 @@ class WidgetTrabajo extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      title,
+                      '${trabajo.titulo}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const Spacer(),
-                    Text(fecha),
+                    Text('${trabajo.fecha}'),
                   ],
                 ),
+                if (trabajo.fotos!.isNotEmpty)
+                  AspectRatio(
+                    aspectRatio: 16 / 9,
+                    child: Swiper(
+                      itemCount: trabajo.fotos!.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              '${trabajo.fotos![index]}',
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                else
+                  const SizedBox(
+                    height: 20,
+                  ),
+                /*
                 img != ''
                     ? Padding(
                         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -78,8 +102,8 @@ class WidgetTrabajo extends StatelessWidget {
                       )
                     : const SizedBox(
                         height: 20,
-                      ),
-                Text(descripcion),
+                      ),*/
+                Text('${trabajo.descripcion}'),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: SizedBox(
@@ -99,7 +123,7 @@ class WidgetTrabajo extends StatelessWidget {
                                   color: Color(0xFFFDD835),
                                 ),
                               ),
-                              TextSpan(text: categoria),
+                              TextSpan(text: '${trabajo.tipo}'),
                             ],
                           ),
                         ),
@@ -113,21 +137,21 @@ class WidgetTrabajo extends StatelessWidget {
                                   color: Color(0xFFFDD835),
                                 ),
                               ),
-                              TextSpan(text: cliente),
+                              TextSpan(text: '${trabajo.usuario}'),
                             ],
                           ),
                         ),
                         RichText(
-                          text: TextSpan(
-                            style: const TextStyle(color: Colors.black),
+                          text: const TextSpan(
+                            style: TextStyle(color: Colors.black),
                             children: [
-                              const WidgetSpan(
+                              WidgetSpan(
                                 child: Icon(
                                   Icons.map,
                                   color: Color(0xFFFDD835),
                                 ),
                               ),
-                              TextSpan(text: distancia),
+                              TextSpan(text: '3.29 KM'),
                             ],
                           ),
                         ),
@@ -136,7 +160,7 @@ class WidgetTrabajo extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '\$$costo',
+                  '\$${trabajo.precio}',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),

@@ -98,7 +98,7 @@ class HomeController {
                 longitud: e["longitud"],
                 latitud: e["latitud"],
                 precio: e["precio"],
-                foto: e["foto"],
+                fotos: e["fotos"],
                 titulo: e["titulo"],
                 usuario: e["usuario"],
               ))
@@ -107,7 +107,7 @@ class HomeController {
       //Valida si el usuario es inactivo
       qs = await FirebaseFirestore.instance
           .collection("UsuariosInactivos")
-          .where('UserID', isEqualTo: user!.uid)
+          .where('UserID', isEqualTo: user?.uid)
           .get();
       List<InactiveUser> inactiveUsers = qs.docs
           .map((e) => InactiveUser(
@@ -124,6 +124,7 @@ class HomeController {
     } catch (e) {
       print(e);
     }
+    return null;
   }
 
   Future<bool> isCurrentUserInactive() async {

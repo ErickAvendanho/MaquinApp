@@ -101,10 +101,11 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  _controller.isUserInactive ?
-                  const SizedBox(
-                    height: 10,
-                  ) : _changeMapButton(size),
+                  _controller.isUserInactive
+                      ? const SizedBox(
+                          height: 10,
+                        )
+                      : _changeMapButton(size),
                   const SizedBox(
                     height: 10,
                   ),
@@ -114,19 +115,10 @@ class _HomePageState extends State<HomePage> {
                     itemCount: trabajos.isEmpty ? 0 : trabajos.length,
                     itemBuilder: (context, int index) {
                       return WidgetTrabajo(
-                        size: size,
-                        title: trabajos[index].titulo.toString(),
-                        fecha: trabajos[index].fecha.toString(),
-                        descripcion: trabajos[index].descripcion.toString(),
-                        categoria: trabajos[index].tipo.toString(),
-                        cliente: trabajos[index].usuario.toString(),
-                        distancia: '3.29 KM',
-                        costo: trabajos[index].precio.toString(),
-                        img: trabajos[index].foto.toString(),
-                        uid: trabajos[index].uid.toString(),
-                        isLogued: true,
-                        isCurrentUserInactive: _controller.isUserInactive
-                      );
+                          size: size,
+                          trabajo: trabajos[index],
+                          isLogued: true,
+                          isCurrentUserInactive: _controller.isUserInactive);
                     },
                   ),
                 ],
