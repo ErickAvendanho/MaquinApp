@@ -14,8 +14,8 @@ class AddUser {
   final String tipo;
   final String uid;
   final String status;
-  final String actividad;
-  final String categoria;
+  final String? actividad;
+  final String? categoria;
 
   AddUser(
       this.alcance,
@@ -65,11 +65,11 @@ class AddUser {
     }
   }
 
-  Future<bool> agregarUsuarioFirestore() async {
+  Future<bool> agregarUsuarioFirestore(bool esArrendatario) async {
     bool result = false;
     try {
-      print(status);
-      users
+      if(esArrendatario){
+        users
           .doc(uid.toString())
           .set({
             'alcance': alcance,
@@ -89,6 +89,27 @@ class AddUser {
           })
           .then((value) => result = true)
           .catchError((error) => result = false);
+      }else{
+        users
+          .doc(uid.toString())
+          .set({
+            'alcance': alcance,
+            'comuna': comuna,
+            'correo': correo,
+            'fotoperfil': fotoPerfil,
+            'latitud': latitud,
+            'longitud': longitud,
+            'negocio': negocio,
+            'nombre': nombre,
+            'telefono': telefono,
+            'tipo': tipo,
+            'uid': uid,
+            'status': status
+          })
+          .then((value) => result = true)
+          .catchError((error) => result = false);
+      }
+      
       if (status == 'inactivo') {
         inactiveUsers
             .doc(uid.toString())

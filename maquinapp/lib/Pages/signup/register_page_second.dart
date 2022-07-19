@@ -4,11 +4,13 @@ import 'package:maquinapp/Pages/signup/register_page_third.dart';
 
 class RegisterPageSecond extends StatefulWidget {
   final String tipoRegistro;
+  final bool esArrendatario;
   final String actividad;
   final String categoria;
   const RegisterPageSecond({
     Key? key,
     required this.tipoRegistro,
+    required this.esArrendatario,
     required this.actividad,
     required this.categoria
   }) : super(key: key);
@@ -341,6 +343,7 @@ class _RegisterPageSecondState extends State<RegisterPageSecond> {
         MaterialPageRoute(
           builder: (context) => RegisterPageThird(
             tipoRegistro: widget.tipoRegistro,
+            esArrendatario: widget.esArrendatario,
             actividad: widget.actividad,
             categoria: widget.categoria,
             nombre: nameCtrl.text,

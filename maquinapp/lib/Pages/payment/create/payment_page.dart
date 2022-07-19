@@ -9,6 +9,7 @@ import 'package:stripe_payment/stripe_payment.dart';
 
 class PaymentsPage extends StatefulWidget {
   final String tipoRegistro;
+  final bool esArrendatario;
   final String actividad;
   final String categoria;
   final String correo;
@@ -20,6 +21,7 @@ class PaymentsPage extends StatefulWidget {
   const PaymentsPage({
     Key? key,
     required this.tipoRegistro,
+    required this.esArrendatario,
     required this.actividad,
     required this.categoria,
     required this.correo,
@@ -294,7 +296,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           isPremium ? 'activo' : 'inactivo',
           widget.actividad,
           widget.categoria);
-      await register.agregarUsuarioFirestore();
+      await register.agregarUsuarioFirestore(widget.esArrendatario);
       UserCredential? uc = await as.singIn(widget.correo, widget.password);
       if (uc != null) {
         Navigator.pushAndRemoveUntil(

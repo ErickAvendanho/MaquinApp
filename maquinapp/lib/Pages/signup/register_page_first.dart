@@ -3,7 +3,9 @@ import 'package:maquinapp/Pages/signup/register_page_second.dart';
 
 class RegisterPageFirst extends StatefulWidget {
   final String tipoRegistro;
-  const RegisterPageFirst({Key? key, required this.tipoRegistro})
+  final bool esArrendatario;
+  const RegisterPageFirst(
+      {Key? key, required this.tipoRegistro, required this.esArrendatario})
       : super(key: key);
 
   @override
@@ -147,7 +149,9 @@ class _RegisterPageFirstState extends State<RegisterPageFirst> {
                         }).toList(),
                   onChanged: (String? newValue) {
                     setState(() {
-                      esArrendar ? categoriaArrendar =newValue! : categoriaContratar = newValue!;
+                      esArrendar
+                          ? categoriaArrendar = newValue!
+                          : categoriaContratar = newValue!;
                     });
                   },
                 ),
@@ -163,14 +167,19 @@ class _RegisterPageFirstState extends State<RegisterPageFirst> {
                     ),
                     onPressed: () => {
                       print(actividad),
-                      esArrendar ? print(categoriaArrendar) : print(categoriaContratar),
+                      esArrendar
+                          ? print(categoriaArrendar)
+                          : print(categoriaContratar),
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => RegisterPageSecond(
                             tipoRegistro: widget.tipoRegistro,
+                            esArrendatario: widget.esArrendatario,
                             actividad: actividad,
-                            categoria: esArrendar ? categoriaArrendar : categoriaContratar,
+                            categoria: esArrendar
+                                ? categoriaArrendar
+                                : categoriaContratar,
                           ),
                         ),
                       ),

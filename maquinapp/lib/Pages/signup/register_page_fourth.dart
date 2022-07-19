@@ -1,11 +1,12 @@
+//--------------------OMITIDA------------------------------
+
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maquinapp/Pages/payment/create/payment_page.dart';
 
-import '../home/home_page.dart';
-
 class RegisterPageFourth extends StatefulWidget {
   final String tipoRegistro;
+  final bool esArrendatario;
   final String actividad;
   final String categoria;
   final String correo;
@@ -17,6 +18,7 @@ class RegisterPageFourth extends StatefulWidget {
   const RegisterPageFourth({
     Key? key,
     required this.tipoRegistro,
+    required this.esArrendatario,
     required this.actividad,
     required this.categoria,
     required this.correo,
@@ -91,6 +93,7 @@ class _RegisterPageFourthState extends State<RegisterPageFourth> {
                 MaterialPageRoute(
                   builder: (BuildContext context) => PaymentsPage(
                     tipoRegistro: widget.tipoRegistro,
+                    esArrendatario: widget.esArrendatario,
                     actividad: widget.actividad,
                     categoria: widget.categoria,
                     nombre: widget.nombre,

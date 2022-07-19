@@ -1,13 +1,10 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/payment/create/payment_page.dart';
-import 'package:maquinapp/Pages/signup/register_page_fourth.dart';
-import 'package:maquinapp/Pages/src/adduser.dart';
 
-import '../src/firebaseServices/auth_services.dart';
 
 class RegisterPageThird extends StatefulWidget {
   final String tipoRegistro;
+  final bool esArrendatario;
   final String actividad;
   final String categoria;
   final String correo;
@@ -17,6 +14,7 @@ class RegisterPageThird extends StatefulWidget {
   const RegisterPageThird({
     Key? key,
     required this.tipoRegistro,
+    required this.esArrendatario,
     required this.actividad,
     required this.categoria,
     required this.correo,
@@ -185,8 +183,9 @@ class _RegisterPageState extends State<RegisterPageThird> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => RegisterPageFourth(
+          builder: (context) => PaymentsPage(
             tipoRegistro: widget.tipoRegistro,
+            esArrendatario: widget.esArrendatario,
             actividad: widget.actividad,
             categoria: widget.categoria,
             nombre: widget.nombre,
