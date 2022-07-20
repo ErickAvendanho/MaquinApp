@@ -11,6 +11,7 @@ class AddJobController {
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
+        locale: const Locale('es', 'ES'),
         context: context,
         initialDate: selectedDate,
         firstDate: DateTime(2015, 8),
