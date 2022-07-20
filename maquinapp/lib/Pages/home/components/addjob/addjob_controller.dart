@@ -1,15 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as m;
 import '../../../../models/trabajos_arrendatario.dart';
 
-class ProductController {
+class AddJobController {
+  DateTime selectedDate = DateTime.now();
   late BuildContext context;
-  TextEditingController tituloController = TextEditingController();
-  TextEditingController precioController = TextEditingController();
-  TextEditingController descripcionController = TextEditingController();
-  TextEditingController fechaController = TextEditingController();
-  TextEditingController usuarioController = TextEditingController();
-  TextEditingController typeController = TextEditingController();
+  User? user = FirebaseAuth.instance.currentUser;
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      selectedDate = picked;
+    }
+  }
 
   void showAlertDialog() {
     Widget gallerryButton =
@@ -30,13 +39,41 @@ class ProductController {
         });
   }
 
-  void uploadNewJob(TrabajosArrendatario job) async {
-    const _chars =
-        'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
-    m.Random _rnd = m.Random();
-    String getRandomString(int length) =>
-        String.fromCharCodes(Iterable.generate(
-            length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
-    await job.agregarJob(getRandomString.toString());
+  Future<bool> crearTrabajoArrendador(
+      String titulo,
+      String precio,
+      String descripcion,
+      String direccion,
+      String telefono,
+      String email,
+      DateTime fechaFirebase,
+      String actividad,
+      String categoria,
+      String uidArrendador) async {
+    bool result = false;
+
+    try {
+      CollectionReference trabajosArrendadorRef =
+          FirebaseFirestore.instance.collection('TrabajosArrendador');
+      await trabajosArrendadorRef
+          .doc()
+          .set({
+            'Titulo': titulo,
+            'Precio': precio,
+            'Descripcion': descripcion,
+            'Direccion': direccion,
+            'Telefono': telefono,
+            'email': email,
+            'Fecha': fechaFirebase,
+            'Actividad': actividad,
+            'Categoria': categoria,
+            'uidArrendador': uidArrendador
+          })
+          .then((value) => result = true)
+          .catchError((error) => result = false);
+      return result;
+    } catch (e) {
+      return result;
+    }
   }
 }

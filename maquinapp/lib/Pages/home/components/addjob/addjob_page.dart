@@ -1,20 +1,65 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/addjob/addjob_controller.dart';
-import '../../../../models/trabajos_arrendatario.dart';
-import '../../../../utils/my_colors.dart';
+import 'package:maquinapp/Pages/home/home_page.dart';
 
-class ProductPage extends StatefulWidget {
-  const ProductPage({Key? key}) : super(key: key);
+class AddJobPage extends StatefulWidget {
+  const AddJobPage({Key? key}) : super(key: key);
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
+  State<AddJobPage> createState() => _AddJobPageState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _AddJobPageState extends State<AddJobPage> {
+  final _formKey = GlobalKey<FormState>();
+  TextEditingController tituloCtrl = TextEditingController();
+  TextEditingController precioCtrl = TextEditingController();
+  TextEditingController descripcionCtrl = TextEditingController();
+  TextEditingController direccionCtrl = TextEditingController();
+  TextEditingController telefonoCtrl = TextEditingController();
+  TextEditingController emailCtrl = TextEditingController();
+  TextEditingController fechaCtrl = TextEditingController();
+  late DateTime fechaFirebase;
   final User user = FirebaseAuth.instance.currentUser!;
+  String actividad = 'Arrendar';
+  String categoriaArrendar = 'Maquinas';
+  String categoriaContratar = 'Constructores';
+  bool esArrendar = true;
+  var itemsActividad = [
+    'Arrendar',
+    'Contratar',
+  ];
+  var itemsArrendar = [
+    'Maquinas',
+    'Herramientas',
+    'Vehiculos y camiones',
+    'Accesorios',
+    'Otros'
+  ];
+  var itemsContratar = [
+    'Constructores',
+    'Prevencionista',
+    'Topografos',
+    'Arquitectos',
+    'Dibujantes tecnicos',
+    'Chofer',
+    'Operador de maquinarias',
+    'Capataz',
+    'Trazador',
+    'Albañil',
+    'Carpintero',
+    'Electrico',
+    'Gasfiter',
+    'Hojalatero',
+    'Jardinero',
+    'Tecnico electronicos',
+    'Instalador de TV cable',
+    'Mecanicos',
+    'Tecnicos en clima',
+    'Otros'
+  ];
 
-  ProductController _controller = ProductController();
+  final AddJobController _controller = AddJobController();
 
   @override
   Widget build(BuildContext context) {
@@ -42,111 +87,212 @@ class _ProductPageState extends State<ProductPage> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10),
-                child: SizedBox(
-                  width: size.width * 0.30,
-                  child: Image.asset('assets/images/maquinapp.png'),
-                ),
-              ),
-              _textBox(
-                'Titulo',
-                Icons.title,
-                _controller.tituloController,
-                TextInputType.text,
-                TextInputAction.next,
-                false,
-              ),
-              const SizedBox(height: 10),
-              _textBox(
-                'Precio',
-                Icons.money,
-                _controller.precioController,
-                TextInputType.number,
-                TextInputAction.next,
-                false,
-              ),
-              const SizedBox(height: 10),
-              _textBox(
-                'Descripción',
-                Icons.description,
-                _controller.descripcionController,
-                TextInputType.text,
-                TextInputAction.next,
-                true,
-              ),
-              const SizedBox(height: 10),
-              _textBox(
-                'Fecha de publicación',
-                Icons.date_range,
-                _controller.fechaController,
-                TextInputType.text,
-                TextInputAction.next,
-                false,
-              ),
-              const SizedBox(height: 10),
-              _textBox(
-                'Tipo',
-                Icons.more,
-                _controller.typeController,
-                TextInputType.text,
-                TextInputAction.next,
-                false,
-              ),
-              const SizedBox(height: 10),
-              Container(
-                margin: const EdgeInsets.symmetric(
-                  horizontal: 40,
-                  vertical: 5,
-                ),
-                child: Wrap(
-                  spacing: 3,
-                  runSpacing: 3,
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: SizedBox(
-                        width: size.width * 0.20,
-                        child: Stack(
-                          children: [
-                            Image.asset('assets/images/add_image.png'),
-                            Positioned(
-                              bottom: 0,
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(3),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.green,
-                                ),
-                                child: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+        child: Container(
+          margin: const EdgeInsets.all(10.0),
+          child: Form(
+            key: _formKey,
+            child: SizedBox(
+              width: double.infinity,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: SizedBox(
+                      width: size.width * 0.30,
+                      child: Image.asset('assets/images/maquinapp.png'),
                     ),
-                  ],
-                ),
+                  ),
+                  _textBox(
+                      'Titulo',
+                      Icons.title,
+                      tituloCtrl,
+                      TextInputType.text,
+                      TextInputAction.next,
+                      false,
+                      validarTitulo),
+                  const SizedBox(height: 10),
+                  _textBox(
+                      'Precio',
+                      Icons.money,
+                      precioCtrl,
+                      TextInputType.number,
+                      TextInputAction.next,
+                      false,
+                      validarPrecio),
+                  const SizedBox(height: 10),
+                  _textBox(
+                      'Descripción',
+                      Icons.description,
+                      descripcionCtrl,
+                      TextInputType.text,
+                      TextInputAction.next,
+                      true,
+                      validarDescripcion),
+                  const SizedBox(height: 10),
+                  _textBox(
+                      'Dirección',
+                      Icons.location_on_sharp,
+                      direccionCtrl,
+                      TextInputType.text,
+                      TextInputAction.next,
+                      true,
+                      validarDireccion),
+                  const SizedBox(height: 10),
+                  _textBox(
+                      'Teléfono',
+                      Icons.phone,
+                      telefonoCtrl,
+                      TextInputType.number,
+                      TextInputAction.next,
+                      true,
+                      validarTelefono),
+                  const SizedBox(height: 10),
+                  _textBox(
+                      'Correo electrónico',
+                      Icons.email,
+                      emailCtrl,
+                      TextInputType.text,
+                      TextInputAction.next,
+                      true,
+                      validarEmail),
+                  const SizedBox(height: 10),
+                  formItemsDesign(
+                    IconButton(
+                        onPressed: () {
+                          _controller.selectDate(context);
+                        },
+                        icon: const Icon(Icons.calendar_month_outlined)),
+                    Text("${_controller.selectedDate.toLocal()}".split(' ')[0],
+                        style: const TextStyle(color: Colors.white)),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    "Seleccione la actividad que quiere realizar:",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0XFF3B3A38),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  DropdownButton(
+                    value: actividad,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: itemsActividad.map((String items) {
+                      return DropdownMenuItem(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        actividad = newValue!;
+                        if (actividad == 'Arrendar') {
+                          esArrendar = true;
+                        } else {
+                          esArrendar = false;
+                        }
+                      });
+                    },
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  const Text(
+                    "Seleccione una categoría:",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0XFF3B3A38),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  DropdownButton(
+                    value: esArrendar ? categoriaArrendar : categoriaContratar,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: esArrendar
+                        ? itemsArrendar.map((String items) {
+                            return DropdownMenuItem(
+                              value: items,
+                              child: Text(items),
+                            );
+                          }).toList()
+                        : itemsContratar.map((String items) {
+                            return DropdownMenuItem(
+                              value: items,
+                              child: Text(items),
+                            );
+                          }).toList(),
+                    onChanged: (String? newValue) {
+                      setState(() {
+                        esArrendar
+                            ? categoriaArrendar = newValue!
+                            : categoriaContratar = newValue!;
+                      });
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 40,
+                      vertical: 5,
+                    ),
+                    child: Wrap(
+                      spacing: 3,
+                      runSpacing: 3,
+                      children: [
+                        InkWell(
+                          onTap: () {},
+                          child: SizedBox(
+                            width: size.width * 0.20,
+                            child: Stack(
+                              children: [
+                                Image.asset('assets/images/add_image.png'),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(3),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Colors.green,
+                                    ),
+                                    child: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  _buttonUpdate(),
+                ],
               ),
-              const SizedBox(height: 10),
-              _buttonUpdate(),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _textBox(String hint, IconData icon, TextEditingController controller,
-      TextInputType tit, TextInputAction tia, bool isMultiline) {
+  Widget _textBox(
+      String hint,
+      IconData icon,
+      TextEditingController controller,
+      TextInputType tit,
+      TextInputAction tia,
+      bool isMultiline,
+      String? Function(String?)? validador) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
       decoration: BoxDecoration(
@@ -154,7 +300,7 @@ class _ProductPageState extends State<ProductPage> {
         borderRadius: BorderRadius.circular(10),
         color: const Color(0XFF3B3A38),
       ),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         keyboardType: tit,
         style: const TextStyle(
@@ -173,6 +319,7 @@ class _ProductPageState extends State<ProductPage> {
         ),
         textInputAction: tia,
         maxLines: isMultiline ? null : 1,
+        validator: validador,
       ),
     );
   }
@@ -183,6 +330,7 @@ class _ProductPageState extends State<ProductPage> {
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: ElevatedButton(
         onPressed: () {
+          save();
           /*
           TrabajosArrendatario job = TrabajosArrendatario(
             descripcion: _controller.descripcionController.text,
@@ -215,4 +363,153 @@ class _ProductPageState extends State<ProductPage> {
       radius: 60,
     );
   }
+
+  String? validarTitulo(String? value) {
+    if (value!.isEmpty) {
+      return "El título es necesario";
+    }
+    return null;
+  }
+
+  String? validarPrecio(String? value) {
+    if (value!.isEmpty) {
+      return "El precio es necesario";
+    }
+    return null;
+  }
+
+  String? validarDescripcion(String? value) {
+    if (value!.isEmpty) {
+      return "La descripción es necesaria";
+    }
+    return null;
+  }
+
+  String? validarDireccion(String? value) {
+    if (value!.isEmpty) {
+      return "La dirección es necesaria";
+    }
+    return null;
+  }
+
+  String? validarTelefono(String? value) {
+    String patttern = r'(^[0-9]*$)';
+    RegExp regExp = RegExp(patttern);
+    if (value!.isEmpty) {
+      return "El teléfono es necesario";
+    } else if (value.length != 10) {
+      return "El numero debe tener 10 dígitos";
+    }
+    return null;
+  }
+
+  String? validarEmail(String? value) {
+    String pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regExp = new RegExp(pattern);
+    if (value!.isEmpty) {
+      return "El correo electrónico es necesario";
+    } else if (!regExp.hasMatch(value)) {
+      return "Correo inválido";
+    } else {
+      return null;
+    }
+  }
+
+  String? validarFecha(String? value) {
+    if (value!.isEmpty) {
+      return "La fecha es necesaria";
+    }
+    return null;
+  }
+
+  save() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.reset();
+      fechaFirebase =
+          DateTime.parse(_controller.selectedDate.toLocal().toString());
+      if (await _controller.crearTrabajoArrendador(
+          tituloCtrl.text,
+          precioCtrl.text,
+          descripcionCtrl.text,
+          direccionCtrl.text,
+          telefonoCtrl.text,
+          emailCtrl.text,
+          fechaFirebase,
+          actividad,
+          esArrendar ? categoriaArrendar : categoriaContratar,
+          user.uid)) {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => const HomePage()));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: const Color(0XFF3B3A38),
+            elevation: 5,
+            margin: const EdgeInsets.all(10),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            content: const Text.rich(
+              TextSpan(
+                children: [
+                  WidgetSpan(
+                    alignment: PlaceholderAlignment.middle,
+                    child: Icon(
+                      Icons.check,
+                      color: Color(0xFFFDD835),
+                    ),
+                  ),
+                  TextSpan(
+                    text: "Trabajo añadido con éxito",
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      } else {
+        showAlertDialog(context, "Hubo un problema", "Intente nuevamente.");
+      }
+    }
+  }
+}
+
+formItemsDesign(icon, item) {
+  return Container(
+    margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 3),
+    decoration: BoxDecoration(
+      border: Border.all(),
+      borderRadius: BorderRadius.circular(10),
+      color: const Color(0XFF3B3A38),
+    ),
+    child: Card(
+        child: ListTile(
+            tileColor: const Color(0XFF3B3A38),
+            iconColor: Colors.amber,
+            leading: icon,
+            title: item)),
+  );
+}
+
+showAlertDialog(BuildContext context, String titulo, String contenido) {
+  Widget okButton = TextButton(
+    child: const Text("OK"),
+    onPressed: () {},
+  );
+
+  AlertDialog alert = AlertDialog(
+    title: Text(titulo),
+    content: Text(contenido),
+    actions: [
+      okButton,
+    ],
+  );
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
