@@ -6,13 +6,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:math' as m;
-import '../../../../models/trabajos_arrendatario.dart';
 
 class AddJobController {
   DateTime selectedDate = DateTime.now();
   late BuildContext context;
   User? user = FirebaseAuth.instance.currentUser;
+  List<PickedFile?> imagenesElegidas = [];
+  List<String> imagesPaths = [];
+  List<String> linksImagenes = [];
+  var link;
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -59,6 +61,9 @@ class AddJobController {
     bool result = false;
 
     try {
+      for (var img in imagenesElegidas) {
+        uploadImage(img);
+      }
       CollectionReference trabajosArrendadorRef =
           FirebaseFirestore.instance.collection('TrabajosArrendador');
       await trabajosArrendadorRef
@@ -73,7 +78,8 @@ class AddJobController {
             'Fecha': fechaFirebase,
             'Actividad': actividad,
             'Categoria': categoria,
-            'uidArrendador': uidArrendador
+            'uidArrendador': uidArrendador,
+            'Fotos': linksImagenes
           })
           .then((value) => result = true)
           .catchError((error) => result = false);
@@ -83,8 +89,7 @@ class AddJobController {
     }
   }
 
-  Future<String?> uploadImage(
-      PickedFile? imagen) async {
+  Future<String?> uploadImage(PickedFile? imagen) async {
     try {
       var file = File(imagen!.path);
       final Reference storageReference =

@@ -64,8 +64,6 @@ class _AddJobPageState extends State<AddJobPage> {
 
   final AddJobController _controller = AddJobController();
 
-  String imagePath = "";
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -241,11 +239,35 @@ class _AddJobPageState extends State<AddJobPage> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  Row(
+                  Wrap(
                     children: <Widget>[
-                      (imagePath == null)
+                      (_controller.imagesPaths.isEmpty)
                           ? Container()
-                          : Expanded(
+                          : ListView.builder(
+                              shrinkWrap: true,
+                              primary: false,
+                              itemCount: _controller.imagesPaths.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: const EdgeInsets.symmetric(
+                                    horizontal: 40,
+                                    vertical: 5,
+                                  ),
+                                  child: Wrap(
+                                    spacing: 3,
+                                    runSpacing: 3,
+                                    children: [
+                                      SizedBox(
+                                        width: size.width * 0.20,
+                                        child: Image.file(File(
+                                            _controller.imagesPaths[index])),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }),
+                      (_controller.imagesPaths.length < 3)
+                          ? Expanded(
                               child: Container(
                                 margin: const EdgeInsets.symmetric(
                                   horizontal: 40,
@@ -256,63 +278,49 @@ class _AddJobPageState extends State<AddJobPage> {
                                   runSpacing: 3,
                                   children: [
                                     InkWell(
-                                      onTap: () {},
+                                      onTap: () async {
+                                        final ImagePicker _picker =
+                                            ImagePicker();
+                                        _controller.imagenesElegidas.add(
+                                            await _picker.getImage(
+                                                source: ImageSource.camera));
+                                        _controller.imagesPaths.add(_controller
+                                            .imagenesElegidas.last!.path);
+                                        setState(() {
+                                        });
+                                      },
                                       child: SizedBox(
                                         width: size.width * 0.20,
-                                        child: Image.file(File(imagePath)),
+                                        child: Stack(
+                                          children: [
+                                            Image.asset(
+                                                'assets/images/add_image.png'),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 0,
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.all(3),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                  color: Colors.green,
+                                                ),
+                                                child: const Icon(
+                                                  Icons.add,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ),
-                      Expanded(
-                        child: Container(
-                          margin: const EdgeInsets.symmetric(
-                            horizontal: 40,
-                            vertical: 5,
-                          ),
-                          child: Wrap(
-                            spacing: 3,
-                            runSpacing: 3,
-                            children: [
-                              InkWell(
-                                onTap: () async{
-                                  final ImagePicker _picker = ImagePicker();
-                                  PickedFile? _pickedFile = await _picker.getImage(source: ImageSource.camera);
-                                  imagePath = _pickedFile!.path;
-                                  setState(() {});
-                                },
-                                child: SizedBox(
-                                  width: size.width * 0.20,
-                                  child: Stack(
-                                    children: [
-                                      Image.asset(
-                                          'assets/images/add_image.png'),
-                                      Positioned(
-                                        bottom: 0,
-                                        right: 0,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(3),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            color: Colors.green,
-                                          ),
-                                          child: const Icon(
-                                            Icons.add,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                            )
+                          : Container()
                     ],
                   ),
                   const SizedBox(height: 10),
