@@ -1,6 +1,11 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:math' as m;
 import '../../../../models/trabajos_arrendatario.dart';
 
@@ -76,5 +81,38 @@ class AddJobController {
     } catch (e) {
       return result;
     }
+  }
+
+  Future<String?> uploadImage(
+      PickedFile? imagen) async {
+    try {
+      var file = File(imagen!.path);
+      final Reference storageReference =
+          FirebaseStorage.instance.ref().child("ImagenesTrabajos");
+
+      TaskSnapshot taskSnapshot = await storageReference
+          .child("${getRandomString(10)}.jpg")
+          .putFile(file);
+
+      var downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+      return downloadUrl;
+    } catch (ex) {
+      print('Error al subir imagen: $ex');
+      return null;
+    }
+  }
+
+  String getRandomString(int length) {
+    const characters = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz';
+    Random random = Random();
+    return String.fromCharCodes(
+      Iterable.generate(
+        length,
+        (_) => characters.codeUnitAt(
+          random.nextInt(characters.length),
+        ),
+      ),
+    );
   }
 }

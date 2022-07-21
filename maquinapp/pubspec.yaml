@@ -45,6 +45,7 @@ dependencies:
   card_swiper: ^2.0.4
   flutter_localizations:
     sdk: flutter
+  firebase_storage:
 
 dev_dependencies:
   flutter_test:
