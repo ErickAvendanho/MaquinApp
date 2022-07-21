@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:maquinapp/Pages/home/components/addjob/addjob_controller.dart';
 import 'package:maquinapp/Pages/home/home_page.dart';
 
@@ -60,6 +63,8 @@ class _AddJobPageState extends State<AddJobPage> {
   ];
 
   final AddJobController _controller = AddJobController();
+
+  String imagePath = "";
 
   @override
   Widget build(BuildContext context) {
@@ -236,43 +241,79 @@ class _AddJobPageState extends State<AddJobPage> {
                     },
                   ),
                   const SizedBox(height: 10),
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 40,
-                      vertical: 5,
-                    ),
-                    child: Wrap(
-                      spacing: 3,
-                      runSpacing: 3,
-                      children: [
-                        InkWell(
-                          onTap: () {},
-                          child: SizedBox(
-                            width: size.width * 0.20,
-                            child: Stack(
-                              children: [
-                                Image.asset('assets/images/add_image.png'),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color: Colors.green,
+                  Row(
+                    children: <Widget>[
+                      (imagePath == null)
+                          ? Container()
+                          : Expanded(
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 40,
+                                  vertical: 5,
+                                ),
+                                child: Wrap(
+                                  spacing: 3,
+                                  runSpacing: 3,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {},
+                                      child: SizedBox(
+                                        width: size.width * 0.20,
+                                        child: Image.file(File(imagePath)),
+                                      ),
                                     ),
-                                    child: const Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 40,
+                            vertical: 5,
+                          ),
+                          child: Wrap(
+                            spacing: 3,
+                            runSpacing: 3,
+                            children: [
+                              InkWell(
+                                onTap: () async{
+                                  final ImagePicker _picker = ImagePicker();
+                                  PickedFile? _pickedFile = await _picker.getImage(source: ImageSource.camera);
+                                  imagePath = _pickedFile!.path;
+                                  setState(() {});
+                                },
+                                child: SizedBox(
+                                  width: size.width * 0.20,
+                                  child: Stack(
+                                    children: [
+                                      Image.asset(
+                                          'assets/images/add_image.png'),
+                                      Positioned(
+                                        bottom: 0,
+                                        right: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(3),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            color: Colors.green,
+                                          ),
+                                          child: const Icon(
+                                            Icons.add,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
                   _buttonUpdate(),
