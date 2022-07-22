@@ -78,18 +78,6 @@ class WidgetTrabajo extends StatelessWidget {
                           child: Swiper(
                             itemCount: trabajo.fotos!.length,
                             itemBuilder: (context, index) {
-                              /*
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    '${trabajo.fotos![index]}',
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
-                              );*/
-
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ClipRRect(
@@ -121,10 +109,6 @@ class WidgetTrabajo extends StatelessWidget {
                                   height: 60,
                                 ),
                               ),
-                              /*Image.network(
-                                '${trabajo.fotos!.first}',
-                                fit: BoxFit.fill,
-                              ),*/
                             ),
                           ),
                         )

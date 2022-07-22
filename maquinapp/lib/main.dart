@@ -20,12 +20,12 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: [
-         GlobalMaterialLocalizations.delegate
-       ],
-       supportedLocales: [
-         const Locale('es')
-       ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('es'),
+      ],
       title: 'Maquinapp',
       debugShowCheckedModeBanner: false,
       initialRoute: 'Home',
