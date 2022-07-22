@@ -5,10 +5,8 @@ import 'package:maquinapp/Pages/home/home_controller.dart';
 import 'package:maquinapp/Pages/home/components/addjob/addjob_page.dart';
 import 'package:maquinapp/Pages/home/home_page_signin.dart';
 import 'dart:math' as math;
-
-import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
-import 'package:maquinapp/models/trabajos_arrendatario.dart';
+import 'package:maquinapp/models/trabajos_arrendatarios.dart';
 import 'package:provider/provider.dart';
 
 import '../src/search_list_page.dart';
@@ -94,8 +92,8 @@ class _HomePageState extends State<HomePage> {
           future: _controller.getJobsAndCheckStatusUser(),
           builder: (context, data) {
             if (data.hasData) {
-              List<TrabajosArrendatario> trabajos =
-                  data.data as List<TrabajosArrendatario>;
+              List<TrabajosArrendatarios> trabajos =
+                  data.data as List<TrabajosArrendatarios>;
               return Column(
                 children: [
                   const SizedBox(

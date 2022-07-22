@@ -68,9 +68,9 @@ class AddJobController {
       if (linksImagenes.any((element) => element == null)) {
         return false;
       }else{
-        CollectionReference trabajosArrendatarioRef =
-          FirebaseFirestore.instance.collection('TrabajosArrendatario');
-      await trabajosArrendatarioRef
+        CollectionReference trabajosArrendatariosRef =
+          FirebaseFirestore.instance.collection('TrabajosArrendatarios');
+      await trabajosArrendatariosRef
           .doc()
           .set({
             'titulo': titulo,

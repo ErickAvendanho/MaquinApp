@@ -7,7 +7,7 @@ import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
-import 'package:maquinapp/models/trabajos_arrendatario.dart';
+import 'package:maquinapp/models/trabajos_arrendatarios.dart';
 import 'package:provider/provider.dart';
 
 import '../src/search_list_page.dart';
@@ -74,8 +74,8 @@ class _HomePageSignInState extends State<HomePageSignIn> {
           future: _controller.getJobsAndCheckStatusUser(),
           builder: (context, data) {
             if (data.hasData) {
-              List<TrabajosArrendatario> trabajos =
-                  data.data as List<TrabajosArrendatario>;
+              List<TrabajosArrendatarios> trabajos =
+                  data.data as List<TrabajosArrendatarios>;
               return Column(
                 children: [
                   const SizedBox(

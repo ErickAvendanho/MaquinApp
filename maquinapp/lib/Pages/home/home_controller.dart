@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maquinapp/Pages/src/inactiveUser.dart';
 
 import '../../models/document_user.dart';
-import '../../models/trabajos_arrendatario.dart';
+import '../../models/trabajos_arrendatarios.dart';
 
 class HomeController {
   late List<Marker>? markers;
@@ -13,7 +15,7 @@ class HomeController {
   Future<bool> addMarkers() async {
     try {
       QuerySnapshot qs = await FirebaseFirestore.instance
-          .collection("TrabajosArrendatario")
+          .collection("TrabajosArrendatarios")
           .get();
       List<DocumentSnapshot> documents = qs.docs;
       for (var document in documents) {
@@ -84,23 +86,25 @@ class HomeController {
     return 'null';
   }
 
-  Future<List<TrabajosArrendatario>?> getJobsAndCheckStatusUser() async {
+  Future<List<TrabajosArrendatarios>?> getJobsAndCheckStatusUser() async {
     try {
       QuerySnapshot qs = await FirebaseFirestore.instance
-          .collection("TrabajosArrendatario")
+          .collection("TrabajosArrendatarios")
           .get();
-      List<TrabajosArrendatario> documents = qs.docs
-          .map((e) => TrabajosArrendatario(
+      List<TrabajosArrendatarios> documents = qs.docs
+          .map((e) => TrabajosArrendatarios(
+                actividad: e["actividad"],
+                categoria: e["categoria"],
                 descripcion: e["descripcion"],
-                uid: e["uid"],
-                fecha: e["fecha"],
-                tipo: e["tipo"],
-                longitud: e["longitud"],
-                latitud: e["latitud"],
-                precio: e["precio"],
+                direccion: e["direccion"],
+                email: e["email"],
+                fecha: DateTime.parse(e['fecha'].toDate().toString()),
+                id: e["id"],
                 fotos: e["fotos"],
+                precio: e["precio"],
+                telefono: e["telefono"],
                 titulo: e["titulo"],
-                usuario: e["usuario"],
+                uidArrendador: e["uidArrendador"],
               ))
           .toList();
 

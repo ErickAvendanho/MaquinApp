@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller.dart';
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/widgets/alerts.dart';
-import 'package:maquinapp/models/trabajos_arrendatario.dart';
+import 'package:maquinapp/models/trabajos_arrendatarios.dart';
 
 class JobDetailPage extends StatefulWidget {
   final String jobID;
@@ -47,7 +47,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 widget.jobID, widget.isLogued, widget.isUserInactive),
             builder: (context, data) {
               if (data.hasData) {
-                TrabajosArrendatario job = data.data as TrabajosArrendatario;
+                TrabajosArrendatarios job = data.data as TrabajosArrendatarios;
                 return Column(
                   children: [
                     if (job.fotos!.isNotEmpty)
@@ -126,39 +126,44 @@ class _JobDetailPageState extends State<JobDetailPage> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text(
-                                    '${job.titulo}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text(
+                                      '${job.titulo}',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 22,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
-                                  Row(
-                                    children: const [
-                                      Icon(
-                                        Icons.star_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      Icon(
-                                        Icons.star_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      Icon(
-                                        Icons.star_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      Icon(
-                                        Icons.star_rounded,
-                                        color: Colors.white,
-                                      ),
-                                      Icon(
-                                        Icons.star_border_rounded,
-                                        color: Colors.white,
-                                      ),
-                                    ],
+                                  const SizedBox(width: 10,),
+                                  Expanded(
+                                    child: Row(
+                                      children: const [
+                                        Icon(
+                                          Icons.star_rounded,
+                                          color: Colors.white,
+                                        ),
+                                        Icon(
+                                          Icons.star_rounded,
+                                          color: Colors.white,
+                                        ),
+                                        Icon(
+                                          Icons.star_rounded,
+                                          color: Colors.white,
+                                        ),
+                                        Icon(
+                                          Icons.star_rounded,
+                                          color: Colors.white,
+                                        ),
+                                        Icon(
+                                          Icons.star_border_rounded,
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ],
                               ),
@@ -191,7 +196,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                     ),
                                     padding: const EdgeInsets.all(5.0),
                                     child: Text(
-                                      'Fecha: ${job.fecha}',
+                                      'Fecha: ' + '${job.fecha}'.split(' ')[0],
                                       style: const TextStyle(
                                         color: Color(0XFFD4A006),
                                         fontWeight: FontWeight.bold,
@@ -391,6 +396,7 @@ class _JobDetailPageState extends State<JobDetailPage> {
                   child: Text('${data.error}'),
                 );
               } else {
+                print("NO HAY DATOS ):");
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

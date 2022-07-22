@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:maquinapp/Pages/src/inactiveUser.dart';
 
-import '../../../../models/trabajos_arrendatario.dart';
+import '../../../../models/trabajos_arrendatarios.dart';
 
 class JobDetailController {
   User? user = FirebaseAuth.instance.currentUser;
@@ -10,18 +10,32 @@ class JobDetailController {
   late bool hasFreeViewsYet;
   late int freeViews;
 
-  Future<TrabajosArrendatario?> getJobAndInfoInactiveUser(
+  Future<TrabajosArrendatarios?> getJobAndInfoInactiveUser(
       String doc, bool isLogued, bool isUserInactive) async {
+    print('ENTRAAAA A METODO GET INFO');
+    print('$doc');
     if (isLogued) {
       if (isUserInactive) {
+        print('ENTRAAAA A LOEGUAEDO E INACTIVO');
         try {
           DocumentSnapshot<Map<String, dynamic>> docSnapshot =
               await FirebaseFirestore.instance
-                  .collection("TrabajosArrendatario")
+                  .collection("TrabajosArrendatarios")
                   .doc(doc)
                   .get();
-          TrabajosArrendatario jobDoc = TrabajosArrendatario();
-          jobDoc.fromMap(docSnapshot.data());
+          TrabajosArrendatarios jobDoc = TrabajosArrendatarios();
+          jobDoc.actividad = docSnapshot["actividad"];
+          jobDoc.categoria = docSnapshot["categoria"];
+          jobDoc.descripcion = docSnapshot["descripcion"];
+          jobDoc.direccion = docSnapshot["direccion"];
+          jobDoc.email = docSnapshot["email"];
+          jobDoc.fecha = DateTime.parse(docSnapshot['fecha'].toDate().toString());
+          jobDoc.fotos = docSnapshot["fotos"];
+          jobDoc.id = docSnapshot["id"];
+          jobDoc.precio = docSnapshot["precio"];
+          jobDoc.telefono = docSnapshot["telefono"];
+          jobDoc.titulo = docSnapshot["titulo"];
+          jobDoc.uidArrendador = docSnapshot["uidArrendador"];
 
           //Obtiene información del usuario inactivo
           QuerySnapshot qs = await FirebaseFirestore.instance
@@ -44,36 +58,68 @@ class JobDetailController {
           } else {
             hasFreeViewsYet = false;
           }
-
+          print(' FIN LOEGUAEDO E INACTIVO');
+          print(jobDoc.titulo);
           return jobDoc;
         } catch (e) {
+          print(e);
           return null;
         }
-      }else{
+      } else {
+        print('ENTRAAAA A LOEGUAEDO Y ACTIVO');
         try {
           DocumentSnapshot<Map<String, dynamic>> docSnapshot =
               await FirebaseFirestore.instance
-                  .collection("TrabajosArrendatario")
+                  .collection("TrabajosArrendatarios")
                   .doc(doc)
                   .get();
-          TrabajosArrendatario jobDoc = TrabajosArrendatario();
-          jobDoc.fromMap(docSnapshot.data());
+          TrabajosArrendatarios jobDoc = TrabajosArrendatarios();
+          jobDoc.actividad = docSnapshot["actividad"];
+          jobDoc.categoria = docSnapshot["categoria"];
+          jobDoc.descripcion = docSnapshot["descripcion"];
+          jobDoc.direccion = docSnapshot["direccion"];
+          jobDoc.email = docSnapshot["email"];
+          jobDoc.fecha = DateTime.parse(docSnapshot['fecha'].toDate().toString());
+          jobDoc.fotos = docSnapshot["fotos"];
+          jobDoc.id = docSnapshot["id"];
+          jobDoc.precio = docSnapshot["precio"];
+          jobDoc.telefono = docSnapshot["telefono"];
+          jobDoc.titulo = docSnapshot["titulo"];
+          jobDoc.uidArrendador = docSnapshot["uidArrendador"];
+          print('FIN LOEGUAEDO Y ACTIVO');
+          print(jobDoc.titulo);
           return jobDoc;
         } catch (e) {
+          print(e);
           return null;
         }
       }
     } else {
+      print('ENTRAAAA A NO LOGUEADO');
       try {
         DocumentSnapshot<Map<String, dynamic>> docSnapshot =
             await FirebaseFirestore.instance
-                .collection("TrabajosArrendatario")
+                .collection("TrabajosArrendatarios")
                 .doc(doc)
                 .get();
-        TrabajosArrendatario jobDoc = TrabajosArrendatario();
-        jobDoc.fromMap(docSnapshot.data());
+        TrabajosArrendatarios jobDoc = TrabajosArrendatarios();
+        jobDoc.actividad = docSnapshot["actividad"];
+        jobDoc.categoria = docSnapshot["categoria"];
+        jobDoc.descripcion = docSnapshot["descripcion"];
+        jobDoc.direccion = docSnapshot["direccion"];
+        jobDoc.email = docSnapshot["email"];
+        jobDoc.fecha = DateTime.parse(docSnapshot['fecha'].toDate().toString());
+        jobDoc.fotos = docSnapshot["fotos"];
+        jobDoc.id = docSnapshot["id"];
+        jobDoc.precio = docSnapshot["precio"];
+        jobDoc.telefono = docSnapshot["telefono"];
+        jobDoc.titulo = docSnapshot["titulo"];
+        jobDoc.uidArrendador = docSnapshot["uidArrendador"];
+        print('FINNO LOGUEADO');
+        print(jobDoc);
         return jobDoc;
       } catch (e) {
+        print(e);
         return null;
       }
     }

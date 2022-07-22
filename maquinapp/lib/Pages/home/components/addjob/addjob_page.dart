@@ -381,7 +381,7 @@ class _AddJobPageState extends State<AddJobPage> {
         onPressed: () {
           save();
           /*
-          TrabajosArrendatario job = TrabajosArrendatario(
+          TrabajosArrendatarios job = TrabajosArrendatarios(
             descripcion: _controller.descripcionController.text,
             fecha: _controller.fechaController.text,
             foto: '',
