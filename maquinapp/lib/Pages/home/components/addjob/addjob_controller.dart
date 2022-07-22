@@ -67,26 +67,28 @@ class AddJobController {
       }
       if (linksImagenes.any((element) => element == null)) {
         return false;
-      }else{
+      } else {
         CollectionReference trabajosArrendatariosRef =
-          FirebaseFirestore.instance.collection('TrabajosArrendatarios');
-      await trabajosArrendatariosRef
-          .doc()
-          .set({
-            'titulo': titulo,
-            'precio': precio,
-            'descripcion': descripcion,
-            'direccion': direccion,
-            'telefono': telefono,
-            'email': email,
-            'fecha': fechaFirebase,
-            'actividad': actividad,
-            'categoria': categoria,
-            'uidArrendador': uidArrendador,
-            'fotos': linksImagenes
-          })
-          .then((value) => result = true)
-          .catchError((error) => result = false);
+            FirebaseFirestore.instance.collection('TrabajosArrendatarios');
+        String uidGen = getRandomString(20);
+        await trabajosArrendatariosRef
+            .doc(uidGen)
+            .set({
+              'titulo': titulo,
+              'precio': precio,
+              'descripcion': descripcion,
+              'direccion': direccion,
+              'telefono': telefono,
+              'email': email,
+              'fecha': fechaFirebase,
+              'actividad': actividad,
+              'categoria': categoria,
+              'uidArrendador': uidArrendador,
+              'fotos': linksImagenes,
+              'id': uidGen,
+            })
+            .then((value) => result = true)
+            .catchError((error) => result = false);
       }
       return result;
     } catch (e) {
