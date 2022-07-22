@@ -127,10 +127,10 @@ class _HomePageSignInState extends State<HomePageSignIn> {
               decoration: const BoxDecoration(
                 color: Color(0XFF3B3A38),
               ),
-              padding: const EdgeInsets.only(top: 40, left: 20, bottom: 30),
+              padding: const EdgeInsets.only(top: 10, left: 20, bottom: 10),
               child: Column(
                 children: [
-                  Image.asset('assets/images/logomaquina.png'),
+                  Image.asset('assets/images/maquinapp.png'),
                   const Text(
                     'Bienvenido',
                     style: TextStyle(

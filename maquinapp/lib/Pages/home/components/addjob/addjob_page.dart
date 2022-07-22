@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:maquinapp/Pages/home/components/addjob/addjob_controller.dart';
 import 'package:maquinapp/Pages/home/home_page.dart';
+import 'package:maquinapp/Pages/widgets/alerts.dart';
 
 class AddJobPage extends StatefulWidget {
   const AddJobPage({Key? key}) : super(key: key);
@@ -308,7 +309,7 @@ class _AddJobPageState extends State<AddJobPage> {
         },
         child: const Text('AGREGAR TRABAJO'),
         style: ElevatedButton.styleFrom(
-            primary: const Color(0XFF3B3A38),
+            primary: const Color(0XFF285D7C),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             padding: const EdgeInsets.symmetric(vertical: 15)),
@@ -383,11 +384,12 @@ class _AddJobPageState extends State<AddJobPage> {
     return null;
   }
 
-  save() async {
+  void save() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.reset();
       fechaFirebase =
           DateTime.parse(_controller.selectedDate.toLocal().toString());
+      Alerts.messageLoading(context);
       if (await _controller.crearTrabajoArrendador(
           tituloCtrl.text,
           precioCtrl.text,
@@ -399,6 +401,7 @@ class _AddJobPageState extends State<AddJobPage> {
           actividad,
           esArrendar ? categoriaArrendar : categoriaContratar,
           user.uid)) {
+        Navigator.pop(context);
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => const HomePage()));
         ScaffoldMessenger.of(context).showSnackBar(
@@ -429,6 +432,7 @@ class _AddJobPageState extends State<AddJobPage> {
           ),
         );
       } else {
+        Navigator.pop(context);
         showAlertDialog(context, "Hubo un problema", "Intente nuevamente.");
       }
     }
