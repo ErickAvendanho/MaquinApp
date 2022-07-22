@@ -13,8 +13,8 @@ class AddJobController {
   User? user = FirebaseAuth.instance.currentUser;
   List<PickedFile?> imagenesElegidas = [];
   List<String> imagesPaths = [];
-  List<String> linksImagenes = [];
-  var link;
+  List<String?> linksImagenes = [];
+  String? link = "";
 
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -62,27 +62,32 @@ class AddJobController {
 
     try {
       for (var img in imagenesElegidas) {
-        uploadImage(img);
+        link = await uploadImage(img);
+        linksImagenes.add(link);
       }
-      CollectionReference trabajosArrendadorRef =
-          FirebaseFirestore.instance.collection('TrabajosArrendador');
-      await trabajosArrendadorRef
+      if (linksImagenes.any((element) => element == null)) {
+        return false;
+      }else{
+        CollectionReference trabajosArrendatarioRef =
+          FirebaseFirestore.instance.collection('TrabajosArrendatario');
+      await trabajosArrendatarioRef
           .doc()
           .set({
-            'Titulo': titulo,
-            'Precio': precio,
-            'Descripcion': descripcion,
-            'Direccion': direccion,
-            'Telefono': telefono,
+            'titulo': titulo,
+            'precio': precio,
+            'descripcion': descripcion,
+            'direccion': direccion,
+            'telefono': telefono,
             'email': email,
-            'Fecha': fechaFirebase,
-            'Actividad': actividad,
-            'Categoria': categoria,
+            'fecha': fechaFirebase,
+            'actividad': actividad,
+            'categoria': categoria,
             'uidArrendador': uidArrendador,
-            'Fotos': linksImagenes
+            'fotos': linksImagenes
           })
           .then((value) => result = true)
           .catchError((error) => result = false);
+      }
       return result;
     } catch (e) {
       return result;
