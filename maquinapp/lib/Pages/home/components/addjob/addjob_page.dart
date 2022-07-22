@@ -445,8 +445,7 @@ class _AddJobPageState extends State<AddJobPage> {
             _controller.imagesPaths.length,
             (index) => _photoSelected(
               size,
-              File(_controller.imagenesElegidas[index]!.path),
-              index,
+              _controller.imagenesElegidas[index]!,
             ),
           ),
         ),
@@ -456,8 +455,7 @@ class _AddJobPageState extends State<AddJobPage> {
         _controller.imagesPaths.length,
         (index) => _photoSelected(
           size,
-          File(_controller.imagenesElegidas[index]!.path),
-          index,
+          _controller.imagenesElegidas[index]!,
         ),
       );
       listImagenes.add(_addImageButton(size));
@@ -467,7 +465,7 @@ class _AddJobPageState extends State<AddJobPage> {
     }
   }
 
-  Card _photoSelected(Size size, File photo, int index) {
+  Card _photoSelected(Size size, PickedFile file) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -478,15 +476,15 @@ class _AddJobPageState extends State<AddJobPage> {
         height: size.width * 0.20,
         child: InkWell(
           onTap: () async {
-            _controller.imagenesElegidas
-                .remove(_controller.imagenesElegidas[index]);
+            _controller.imagenesElegidas.remove(file);
+            _controller.imagesPaths.remove(file.path);
             setState(() {});
           },
           child: Stack(
             children: [
               Center(
                 child: Image.file(
-                  photo,
+                  File(file.path),
                   fit: BoxFit.cover,
                 ),
               ),
