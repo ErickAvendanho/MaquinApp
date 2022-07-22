@@ -357,18 +357,25 @@ class _HomePageState extends State<HomePage> {
                 color: Color(0XFF3B3A38),
               ),
               onTap: () async {
-                final provider =
-                    Provider.of<GoogleSignInProvider>(context, listen: false);
-                bool result = await provider.googleLogout();
-                if (!result) {
+                try {
+                  final provider =
+                      Provider.of<GoogleSignInProvider>(context, listen: false);
+                  await provider.googleLogout();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const HomePageSignIn(),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                } catch (e) {
                   await FirebaseAuth.instance.signOut();
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (context) => const HomePageSignIn(),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
                 }
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (context) => const HomePageSignIn(),
-                  ),
-                  (Route<dynamic> route) => false,
-                );
               },
               title: const Text('Cerrar sesión'),
             ),
