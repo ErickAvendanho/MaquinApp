@@ -41,6 +41,19 @@ class _SignPageState extends State<SignPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: const Color(0XFFFDD734),
+      appBar: AppBar(
+        backgroundColor: const Color(0XFFFDD734),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back_ios,
+            color: Color(0XFF3B3A38),
+          ),
+          onPressed: () => {
+            Navigator.pop(context),
+          },
+        ),
+      ),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

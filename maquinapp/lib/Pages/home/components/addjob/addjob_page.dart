@@ -201,6 +201,17 @@ class _AddJobPageState extends State<AddJobPage> {
                   ),
                   _ddbCategoria(),
                   const SizedBox(height: 10),
+                  const Text(
+                    "Selecciona las imágenes para tu trabajo.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0XFF3B3A38),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   _imagenesSel(size),
                   const SizedBox(height: 10),
                   _buttonUpdate(),
@@ -556,13 +567,76 @@ class _AddJobPageState extends State<AddJobPage> {
         width: size.width * 0.20,
         height: size.width * 0.20,
         child: InkWell(
-          onTap: () async {
-            ImagePicker _picker = ImagePicker();
-            _controller.imagenesElegidas
-                .add(await _picker.getImage(source: ImageSource.camera));
-            _controller.imagesPaths
-                .add(_controller.imagenesElegidas.last!.path);
-            setState(() {});
+          onTap: () {
+            Alerts.messageBoxCustom(
+              context,
+              const Text("Seleccionar imagen"),
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        ImagePicker _picker = ImagePicker();
+                        PickedFile? file =
+                            await _picker.getImage(source: ImageSource.camera);
+                        if (file != null) {
+                          _controller.imagenesElegidas.add(file);
+                          //print(_controller.imagenesElegidas.length);
+                          _controller.imagesPaths
+                              .add(_controller.imagenesElegidas.last!.path);
+                          Navigator.pop(context);
+                          setState(() {});
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: const [
+                            Expanded(
+                              child: Text('Tomar foto'),
+                            ),
+                            Icon(Icons.camera_alt),
+                          ],
+                        ),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        ImagePicker _picker = ImagePicker();
+                        PickedFile? file =
+                            await _picker.getImage(source: ImageSource.gallery);
+                        if (file != null) {
+                          _controller.imagenesElegidas.add(file);
+                          _controller.imagesPaths
+                              .add(_controller.imagenesElegidas.last!.path);
+                          Navigator.pop(context);
+                          setState(() {});
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: const [
+                            Expanded(
+                              child: Text('Elegir foto de la galería'),
+                            ),
+                            Icon(Icons.photo),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: TextButton(
+                        style: TextButton.styleFrom(primary: Colors.redAccent),
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text("Cancelar"),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              [],
+            );
           },
           child: Stack(
             children: [
