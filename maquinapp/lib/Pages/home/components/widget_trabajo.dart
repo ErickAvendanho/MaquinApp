@@ -1,8 +1,9 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:card_loading/card_loading.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail.dart';
-import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/models/trabajos_arrendatarios.dart';
 
 class WidgetTrabajo extends StatelessWidget {
@@ -32,8 +33,6 @@ class WidgetTrabajo extends StatelessWidget {
         elevation: 0,
         child: InkWell(
           onTap: () => {
-            print(
-                'DATOSSSS: -Logueado: $isLogued -Inactivo: $isCurrentUserInactive -idTrabajo: ${trabajo.id}'),
             Navigator.push(
               context,
               CupertinoPageRoute(
@@ -79,6 +78,7 @@ class WidgetTrabajo extends StatelessWidget {
                           child: Swiper(
                             itemCount: trabajo.fotos!.length,
                             itemBuilder: (context, index) {
+                              /*
                               return Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: ClipRRect(
@@ -86,6 +86,21 @@ class WidgetTrabajo extends StatelessWidget {
                                   child: Image.network(
                                     '${trabajo.fotos![index]}',
                                     fit: BoxFit.fill,
+                                  ),
+                                ),
+                              );*/
+
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                    imageUrl: '${trabajo.fotos![index]}',
+                                    placeholder: (context, url) =>
+                                        const CardLoading(
+                                      height: 60,
+                                    ),
                                   ),
                                 ),
                               );
@@ -98,12 +113,21 @@ class WidgetTrabajo extends StatelessWidget {
                             aspectRatio: 16 / 9,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
+                              child: CachedNetworkImage(
+                                fit: BoxFit.fill,
+                                imageUrl: '${trabajo.fotos!.first}',
+                                placeholder: (context, url) =>
+                                    const CardLoading(
+                                  height: 60,
+                                ),
+                              ),
+                              /*Image.network(
                                 '${trabajo.fotos!.first}',
                                 fit: BoxFit.fill,
-                              ),
+                              ),*/
                             ),
-                          ))
+                          ),
+                        )
                 else
                   const SizedBox(
                     height: 20,
