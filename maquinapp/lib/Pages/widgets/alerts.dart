@@ -34,6 +34,9 @@ class Alerts {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
           title: title,
           content: content,
           actions: actions,
@@ -49,6 +52,9 @@ class Alerts {
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+          ),
           title: Text(title),
           content: Text(content),
           actions: [

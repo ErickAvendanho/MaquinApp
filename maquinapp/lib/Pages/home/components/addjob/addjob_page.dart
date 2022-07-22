@@ -162,12 +162,15 @@ class _AddJobPageState extends State<AddJobPage> {
                   const SizedBox(height: 10),
                   formItemsDesign(
                     IconButton(
-                        onPressed: () {
-                          _controller.selectDate(context);
-                        },
-                        icon: const Icon(Icons.calendar_month_outlined)),
-                    Text("${_controller.selectedDate.toLocal()}".split(' ')[0],
-                        style: const TextStyle(color: Colors.white)),
+                      onPressed: () {
+                        _controller.selectDate(context);
+                      },
+                      icon: const Icon(Icons.calendar_month_outlined),
+                    ),
+                    Text(
+                      "${_controller.selectedDate.toLocal()}".split(' ')[0],
+                      style: const TextStyle(color: Colors.white),
+                    ),
                   ),
                   const SizedBox(height: 20),
                   const Text(
@@ -210,53 +213,89 @@ class _AddJobPageState extends State<AddJobPage> {
     );
   }
 
-  DropdownButton<String> _ddbCategoria() {
-    return DropdownButton(
-      value: esArrendar ? categoriaArrendar : categoriaContratar,
-      icon: const Icon(Icons.keyboard_arrow_down),
-      items: esArrendar
-          ? itemsArrendar.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: Text(items),
-              );
-            }).toList()
-          : itemsContratar.map((String items) {
-              return DropdownMenuItem(
-                value: items,
-                child: Text(items),
-              );
-            }).toList(),
-      onChanged: (String? newValue) {
-        setState(() {
-          esArrendar
-              ? categoriaArrendar = newValue!
-              : categoriaContratar = newValue!;
-        });
-      },
+  Container _ddbCategoria() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(10),
+        color: const Color(0XFF3B3A38),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          isExpanded: true,
+          value: esArrendar ? categoriaArrendar : categoriaContratar,
+          style: const TextStyle(color: Colors.white, fontSize: 16),
+          icon: const Icon(Icons.keyboard_arrow_down),
+          dropdownColor: Colors.grey.shade700,
+          items: esArrendar
+              ? itemsArrendar.map(
+                  (String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  },
+                ).toList()
+              : itemsContratar.map(
+                  (String items) {
+                    return DropdownMenuItem(
+                      value: items,
+                      child: Text(items),
+                    );
+                  },
+                ).toList(),
+          onChanged: (String? newValue) {
+            setState(
+              () {
+                esArrendar
+                    ? categoriaArrendar = newValue!
+                    : categoriaContratar = newValue!;
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 
-  DropdownButton<String> _ddbActividad() {
-    return DropdownButton(
-      value: actividad,
-      icon: const Icon(Icons.keyboard_arrow_down),
-      items: itemsActividad.map((String items) {
-        return DropdownMenuItem(
-          value: items,
-          child: Text(items),
-        );
-      }).toList(),
-      onChanged: (String? newValue) {
-        setState(() {
-          actividad = newValue!;
-          if (actividad == 'Arrendar') {
-            esArrendar = true;
-          } else {
-            esArrendar = false;
-          }
-        });
-      },
+  Container _ddbActividad() {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 5),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(10),
+        color: const Color(0XFF3B3A38),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton(
+          isExpanded: true,
+          value: actividad,
+          icon: const Icon(Icons.keyboard_arrow_down),
+          style: const TextStyle(color: Colors.white, fontSize: 16),
+          dropdownColor: Colors.grey.shade700,
+          items: itemsActividad.map((String items) {
+            return DropdownMenuItem(
+              value: items,
+              child: Text(items),
+            );
+          }).toList(),
+          onChanged: (String? newValue) {
+            setState(
+              () {
+                actividad = newValue!;
+                if (actividad == 'Arrendar') {
+                  esArrendar = true;
+                } else {
+                  esArrendar = false;
+                }
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -314,14 +353,6 @@ class _AddJobPageState extends State<AddJobPage> {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             padding: const EdgeInsets.symmetric(vertical: 15)),
       ),
-    );
-  }
-
-  Widget _imageUser() {
-    return CircleAvatar(
-      backgroundImage: const AssetImage('assets/images/descarga.png'),
-      backgroundColor: Colors.grey[200],
-      radius: 60,
     );
   }
 
@@ -433,7 +464,8 @@ class _AddJobPageState extends State<AddJobPage> {
         );
       } else {
         Navigator.pop(context);
-        showAlertDialog(context, "Hubo un problema", "Intente nuevamente.");
+        Alerts.messageBoxMessage(
+            context, "Hubo un problema", "Intente nuevamente.");
       }
     }
   }
@@ -572,27 +604,5 @@ formItemsDesign(icon, item) {
             iconColor: Colors.amber,
             leading: icon,
             title: item)),
-  );
-}
-
-showAlertDialog(BuildContext context, String titulo, String contenido) {
-  Widget okButton = TextButton(
-    child: const Text("OK"),
-    onPressed: () {},
-  );
-
-  AlertDialog alert = AlertDialog(
-    title: Text(titulo),
-    content: Text(contenido),
-    actions: [
-      okButton,
-    ],
-  );
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
   );
 }
