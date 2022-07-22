@@ -180,26 +180,7 @@ class _AddJobPageState extends State<AddJobPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  DropdownButton(
-                    value: actividad,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: itemsActividad.map((String items) {
-                      return DropdownMenuItem(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        actividad = newValue!;
-                        if (actividad == 'Arrendar') {
-                          esArrendar = true;
-                        } else {
-                          esArrendar = false;
-                        }
-                      });
-                    },
-                  ),
+                  _ddbActividad(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -214,115 +195,9 @@ class _AddJobPageState extends State<AddJobPage> {
                   const SizedBox(
                     height: 10,
                   ),
-                  DropdownButton(
-                    value: esArrendar ? categoriaArrendar : categoriaContratar,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: esArrendar
-                        ? itemsArrendar.map((String items) {
-                            return DropdownMenuItem(
-                              value: items,
-                              child: Text(items),
-                            );
-                          }).toList()
-                        : itemsContratar.map((String items) {
-                            return DropdownMenuItem(
-                              value: items,
-                              child: Text(items),
-                            );
-                          }).toList(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        esArrendar
-                            ? categoriaArrendar = newValue!
-                            : categoriaContratar = newValue!;
-                      });
-                    },
-                  ),
+                  _ddbCategoria(),
                   const SizedBox(height: 10),
-                  Wrap(
-                    children: <Widget>[
-                      (_controller.imagesPaths.isEmpty)
-                          ? Container()
-                          : ListView.builder(
-                              shrinkWrap: true,
-                              primary: false,
-                              itemCount: _controller.imagesPaths.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: const EdgeInsets.symmetric(
-                                    horizontal: 40,
-                                    vertical: 5,
-                                  ),
-                                  child: Wrap(
-                                    spacing: 3,
-                                    runSpacing: 3,
-                                    children: [
-                                      SizedBox(
-                                        width: size.width * 0.20,
-                                        child: Image.file(File(
-                                            _controller.imagesPaths[index])),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }),
-                      (_controller.imagesPaths.length < 3)
-                          ? Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 40,
-                                  vertical: 5,
-                                ),
-                                child: Wrap(
-                                  spacing: 3,
-                                  runSpacing: 3,
-                                  children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        final ImagePicker _picker =
-                                            ImagePicker();
-                                        _controller.imagenesElegidas.add(
-                                            await _picker.getImage(
-                                                source: ImageSource.camera));
-                                        _controller.imagesPaths.add(_controller
-                                            .imagenesElegidas.last!.path);
-                                        setState(() {
-                                        });
-                                      },
-                                      child: SizedBox(
-                                        width: size.width * 0.20,
-                                        child: Stack(
-                                          children: [
-                                            Image.asset(
-                                                'assets/images/add_image.png'),
-                                            Positioned(
-                                              bottom: 0,
-                                              right: 0,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.all(3),
-                                                decoration: BoxDecoration(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  color: Colors.green,
-                                                ),
-                                                child: const Icon(
-                                                  Icons.add,
-                                                  color: Colors.white,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          : Container()
-                    ],
-                  ),
+                  _imagenesSel(size),
                   const SizedBox(height: 10),
                   _buttonUpdate(),
                 ],
@@ -331,6 +206,56 @@ class _AddJobPageState extends State<AddJobPage> {
           ),
         ),
       ),
+    );
+  }
+
+  DropdownButton<String> _ddbCategoria() {
+    return DropdownButton(
+      value: esArrendar ? categoriaArrendar : categoriaContratar,
+      icon: const Icon(Icons.keyboard_arrow_down),
+      items: esArrendar
+          ? itemsArrendar.map((String items) {
+              return DropdownMenuItem(
+                value: items,
+                child: Text(items),
+              );
+            }).toList()
+          : itemsContratar.map((String items) {
+              return DropdownMenuItem(
+                value: items,
+                child: Text(items),
+              );
+            }).toList(),
+      onChanged: (String? newValue) {
+        setState(() {
+          esArrendar
+              ? categoriaArrendar = newValue!
+              : categoriaContratar = newValue!;
+        });
+      },
+    );
+  }
+
+  DropdownButton<String> _ddbActividad() {
+    return DropdownButton(
+      value: actividad,
+      icon: const Icon(Icons.keyboard_arrow_down),
+      items: itemsActividad.map((String items) {
+        return DropdownMenuItem(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        setState(() {
+          actividad = newValue!;
+          if (actividad == 'Arrendar') {
+            esArrendar = true;
+          } else {
+            esArrendar = false;
+          }
+        });
+      },
     );
   }
 
@@ -380,20 +305,6 @@ class _AddJobPageState extends State<AddJobPage> {
       child: ElevatedButton(
         onPressed: () {
           save();
-          /*
-          TrabajosArrendatarios job = TrabajosArrendatarios(
-            descripcion: _controller.descripcionController.text,
-            fecha: _controller.fechaController.text,
-            foto: '',
-            latitud: _controller,
-            longitud: _controller,
-            precio: _controller.precioController.text,
-            tipo: _controller.typeController.text,
-            titulo: _controller.tituloController.text,
-            uid: user.uid,
-            usuario: _controller.usuarioController.text,
-          );
-          _controller.uploadNewJob(job);*/
         },
         child: const Text('AGREGAR TRABAJO'),
         style: ElevatedButton.styleFrom(
@@ -521,6 +432,127 @@ class _AddJobPageState extends State<AddJobPage> {
         showAlertDialog(context, "Hubo un problema", "Intente nuevamente.");
       }
     }
+  }
+
+  Widget _imagenesSel(Size size) {
+    if (_controller.imagesPaths.isEmpty) {
+      return _addImageButton(size);
+    } else if (_controller.imagesPaths.isNotEmpty &&
+        _controller.imagesPaths.length == 3) {
+      return Center(
+        child: Wrap(
+          children: List.generate(
+            _controller.imagesPaths.length,
+            (index) => _photoSelected(
+              size,
+              File(_controller.imagenesElegidas[index]!.path),
+              index,
+            ),
+          ),
+        ),
+      );
+    } else {
+      List<Widget> listImagenes = List.generate(
+        _controller.imagesPaths.length,
+        (index) => _photoSelected(
+          size,
+          File(_controller.imagenesElegidas[index]!.path),
+          index,
+        ),
+      );
+      listImagenes.add(_addImageButton(size));
+      return Wrap(
+        children: listImagenes,
+      );
+    }
+  }
+
+  Card _photoSelected(Size size, File photo, int index) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(2.0),
+        width: size.width * 0.20,
+        height: size.width * 0.20,
+        child: InkWell(
+          onTap: () async {
+            _controller.imagenesElegidas
+                .remove(_controller.imagenesElegidas[index]);
+            setState(() {});
+          },
+          child: Stack(
+            children: [
+              Center(
+                child: Image.file(
+                  photo,
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.red,
+                  ),
+                  child: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Card _addImageButton(Size size) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(2.0),
+        width: size.width * 0.20,
+        height: size.width * 0.20,
+        child: InkWell(
+          onTap: () async {
+            ImagePicker _picker = ImagePicker();
+            _controller.imagenesElegidas
+                .add(await _picker.getImage(source: ImageSource.camera));
+            _controller.imagesPaths
+                .add(_controller.imagenesElegidas.last!.path);
+            setState(() {});
+          },
+          child: Stack(
+            children: [
+              Image.asset('assets/images/add_image.png'),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(3),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.green,
+                  ),
+                  child: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
 
