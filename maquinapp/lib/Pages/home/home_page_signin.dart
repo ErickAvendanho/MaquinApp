@@ -1,14 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maquinapp/Pages/home/home_controller.dart';
-import 'package:maquinapp/Pages/home/home_page.dart';
 import 'dart:math' as math;
 
 import 'package:maquinapp/Pages/singmenu_page.dart';
-import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
 import 'package:maquinapp/models/trabajos_arrendatarios.dart';
-import 'package:provider/provider.dart';
 
 import '../src/search_list_page.dart';
 import 'components/widget_trabajo.dart';
@@ -24,7 +20,7 @@ class HomePageSignIn extends StatefulWidget {
 
 class _HomePageSignInState extends State<HomePageSignIn> {
   final User? user = FirebaseAuth.instance.currentUser;
-  HomeController _controller = HomeController();
+  final HomeController _controller = HomeController();
 
   @override
   Widget build(BuildContext context) {
@@ -84,11 +80,7 @@ class _HomePageSignInState extends State<HomePageSignIn> {
                   ListView.builder(
                     primary: false,
                     shrinkWrap: true,
-                    itemCount: trabajos.isEmpty
-                        ? 0
-                        : trabajos.length > 3
-                            ? 3
-                            : trabajos.length,
+                    itemCount: trabajos.isEmpty ? 0 : trabajos.length,
                     itemBuilder: (context, int index) {
                       return WidgetTrabajo(
                         size: size,

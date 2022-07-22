@@ -138,7 +138,9 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
-                                  const SizedBox(width: 10,),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
                                   Expanded(
                                     child: Row(
                                       children: const [
@@ -396,7 +398,6 @@ class _JobDetailPageState extends State<JobDetailPage> {
                   child: Text('${data.error}'),
                 );
               } else {
-                print("NO HAY DATOS ):");
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

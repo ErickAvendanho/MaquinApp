@@ -12,11 +12,8 @@ class JobDetailController {
 
   Future<TrabajosArrendatarios?> getJobAndInfoInactiveUser(
       String doc, bool isLogued, bool isUserInactive) async {
-    print('ENTRAAAA A METODO GET INFO');
-    print('$doc');
     if (isLogued) {
       if (isUserInactive) {
-        print('ENTRAAAA A LOEGUAEDO E INACTIVO');
         try {
           DocumentSnapshot<Map<String, dynamic>> docSnapshot =
               await FirebaseFirestore.instance
@@ -29,7 +26,8 @@ class JobDetailController {
           jobDoc.descripcion = docSnapshot["descripcion"];
           jobDoc.direccion = docSnapshot["direccion"];
           jobDoc.email = docSnapshot["email"];
-          jobDoc.fecha = DateTime.parse(docSnapshot['fecha'].toDate().toString());
+          jobDoc.fecha =
+              DateTime.parse(docSnapshot['fecha'].toDate().toString());
           jobDoc.fotos = docSnapshot["fotos"];
           jobDoc.id = docSnapshot["id"];
           jobDoc.precio = docSnapshot["precio"];
@@ -58,15 +56,12 @@ class JobDetailController {
           } else {
             hasFreeViewsYet = false;
           }
-          print(' FIN LOEGUAEDO E INACTIVO');
-          print(jobDoc.titulo);
           return jobDoc;
         } catch (e) {
           print(e);
           return null;
         }
       } else {
-        print('ENTRAAAA A LOEGUAEDO Y ACTIVO');
         try {
           DocumentSnapshot<Map<String, dynamic>> docSnapshot =
               await FirebaseFirestore.instance
@@ -79,15 +74,14 @@ class JobDetailController {
           jobDoc.descripcion = docSnapshot["descripcion"];
           jobDoc.direccion = docSnapshot["direccion"];
           jobDoc.email = docSnapshot["email"];
-          jobDoc.fecha = DateTime.parse(docSnapshot['fecha'].toDate().toString());
+          jobDoc.fecha =
+              DateTime.parse(docSnapshot['fecha'].toDate().toString());
           jobDoc.fotos = docSnapshot["fotos"];
           jobDoc.id = docSnapshot["id"];
           jobDoc.precio = docSnapshot["precio"];
           jobDoc.telefono = docSnapshot["telefono"];
           jobDoc.titulo = docSnapshot["titulo"];
           jobDoc.uidArrendador = docSnapshot["uidArrendador"];
-          print('FIN LOEGUAEDO Y ACTIVO');
-          print(jobDoc.titulo);
           return jobDoc;
         } catch (e) {
           print(e);
@@ -95,7 +89,6 @@ class JobDetailController {
         }
       }
     } else {
-      print('ENTRAAAA A NO LOGUEADO');
       try {
         DocumentSnapshot<Map<String, dynamic>> docSnapshot =
             await FirebaseFirestore.instance
@@ -115,8 +108,6 @@ class JobDetailController {
         jobDoc.telefono = docSnapshot["telefono"];
         jobDoc.titulo = docSnapshot["titulo"];
         jobDoc.uidArrendador = docSnapshot["uidArrendador"];
-        print('FINNO LOGUEADO');
-        print(jobDoc);
         return jobDoc;
       } catch (e) {
         print(e);
