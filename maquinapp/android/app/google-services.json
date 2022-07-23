@@ -14,40 +14,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "923892908546-s38a1ge3v58jrh5davt5ge6qgbfihcqv.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyC3fup-bfMPO4Hq733nEcgalQWruuYMI6k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "923892908546-s38a1ge3v58jrh5davt5ge6qgbfihcqv.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:923892908546:android:e8fcf171b45a79b5ffdd1b",
-        "android_client_info": {
-          "package_name": "com.igrtec.maquinapp"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "923892908546-oblslkus9lkg3o7kqeo9bktn132c7jcq.apps.googleusercontent.com",
+          "client_id": "923892908546-3ktlcfiahebtnnoktnd0vhk8abh6lmh3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.igrtec.maquinapp",
-            "certificate_hash": "5c93c8a79f28df1d4a682cdc02978e6ec8f0b87c"
+            "package_name": "com.example.maquinapp",
+            "certificate_hash": "a6c93c4c6bd8a4bc74234b2df1da9c76bf70ac89"
+          }
+        },
+        {
+          "client_id": "923892908546-6op1749fotta30dobg3hk73leh2gfo2o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.maquinapp",
+            "certificate_hash": "7929c2288a7ef45e2f63ace4fc9446520a029755"
+          }
+        },
+        {
+          "client_id": "923892908546-n6ajb1g6sp51cphbll2t8s3s0id2j61o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.maquinapp",
+            "certificate_hash": "7eb0150b839dcd96e0c45dcd000601446ec2648b"
           }
         },
         {
@@ -66,6 +53,13 @@
             {
               "client_id": "923892908546-s38a1ge3v58jrh5davt5ge6qgbfihcqv.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "923892908546-jvjsmjdpc001eeftrvcda9fkpmu1jrbv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.maquinapp"
+              }
             }
           ]
         }

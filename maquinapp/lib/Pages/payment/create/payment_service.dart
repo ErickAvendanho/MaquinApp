@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:stripe_payment/stripe_payment.dart';
+//import 'package:stripe_payment/stripe_payment.dart';
 import 'package:http/http.dart' as http;
 
 class PaymentService {
@@ -11,7 +11,7 @@ class PaymentService {
     this.amount = 10,
     this.url = '',
   });
-
+/*
   static init() {
     StripePayment.setOptions(StripeOptions(
         publishableKey:
@@ -46,5 +46,5 @@ class PaymentService {
     } else {
       print('Payment failed');
     }
-  }
+  }*/
 }

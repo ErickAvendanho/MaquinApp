@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/home_page.dart';
 import 'package:maquinapp/Pages/payment/create/add_creditcard.dart';
-import 'package:maquinapp/Pages/payment/create/payment_service.dart';
 import 'package:maquinapp/Pages/src/adduser.dart';
 import 'package:maquinapp/Pages/src/firebaseServices/auth_services.dart';
-import 'package:stripe_payment/stripe_payment.dart';
+//import 'package:stripe_payment/stripe_payment.dart';
 
 class PaymentsPage extends StatefulWidget {
   final String tipoRegistro;
@@ -273,7 +272,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   }
 
   save() async {
-   setState(() {
+    setState(() {
       loginIng = true;
     });
 
