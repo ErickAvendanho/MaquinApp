@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/login_page.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'type_signup_page.dart';
 
@@ -12,22 +11,22 @@ class SignPage extends StatefulWidget {
 }
 
 class _SignPageState extends State<SignPage> {
-  Future requestGPSPermission() async {
-    final locationStatus = await Permission.location.status;
-    final locationWhenInUseStatus = await Permission.locationWhenInUse.status;
-    while (locationStatus.isDenied || locationWhenInUseStatus.isDenied) {
-      if (locationStatus.isDenied) {
-        await Permission.location.request();
-      }
-      if (locationWhenInUseStatus.isDenied) {
-        await Permission.locationWhenInUse.request();
-      }
-    }
-  }
+  // Future requestGPSPermission() async {
+  //   final locationStatus = await Permission.location.status;
+  //   final locationWhenInUseStatus = await Permission.locationWhenInUse.status;
+  //   while (locationStatus.isDenied || locationWhenInUseStatus.isDenied) {
+  //     if (locationStatus.isDenied) {
+  //       await Permission.location.request();
+  //     }
+  //     if (locationWhenInUseStatus.isDenied) {
+  //       await Permission.locationWhenInUse.request();
+  //     }
+  //   }
+  // }
 
   @override
   void initState() {
-    requestGPSPermission();
+    // requestGPSPermission();
     super.initState();
   }
 

@@ -87,6 +87,7 @@ class _HomePageSignInState extends State<HomePageSignIn> {
                         trabajo: trabajos[index],
                         isLogued: false,
                         isCurrentUserInactive: _controller.isUserInactive,
+                        isInCrud: false
                       );
                     },
                   ),

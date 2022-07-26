@@ -96,6 +96,51 @@ class AddJobController {
     }
   }
 
+  Future<bool> actualizarTrabajoArrendador(
+      String titulo,
+      String precio,
+      String descripcion,
+      String direccion,
+      String telefono,
+      String email,
+      DateTime fechaFirebase,
+      String actividad,
+      String categoria,
+      String uidArrendador,
+      String? id) async {
+    bool result = false;
+    final db = FirebaseFirestore.instance.collection('TrabajosArrendatarios').doc(id);
+
+    try {
+      for (var img in imagenesElegidas) {
+        link = await uploadImage(img);
+        linksImagenes.add(link);
+      }
+      if (linksImagenes.any((element) => element == null)) {
+        return false;
+      } else {
+        await db.update({
+              'titulo': titulo,
+              'precio': precio,
+              'descripcion': descripcion,
+              'direccion': direccion,
+              'telefono': telefono,
+              'email': email,
+              'fecha': fechaFirebase,
+              'actividad': actividad,
+              'categoria': categoria,
+              'uidArrendador': uidArrendador,
+              'fotos': linksImagenes
+            })
+            .then((value) => result = true)
+            .catchError((error) => result = false);
+      }
+      return result;
+    } catch (e) {
+      return result;
+    }
+  }
+
   Future<String?> uploadImage(PickedFile? imagen) async {
     try {
       var file = File(imagen!.path);

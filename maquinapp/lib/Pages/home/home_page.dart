@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:maquinapp/Pages/home/components/job/crud_jobs_page.dart';
 import 'package:maquinapp/Pages/home/home_controller.dart';
-import 'package:maquinapp/Pages/home/components/addjob/addjob_page.dart';
+import 'package:maquinapp/Pages/home/components/job/add_edit_job_page.dart';
 import 'package:maquinapp/Pages/home/home_page_signin.dart';
 import 'dart:math' as math;
 import 'package:maquinapp/Pages/src/provider/google_sign_in.dart';
@@ -116,7 +117,8 @@ class _HomePageState extends State<HomePage> {
                           size: size,
                           trabajo: trabajos[index],
                           isLogued: true,
-                          isCurrentUserInactive: _controller.isUserInactive);
+                          isCurrentUserInactive: _controller.isUserInactive,
+                          isInCrud: false,);
                     },
                   ),
                 ],
@@ -345,11 +347,26 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AddJobPage(),
+                    builder: (context) => const AddJobPage(isEditing: false,),
                   ),
                 );
               },
               title: const Text('Subir nuevo trabajo'),
+            ),
+            ListTile(
+              leading: const Icon(
+                Icons.add_chart,
+                color: Color(0XFF3B3A38),
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CrudJobsPage(),
+                  ),
+                );
+              },
+              title: const Text('Mis trabajos'),
             ),
             ListTile(
               leading: const Icon(

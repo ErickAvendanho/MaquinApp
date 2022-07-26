@@ -3,6 +3,7 @@ import 'package:card_loading/card_loading.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:maquinapp/Pages/home/components/job/add_edit_job_page.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail.dart';
 import 'package:maquinapp/models/trabajos_arrendatarios.dart';
 
@@ -12,13 +13,15 @@ class WidgetTrabajo extends StatelessWidget {
       required this.size,
       required this.trabajo,
       required this.isLogued,
-      required this.isCurrentUserInactive})
+      required this.isCurrentUserInactive,
+      required this.isInCrud})
       : super(key: key);
 
   final Size size;
   final TrabajosArrendatarios trabajo;
   final bool isLogued;
   final bool isCurrentUserInactive;
+  final bool isInCrud;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -177,6 +180,33 @@ class WidgetTrabajo extends StatelessWidget {
                   style: const TextStyle(
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),
+                isInCrud
+                    ? Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: IconButton(
+                              color: const Color(0xff7B91A3),
+                              icon: const Icon(Icons.create_outlined),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => AddJobPage(
+                                          isEditing: true, trabajo: trabajo)),
+                                );
+                              },
+                            ),
+                          ),
+                          Expanded(
+                            child: IconButton(
+                              color: Colors.red.shade400,
+                              icon: const Icon(Icons.delete),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox.shrink(),
               ],
             ),
           ),

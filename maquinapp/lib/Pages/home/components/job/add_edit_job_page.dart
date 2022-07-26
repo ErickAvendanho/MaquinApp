@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:maquinapp/Pages/home/components/addjob/addjob_controller.dart';
+import 'package:maquinapp/Pages/home/components/job/add_edit_job_controller.dart';
 import 'package:maquinapp/Pages/home/home_page.dart';
 import 'package:maquinapp/Pages/widgets/alerts.dart';
+import 'package:maquinapp/models/trabajos_arrendatarios.dart';
 
 class AddJobPage extends StatefulWidget {
-  const AddJobPage({Key? key}) : super(key: key);
+  final bool isEditing;
+  final TrabajosArrendatarios? trabajo;
+  const AddJobPage({Key? key, required this.isEditing, this.trabajo})
+      : super(key: key);
 
   @override
   State<AddJobPage> createState() => _AddJobPageState();
@@ -66,6 +70,37 @@ class _AddJobPageState extends State<AddJobPage> {
   final AddJobController _controller = AddJobController();
 
   @override
+  void initState() {
+    tituloCtrl = TextEditingController(
+        text: widget.isEditing ? widget.trabajo!.titulo : '');
+    precioCtrl = TextEditingController(
+        text: widget.isEditing ? widget.trabajo!.precio : '');
+    descripcionCtrl = TextEditingController(
+        text: widget.isEditing ? widget.trabajo!.descripcion : '');
+    direccionCtrl = TextEditingController(
+        text: widget.isEditing ? widget.trabajo!.direccion : '');
+    telefonoCtrl = TextEditingController(
+        text: widget.isEditing ? widget.trabajo!.telefono : '');
+    emailCtrl = TextEditingController(
+        text: widget.isEditing ? widget.trabajo!.email : '');
+    _controller.selectedDate =
+        (widget.isEditing ? widget.trabajo!.fecha : DateTime.now())!;
+    actividad = (widget.isEditing ? widget.trabajo!.actividad : 'Arrendar')!;
+    if (widget.isEditing) {
+      if (widget.trabajo!.actividad == 'Arrendar') {
+        esArrendar = true;
+        categoriaArrendar =
+            (widget.isEditing ? widget.trabajo!.categoria : 'Maquinas')!;
+      } else {
+        esArrendar = false;
+        categoriaContratar =
+            (widget.isEditing ? widget.trabajo!.categoria : 'Constructores')!;
+      }
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
@@ -80,14 +115,23 @@ class _AddJobPageState extends State<AddJobPage> {
             color: Colors.white,
           ),
         ),
-        title: const Text(
-          'Nuevo trabajo',
-          style: TextStyle(
-            color: Color(0xFFFDD835),
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
+        title: widget.isEditing
+            ? const Text(
+                'Editar trabajo',
+                style: TextStyle(
+                  color: Color(0xFFFDD835),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              )
+            : const Text(
+                'Nuevo trabajo',
+                style: TextStyle(
+                  color: Color(0xFFFDD835),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                ),
+              ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -354,16 +398,17 @@ class _AddJobPageState extends State<AddJobPage> {
       width: double.infinity,
       margin: const EdgeInsets.symmetric(horizontal: 50, vertical: 20),
       child: ElevatedButton(
-        onPressed: () {
-          save();
-        },
-        child: const Text('AGREGAR TRABAJO'),
-        style: ElevatedButton.styleFrom(
-            primary: const Color(0XFF285D7C),
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            padding: const EdgeInsets.symmetric(vertical: 15)),
-      ),
+          onPressed: () {
+            save();
+          },
+          style: ElevatedButton.styleFrom(
+              primary: const Color(0XFF285D7C),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30)),
+              padding: const EdgeInsets.symmetric(vertical: 15)),
+          child: widget.isEditing
+              ? const Text('GUARDAR CAMBIOS')
+              : const Text('AGREGAR TRABAJO')),
     );
   }
 
@@ -428,55 +473,109 @@ class _AddJobPageState extends State<AddJobPage> {
 
   void save() async {
     if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.reset();
-      fechaFirebase =
-          DateTime.parse(_controller.selectedDate.toLocal().toString());
-      Alerts.messageLoading(context);
-      if (await _controller.crearTrabajoArrendador(
-          tituloCtrl.text,
-          precioCtrl.text,
-          descripcionCtrl.text,
-          direccionCtrl.text,
-          telefonoCtrl.text,
-          emailCtrl.text,
-          fechaFirebase,
-          actividad,
-          esArrendar ? categoriaArrendar : categoriaContratar,
-          user.uid)) {
-        Navigator.pop(context);
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomePage()));
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: const Color(0XFF3B3A38),
-            elevation: 5,
-            margin: const EdgeInsets.all(10),
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            content: const Text.rich(
-              TextSpan(
-                children: [
-                  WidgetSpan(
-                    alignment: PlaceholderAlignment.middle,
-                    child: Icon(
-                      Icons.check,
-                      color: Color(0xFFFDD835),
+      if (widget.isEditing) {
+        _formKey.currentState!.reset();
+        fechaFirebase =
+            DateTime.parse(_controller.selectedDate.toLocal().toString());
+        Alerts.messageLoading(context);
+        if (await _controller.actualizarTrabajoArrendador(
+            tituloCtrl.text,
+            precioCtrl.text,
+            descripcionCtrl.text,
+            direccionCtrl.text,
+            telefonoCtrl.text,
+            emailCtrl.text,
+            fechaFirebase,
+            actividad,
+            esArrendar ? categoriaArrendar : categoriaContratar,
+            user.uid,
+            widget.trabajo!.id)) {
+          Navigator.pop(context);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: const Color(0XFF3B3A38),
+              elevation: 5,
+              margin: const EdgeInsets.all(10),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              content: const Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Icon(
+                        Icons.check,
+                        color: Color(0xFFFDD835),
+                      ),
                     ),
-                  ),
-                  TextSpan(
-                    text: "Trabajo añadido con éxito",
-                  ),
-                ],
+                    TextSpan(
+                      text: "Trabajo actualizado con éxito",
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
+          );
+        } else {
+          Navigator.pop(context);
+          Alerts.messageBoxMessage(
+              context, "Hubo un problema", "Intente nuevamente.");
+        }
       } else {
-        Navigator.pop(context);
-        Alerts.messageBoxMessage(
-            context, "Hubo un problema", "Intente nuevamente.");
+        _formKey.currentState!.reset();
+        fechaFirebase =
+            DateTime.parse(_controller.selectedDate.toLocal().toString());
+        Alerts.messageLoading(context);
+        if (await _controller.crearTrabajoArrendador(
+            tituloCtrl.text,
+            precioCtrl.text,
+            descripcionCtrl.text,
+            direccionCtrl.text,
+            telefonoCtrl.text,
+            emailCtrl.text,
+            fechaFirebase,
+            actividad,
+            esArrendar ? categoriaArrendar : categoriaContratar,
+            user.uid)) {
+          Navigator.pop(context);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => const HomePage()));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: const Color(0XFF3B3A38),
+              elevation: 5,
+              margin: const EdgeInsets.all(10),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              content: const Text.rich(
+                TextSpan(
+                  children: [
+                    WidgetSpan(
+                      alignment: PlaceholderAlignment.middle,
+                      child: Icon(
+                        Icons.check,
+                        color: Color(0xFFFDD835),
+                      ),
+                    ),
+                    TextSpan(
+                      text: "Trabajo añadido con éxito",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        } else {
+          Navigator.pop(context);
+          Alerts.messageBoxMessage(
+              context, "Hubo un problema", "Intente nuevamente.");
+        }
       }
     }
   }
