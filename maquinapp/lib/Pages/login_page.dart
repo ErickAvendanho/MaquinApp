@@ -118,41 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                               margin:
                                   const EdgeInsets.symmetric(horizontal: 10),
                               child: InkWell(
-                                onTap: () async {
-                                  final provider =
-                                      Provider.of<GoogleSignInProvider>(context,
-                                          listen: false);
-                                  bool result = await provider.googleLogin();
-                                  if (result) {
-                                    final User? userSigned =
-                                        FirebaseAuth.instance.currentUser;
-                                    DocumentSnapshot<Map<String, dynamic>>
-                                        docSnapshot = await FirebaseFirestore
-                                            .instance
-                                            .collection("Users")
-                                            .doc(userSigned?.uid.toString())
-                                            .get();
-                                    if (docSnapshot.exists) {
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const HomePage(),
-                                        ),
-                                        (route) => false,
-                                      );
-                                    } else {
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (BuildContext context) =>
-                                              const RegisterDocPageFirst(),
-                                        ),
-                                        (route) => false,
-                                      );
-                                    }
-                                  }
-                                },
+                                onTap: _googleLogin,
                                 child: Image.asset(
                                   'assets/images/google.png',
                                   width: 50,
@@ -169,6 +135,38 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  _googleLogin() async {
+    final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+    await provider.googleLogin().then((result) async {
+      if (result) {
+        final User? userSigned = FirebaseAuth.instance.currentUser;
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userSigned?.uid.toString())
+            .get()
+            .then((DocumentSnapshot<Map<String, dynamic>> docSnapshot) {
+          if (docSnapshot.exists) {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const HomePage(),
+              ),
+              (route) => false,
+            );
+          } else {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const RegisterDocPageFirst(),
+              ),
+              (route) => false,
+            );
+          }
+        });
+      }
+    });
   }
 
   ElevatedButton _buttonSignIn(Size size) {

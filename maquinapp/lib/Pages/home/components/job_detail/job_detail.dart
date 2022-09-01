@@ -5,6 +5,7 @@ import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/widgets/alerts.dart';
 import 'package:maquinapp/models/trabajos_arrendatarios.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class JobDetailPage extends StatefulWidget {
   final String jobID;
@@ -280,6 +281,10 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                                                       .iUid,
                                                                   _controller
                                                                       .freeViews);
+                                                          Navigator.pop(
+                                                              context);
+                                                          Navigator.pop(
+                                                              context);
                                                           Navigator.push(
                                                             context,
                                                             CupertinoPageRoute(
@@ -373,8 +378,29 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                       ),
                                     ),
                                   )
-                                : const SizedBox(
-                                    height: 10,
+                                : SizedBox(
+                                    width: size.width * 0.95,
+                                    child: Column(
+                                      children: [
+                                        Column(
+                                          children: [
+                                            Divider(
+                                              color: Colors.amber.shade800,
+                                              thickness: 1,
+                                            ),
+                                            _codigoQR(size),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            _ubicacion(size),
+                                            const SizedBox(
+                                              height: 10,
+                                            ),
+                                            _comentarios(size),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                             SizedBox(
                               height: size.height * 0.02,
@@ -405,6 +431,126 @@ class _JobDetailPageState extends State<JobDetailPage> {
             },
           ),
         ),
+      ),
+    );
+  }
+
+  Container _comentarios(Size size) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            spreadRadius: 3,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      width: size.width * 0.90,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: const [
+          Text.rich(
+            TextSpan(
+              children: [
+                WidgetSpan(
+                  child: Icon(
+                    Icons.message,
+                    color: Color(0XFFFDD835),
+                  ),
+                  alignment: PlaceholderAlignment.middle,
+                ),
+                TextSpan(
+                  text: ' Comentarios',
+                  style: TextStyle(
+                    color: Color(0XFFFDD835),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _ubicacion(Size size) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.shade300,
+            spreadRadius: 3,
+            blurRadius: 5,
+          ),
+        ],
+      ),
+      width: size.width * 0.90,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: const [
+          Text.rich(
+            TextSpan(
+              children: [
+                WidgetSpan(
+                  child: Icon(
+                    Icons.location_pin,
+                    color: Color(0XFFFDD835),
+                  ),
+                  alignment: PlaceholderAlignment.middle,
+                ),
+                TextSpan(
+                  text: 'Ubicación',
+                  style: TextStyle(
+                    color: Color(0XFFFDD835),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Container _codigoQR(Size size) {
+    return Container(
+      width: size.width * 0.90,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.amber.shade800,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      padding: const EdgeInsets.all(15),
+      child: Column(
+        children: [
+          Text(
+            '¡Escanea el código QR!',
+            style: TextStyle(
+              fontSize: 28,
+              fontWeight: FontWeight.bold,
+              color: Colors.amber.shade800,
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          QrImage(
+            foregroundColor: Colors.blueGrey.shade800,
+            data: widget.jobID,
+            version: QrVersions.auto,
+            size: 250,
+          ),
+        ],
       ),
     );
   }

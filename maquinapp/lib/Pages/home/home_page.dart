@@ -114,11 +114,12 @@ class _HomePageState extends State<HomePage> {
                     itemCount: trabajos.isEmpty ? 0 : trabajos.length,
                     itemBuilder: (context, int index) {
                       return WidgetTrabajo(
-                          size: size,
-                          trabajo: trabajos[index],
-                          isLogued: true,
-                          isCurrentUserInactive: _controller.isUserInactive,
-                          isInCrud: false,);
+                        size: size,
+                        trabajo: trabajos[index],
+                        isLogued: true,
+                        isCurrentUserInactive: _controller.isUserInactive,
+                        isInCrud: false,
+                      );
                     },
                   ),
                 ],
@@ -347,7 +348,9 @@ class _HomePageState extends State<HomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const AddJobPage(isEditing: false,),
+                    builder: (context) => const AddJobPage(
+                      isEditing: false,
+                    ),
                   ),
                 );
               },
