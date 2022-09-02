@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:maquinapp/Pages/home/components/job/crud_jobs_page.dart';
+import 'package:maquinapp/Pages/home/components/qr_scanner_page/qr_scanner_page.dart';
 import 'package:maquinapp/Pages/home/home_controller.dart';
 import 'package:maquinapp/Pages/home/components/job/add_edit_job_page.dart';
 import 'package:maquinapp/Pages/home/home_page_signin.dart';
@@ -63,6 +64,23 @@ class _HomePageState extends State<HomePage> {
         ),
         centerTitle: true,
         actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.qr_code_scanner_outlined,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => QrScannerPage(
+                    isLogued: true,
+                    isUserInactive: _controller.isUserInactive,
+                  ),
+                ),
+              );
+            },
+          ),
           IconButton(
             icon: const Icon(
               Icons.search,

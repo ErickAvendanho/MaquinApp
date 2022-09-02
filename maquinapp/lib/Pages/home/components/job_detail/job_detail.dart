@@ -5,7 +5,6 @@ import 'package:maquinapp/Pages/home/components/job_detail/job_detail_controller
 import 'package:maquinapp/Pages/singmenu_page.dart';
 import 'package:maquinapp/Pages/widgets/alerts.dart';
 import 'package:maquinapp/models/trabajos_arrendatarios.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class JobDetailPage extends StatefulWidget {
   final String jobID;
@@ -388,7 +387,6 @@ class _JobDetailPageState extends State<JobDetailPage> {
                                               color: Colors.amber.shade800,
                                               thickness: 1,
                                             ),
-                                            _codigoQR(size),
                                             const SizedBox(
                                               height: 10,
                                             ),
@@ -515,40 +513,6 @@ class _JobDetailPageState extends State<JobDetailPage> {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Container _codigoQR(Size size) {
-    return Container(
-      width: size.width * 0.90,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.amber.shade800,
-        ),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      padding: const EdgeInsets.all(15),
-      child: Column(
-        children: [
-          Text(
-            '¡Escanea el código QR!',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.amber.shade800,
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          QrImage(
-            foregroundColor: Colors.blueGrey.shade800,
-            data: widget.jobID,
-            version: QrVersions.auto,
-            size: 250,
           ),
         ],
       ),

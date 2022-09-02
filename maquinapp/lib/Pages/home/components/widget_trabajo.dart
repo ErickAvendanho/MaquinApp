@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_loading/card_loading.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:maquinapp/Pages/home/components/job/add_edit_job_page.dart';
 import 'package:maquinapp/Pages/home/components/job_detail/job_detail.dart';
 import 'package:maquinapp/models/trabajos_arrendatarios.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
 class WidgetTrabajo extends StatelessWidget {
   const WidgetTrabajo(
@@ -181,34 +183,112 @@ class WidgetTrabajo extends StatelessWidget {
                       fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 isInCrud
-                    ? Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: IconButton(
-                              color: const Color(0xff7B91A3),
-                              icon: const Icon(Icons.create_outlined),
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddJobPage(
-                                          isEditing: true, trabajo: trabajo)),
-                                );
-                              },
-                            ),
-                          ),
-                          Expanded(
-                            child: IconButton(
-                              color: Colors.red.shade400,
-                              icon: const Icon(Icons.delete),
-                              onPressed: () {},
-                            ),
+                    ? Column(
+                        children: [
+                          _codigoQR(),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: IconButton(
+                                  color: const Color(0xff7B91A3),
+                                  icon: const Icon(Icons.create_outlined),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => AddJobPage(
+                                              isEditing: true,
+                                              trabajo: trabajo)),
+                                    );
+                                  },
+                                ),
+                              ),
+                              Expanded(
+                                child: IconButton(
+                                  color: Colors.red.shade400,
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () {},
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       )
-                    : SizedBox.shrink(),
+                    : const SizedBox.shrink(),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  ExpandableNotifier _codigoQR() {
+    return ExpandableNotifier(
+      child: Expandable(
+        collapsed: ExpandableButton(
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Colors.amber.shade800,
+              ),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            width: size.width * 0.90,
+            child: Stack(
+              children: const [
+                Positioned(
+                  right: 0,
+                  child: Icon(Icons.arrow_drop_down),
+                ),
+                Text(
+                  "Código QR",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
+        ),
+        expanded: Container(
+          width: size.width * 0.90,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.amber.shade800,
+            ),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              ExpandableButton(
+                child: const Icon(Icons.close),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                '¡Escanea el código QR!',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.amber.shade800,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              QrImage(
+                foregroundColor: Colors.blueGrey.shade800,
+                data: trabajo.id.toString(),
+                version: QrVersions.auto,
+                size: 250,
+              ),
+            ],
           ),
         ),
       ),
